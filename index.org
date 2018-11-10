@@ -1,0 +1,241 @@
+#+TITLE: Reports for Monitoring Data Entry
+#+AUTHOR: SSER
+#+OPTIONS: toc:nil H:3
+#+LATEX_HEADER: \usepackage{booktabs}
+#+LATEX_HEADER: \usepackage{tabularx}
+# #+INCLUDE: table_format.org
+#+PROPERTY: header-args:R :session haryana :eval never-export
+
+#+NAME: load-libraries
+#+BEGIN_SRC R :results silent :exports none
+
+require(RPostgreSQL)
+require(ggplot2)
+require(data.table)
+
+#+END_SRC
+
+
+#+NAME: read-data-code
+#+BEGIN_SRC R :results silent :exports none
+  drv <- dbDriver("PostgreSQL")
+
+  surveypg <- dbConnect(drv, dbname = "ssersurveydata",
+                   host = "localhost", port = 5432,
+                   user = "ssersurveyuser")
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
+  data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
+  data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
+#+END_SRC
+
+
+
+* Households for which data are missing for critical variables
+
+#+NAME: missing-data-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
+  t[is.na(if_sc_st),.(village_name,household_number,blankfield="if_sc_st",detail=caste_tribe)][order(village_name,household_number)]
+#+END_SRC
+
+#+NAME: missing-data-code
+#+CAPTION: Households with data missing for critical variables
+#+RESULTS: missing-data-code
+| village_name     | household_number | blankfield | detail  |
+|------------------+------------------+------------+---------|
+| Birdhana         |                7 | if_sc_st   | Rebari  |
+| Birdhana         |               19 | if_sc_st   | Dhanak  |
+| Birdhana         |               25 | if_sc_st   | Jat     |
+| Birdhana         |               35 | if_sc_st   | Kamboj  |
+| Birdhana         |               36 | if_sc_st   | Kamboj  |
+| Birdhana         |               40 | if_sc_st   | Dhanak  |
+| Birdhana         |              103 | if_sc_st   | Bishnoi |
+| Birdhana         |              104 | if_sc_st   | Mehta   |
+| Birdhana         |              105 | if_sc_st   | Bishnoi |
+| Cheher Kalan     |                4 | if_sc_st   | Brahmin |
+| Cheher Kalan     |                9 | if_sc_st   | Dhanak  |
+| Cheher Kalan     |               10 | if_sc_st   | Baniya  |
+| Cheher Kalan     |               12 | if_sc_st   | Chamar  |
+| Cheher Kalan     |               13 | if_sc_st   | Jat     |
+| Cheher Kalan     |               14 | if_sc_st   | Dhanak  |
+| Cheher Kalan     |               15 | if_sc_st   | Nai     |
+| Cheher Kalan     |               24 | if_sc_st   | Sunar   |
+| Cheher Kalan     |               27 | if_sc_st   | Chamar  |
+| Cheher Kalan     |               29 | if_sc_st   | Jat     |
+| Cheher Kalan     |               32 | if_sc_st   | Jat     |
+| Cheher Kalan     |               33 | if_sc_st   | Chamar  |
+| Cheher Kalan     |               34 | if_sc_st   | Jat     |
+| Cheher Kalan     |               36 | if_sc_st   | Brahmin |
+| Cheher Kalan     |               44 | if_sc_st   | Jat     |
+| Cheher Kalan     |               48 | if_sc_st   | Jat     |
+| Cheher Kalan     |               51 | if_sc_st   | Khati   |
+| Cheher Kalan     |               52 | if_sc_st   | Nai     |
+| Cheher Kalan     |               53 | if_sc_st   | Jat     |
+| Jamalpur Shekhan |                1 | if_sc_st   | Od      |
+| Jamalpur Shekhan |                2 | if_sc_st   | Od      |
+| Jamalpur Shekhan |                6 | if_sc_st   | Saini   |
+| Jamalpur Shekhan |               14 | if_sc_st   | Kamboj  |
+| Jamalpur Shekhan |               16 | if_sc_st   | Jat     |
+| Jamalpur Shekhan |               27 | if_sc_st   | Chamar  |
+| Jamalpur Shekhan |               28 | if_sc_st   | Chamar  |
+| Jamalpur Shekhan |               31 | if_sc_st   | Jat     |
+| Jamalpur Shekhan |               32 | if_sc_st   | Arora   |
+| Jamalpur Shekhan |               36 | if_sc_st   | Jat     |
+| Jamalpur Shekhan |               37 | if_sc_st   | Arora   |
+| Jamalpur Shekhan |               39 | if_sc_st   | Balmiki |
+| Jamalpur Shekhan |               44 | if_sc_st   | Saini   |
+| Khandrai         |              102 | if_sc_st   | Kumhar  |
+
+
+* Caste Composition
+
+#+NAME: caste-composition-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
+  t[,.(Number=length(household_number)),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
+  names(t1)[c(3:6)]<-villages$village_name
+  t1
+
+
+#+END_SRC
+
+#+NAME: caste-composition-code
+#+CAPTION: Caste representation in the sample
+#+RESULTS: caste-composition-code
+| if_sc_st | caste_tribe | Khandrai | Cheher Kalan | Jamalpur Shekhan | Birdhana |
+|----------+-------------+----------+--------------+------------------+----------|
+| nil      | Arora       | nil      | nil          | 2                | nil      |
+| nil      | Balmiki     | nil      | nil          | 1                | nil      |
+| nil      | Baniya      | nil      | 1            | nil              | nil      |
+| nil      | Bawaria     | nil      | nil          | nil              | nil      |
+| nil      | Bazigar     | nil      | nil          | nil              | nil      |
+| nil      | Bishnoi     | 2        | nil          | nil              | nil      |
+| nil      | Brahmin     | nil      | 2            | nil              | nil      |
+| nil      | Chamar      | nil      | 3            | 2                | nil      |
+| nil      | Dhanak      | 2        | 2            | nil              | nil      |
+| nil      | Dhinwar     | nil      | nil          | nil              | nil      |
+| nil      | Jat         | 1        | 7            | 3                | nil      |
+| nil      | Jhimar      | nil      | nil          | nil              | nil      |
+| nil      | Jogi        | nil      | nil          | nil              | nil      |
+| nil      | Kamboj      | 2        | nil          | 1                | nil      |
+| nil      | Khati       | nil      | 1            | nil              | nil      |
+| nil      | Kumhar      | nil      | nil          | nil              | 1        |
+| nil      | Lohar       | nil      | nil          | nil              | nil      |
+| nil      | Mehta       | 1        | nil          | nil              | nil      |
+| nil      | Nai         | nil      | 2            | nil              | nil      |
+| nil      | Nayak       | nil      | nil          | nil              | nil      |
+| nil      | Od          | nil      | nil          | 2                | nil      |
+| nil      | Rai Sikh    | nil      | nil          | nil              | nil      |
+| nil      | Rebari      | 1        | nil          | nil              | nil      |
+| nil      | Saini       | nil      | nil          | 2                | nil      |
+| nil      | Sunar       | nil      | 1            | nil              | nil      |
+| nil      | Yadav       | nil      | nil          | nil              | nil      |
+| BC       | Arora       | nil      | nil          | nil              | nil      |
+| BC       | Balmiki     | nil      | nil          | nil              | nil      |
+| BC       | Baniya      | nil      | nil          | nil              | nil      |
+| BC       | Bawaria     | nil      | nil          | nil              | nil      |
+| BC       | Bazigar     | nil      | nil          | nil              | nil      |
+| BC       | Bishnoi     | nil      | nil          | nil              | nil      |
+| BC       | Brahmin     | nil      | nil          | nil              | nil      |
+| BC       | Chamar      | nil      | nil          | nil              | nil      |
+| BC       | Dhanak      | nil      | 1            | nil              | nil      |
+| BC       | Dhinwar     | 1        | nil          | nil              | nil      |
+| BC       | Jat         | nil      | nil          | nil              | nil      |
+| BC       | Jhimar      | nil      | nil          | nil              | 3        |
+| BC       | Jogi        | nil      | nil          | nil              | 1        |
+| BC       | Kamboj      | 2        | nil          | 1                | nil      |
+| BC       | Khati       | nil      | 8            | nil              | 2        |
+| BC       | Kumhar      | 1        | 2            | nil              | 4        |
+| BC       | Lohar       | 1        | nil          | 1                | nil      |
+| BC       | Mehta       | nil      | nil          | nil              | nil      |
+| BC       | Nai         | 1        | 3            | 2                | nil      |
+| BC       | Nayak       | nil      | nil          | nil              | nil      |
+| BC       | Od          | nil      | nil          | nil              | nil      |
+| BC       | Rai Sikh    | nil      | nil          | nil              | nil      |
+| BC       | Rebari      | nil      | nil          | nil              | nil      |
+| BC       | Saini       | nil      | nil          | 6                | nil      |
+| BC       | Sunar       | nil      | nil          | nil              | nil      |
+| BC       | Yadav       | nil      | nil          | nil              | 1        |
+| Other    | Arora       | 1        | nil          | nil              | nil      |
+| Other    | Balmiki     | nil      | nil          | nil              | nil      |
+| Other    | Baniya      | 1        | 2            | nil              | nil      |
+| Other    | Bawaria     | nil      | nil          | nil              | nil      |
+| Other    | Bazigar     | nil      | nil          | nil              | nil      |
+| Other    | Bishnoi     | 4        | nil          | nil              | nil      |
+| Other    | Brahmin     | nil      | 3            | nil              | 1        |
+| Other    | Chamar      | nil      | nil          | nil              | nil      |
+| Other    | Dhanak      | nil      | nil          | nil              | nil      |
+| Other    | Dhinwar     | nil      | nil          | nil              | nil      |
+| Other    | Jat         | 5        | 3            | 3                | 23       |
+| Other    | Jhimar      | nil      | nil          | nil              | nil      |
+| Other    | Jogi        | nil      | nil          | nil              | nil      |
+| Other    | Kamboj      | nil      | nil          | nil              | nil      |
+| Other    | Khati       | nil      | nil          | 3                | nil      |
+| Other    | Kumhar      | nil      | nil          | nil              | nil      |
+| Other    | Lohar       | nil      | nil          | nil              | nil      |
+| Other    | Mehta       | 5        | nil          | nil              | nil      |
+| Other    | Nai         | nil      | nil          | nil              | nil      |
+| Other    | Nayak       | nil      | nil          | nil              | nil      |
+| Other    | Od          | nil      | nil          | nil              | nil      |
+| Other    | Rai Sikh    | nil      | nil          | nil              | nil      |
+| Other    | Rebari      | nil      | nil          | nil              | nil      |
+| Other    | Saini       | nil      | nil          | nil              | nil      |
+| Other    | Sunar       | 1        | nil          | nil              | nil      |
+| Other    | Yadav       | nil      | nil          | nil              | nil      |
+| SC       | Arora       | nil      | nil          | nil              | nil      |
+| SC       | Balmiki     | nil      | nil          | 3                | 1        |
+| SC       | Baniya      | nil      | nil          | nil              | nil      |
+| SC       | Bawaria     | nil      | nil          | nil              | 1        |
+| SC       | Bazigar     | 2        | nil          | 3                | nil      |
+| SC       | Bishnoi     | nil      | nil          | nil              | nil      |
+| SC       | Brahmin     | nil      | nil          | nil              | nil      |
+| SC       | Chamar      | 5        | 4            | 4                | 17       |
+| SC       | Dhanak      | 3        | 6            | nil              | 17       |
+| SC       | Dhinwar     | nil      | nil          | nil              | nil      |
+| SC       | Jat         | nil      | nil          | nil              | nil      |
+| SC       | Jhimar      | nil      | nil          | nil              | nil      |
+| SC       | Jogi        | nil      | nil          | nil              | nil      |
+| SC       | Kamboj      | nil      | nil          | nil              | nil      |
+| SC       | Khati       | nil      | nil          | nil              | nil      |
+| SC       | Kumhar      | nil      | nil          | nil              | nil      |
+| SC       | Lohar       | nil      | 1            | nil              | nil      |
+| SC       | Mehta       | nil      | nil          | nil              | nil      |
+| SC       | Nai         | nil      | nil          | nil              | nil      |
+| SC       | Nayak       | 1        | nil          | nil              | nil      |
+| SC       | Od          | nil      | nil          | 2                | nil      |
+| SC       | Rai Sikh    | 5        | nil          | nil              | nil      |
+| SC       | Rebari      | nil      | nil          | nil              | nil      |
+| SC       | Saini       | nil      | nil          | nil              | nil      |
+| SC       | Sunar       | nil      | nil          | nil              | nil      |
+| SC       | Yadav       | nil      | nil          | nil              | nil      |
+| ST       | Arora       | nil      | nil          | nil              | nil      |
+| ST       | Balmiki     | nil      | nil          | nil              | nil      |
+| ST       | Baniya      | nil      | nil          | nil              | nil      |
+| ST       | Bawaria     | nil      | nil          | nil              | nil      |
+| ST       | Bazigar     | nil      | nil          | nil              | nil      |
+| ST       | Bishnoi     | nil      | nil          | nil              | nil      |
+| ST       | Brahmin     | nil      | nil          | nil              | nil      |
+| ST       | Chamar      | nil      | nil          | nil              | nil      |
+| ST       | Dhanak      | nil      | 1            | nil              | nil      |
+| ST       | Dhinwar     | nil      | nil          | nil              | nil      |
+| ST       | Jat         | nil      | nil          | nil              | nil      |
+| ST       | Jhimar      | nil      | nil          | nil              | nil      |
+| ST       | Jogi        | nil      | nil          | nil              | nil      |
+| ST       | Kamboj      | nil      | nil          | nil              | nil      |
+| ST       | Khati       | nil      | nil          | nil              | nil      |
+| ST       | Kumhar      | nil      | nil          | nil              | nil      |
+| ST       | Lohar       | nil      | nil          | nil              | nil      |
+| ST       | Mehta       | nil      | nil          | nil              | nil      |
+| ST       | Nai         | nil      | nil          | nil              | nil      |
+| ST       | Nayak       | nil      | nil          | nil              | nil      |
+| ST       | Od          | nil      | nil          | nil              | nil      |
+| ST       | Rai Sikh    | nil      | nil          | nil              | nil      |
+| ST       | Rebari      | nil      | nil          | nil              | nil      |
+| ST       | Saini       | nil      | nil          | nil              | nil      |
+| ST       | Sunar       | nil      | nil          | nil              | nil      |
+| ST       | Yadav       | nil      | nil          | nil              | nil      |
+
