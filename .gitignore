@@ -2,3 +2,4 @@
 !*.org
 !*.html
 !.gitignore
+!*.yml
