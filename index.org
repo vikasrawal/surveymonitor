@@ -1,4 +1,4 @@
-#+TITLE: Reports for Monitoring Data Entry
+#+TITLE: Monitoring Data Entry for Haryana Surveys
 #+AUTHOR: SSER
 #+OPTIONS: toc:nil H:3 ^:{}
 #+LATEX_HEADER: \usepackage{booktabs}
@@ -118,12 +118,19 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 | Jamalpur Shekhan |               59 | if_sc_st   | Od       |
 | Khandrai         |              102 | if_sc_st   | Kumhar   |
 
+** Data categorisation issues
+**** TODO Majhabi Sikh and Rai Sikh are perhaps same
+**** TODO Jhimar and Dhinvar are same
+**** TODO Lohar categorised as both BC and SC
+** 
 
 * Emerging patterns
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 
 ** Caste Composition
+
+
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -193,7 +200,7 @@ This section will provide a compilation of tables and graphs on different aspect
 
 ** Land relations
 ** Food security
-** Cropping pattern, Production, Input Use
+** Cropping pattern, Production, Input use
 ** Labour Deployment
 ** Employment
 ** Housing and Sanitation
