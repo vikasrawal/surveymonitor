@@ -3,8 +3,11 @@
 #+OPTIONS: toc:nil H:3 ^:{}
 #+LATEX_HEADER: \usepackage{booktabs}
 #+LATEX_HEADER: \usepackage{tabularx}
+#+TODO: TODO EDIT CHECK | DONE
 # #+INCLUDE: table_format.org
 #+PROPERTY: header-args:R :session haryana :eval never-export
+
+* Preliminaries                                                    :noexport:
 
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
@@ -30,14 +33,17 @@ require(data.table)
   data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
 #+END_SRC
 
-
 * Tasks to do
+**** TODO Decide on how to deal with ranges
+**** TODO Social groups
++ Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.
+**** TODO Sample weights
++ Vikas needs to check the sampling scripts and get the sampling weights.
 
-**** Decide on how to deal with ranges
-**** Caste groups
-**** 
+* Inconsistencies in Data                                       :Sonia:Jesim:
+** Households for which data are missing for critical variables
 
-* TODO Households for which data are missing for critical variables<2018-11-10 Sat>
+This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 
 #+NAME: missing-data-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -113,7 +119,11 @@ require(data.table)
 | Khandrai         |              102 | if_sc_st   | Kumhar   |
 
 
-* Caste Composition
+* Emerging patterns
+
+This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
+
+** Caste Composition
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -122,62 +132,70 @@ require(data.table)
   t[,.(Number=length(household_number)),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
   t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
   names(t1)[c(3:6)]<-villages$village_name
+  names(t1)[c(1:2)]<-c("Social group","Caste")
   t1
 #+END_SRC
 
 #+NAME: caste-composition-code
 #+CAPTION: Caste representation in the sample
 #+RESULTS: caste-composition-code
-| if_sc_st | caste_tribe  | Khandrai | Cheher Kalan | Jamalpur Shekhan | Birdhana |
-|----------+--------------+----------+--------------+------------------+----------|
-| nil      | Arora        |        2 | nil          | 2                | nil      |
-| nil      | Balmiki      |      nil | nil          | 1                | nil      |
-| nil      | Bawaria      |      nil | nil          | 1                | nil      |
-| nil      | Bazigar      |      nil | nil          | 1                | nil      |
-| nil      | Bishnoi      |        4 | nil          | nil              | nil      |
-| nil      | Chamar       |      nil | 3            | 2                | nil      |
-| nil      | Dhanak       |        2 | 2            | nil              | nil      |
-| nil      | Garg         |      nil | nil          | 1                | nil      |
-| nil      | Jat          |        3 | 7            | 4                | nil      |
-| nil      | Kamboj       |        2 | nil          | 1                | nil      |
-| nil      | Kumhar       |      nil | nil          | nil              | 1        |
-| nil      | Mali         |        1 | nil          | nil              | nil      |
-| nil      | Mehta        |        1 | nil          | nil              | nil      |
-| nil      | Od           |        1 | nil          | 3                | nil      |
-| nil      | Rai Sikh     |        1 | nil          | nil              | nil      |
-| nil      | Rebari       |        2 | nil          | nil              | nil      |
-| nil      | Saini        |      nil | nil          | 3                | nil      |
-| nil      | Teli         |        1 | nil          | nil              | nil      |
-| BC       | Bhatra sikh  |      nil | nil          | 1                | nil      |
-| BC       | Dhinwar      |        1 | nil          | nil              | nil      |
-| BC       | Jhimar       |      nil | nil          | nil              | 3        |
-| BC       | Jogi         |      nil | nil          | nil              | 1        |
-| BC       | Kamboj       |        3 | nil          | 2                | nil      |
-| BC       | Khati        |      nil | 8            | nil              | 2        |
-| BC       | Kumhar       |        1 | 2            | nil              | 4        |
-| BC       | Lohar        |        1 | nil          | 1                | nil      |
-| BC       | Nai          |        2 | 3            | 2                | nil      |
-| BC       | Rebari       |        6 | nil          | nil              | nil      |
-| BC       | Saini        |      nil | nil          | 8                | nil      |
-| BC       | Yadav        |      nil | nil          | nil              | 1        |
-| Other    | Arora        |        1 | nil          | nil              | nil      |
-| Other    | Baniya       |        1 | 2            | nil              | nil      |
-| Other    | Bishnoi      |        5 | nil          | nil              | nil      |
-| Other    | Brahmin      |      nil | 3            | nil              | 1        |
-| Other    | Jat          |        6 | 3            | 4                | 23       |
-| Other    | Khati        |      nil | nil          | 3                | nil      |
-| Other    | Mehta        |        5 | nil          | nil              | nil      |
-| Other    | Sunar        |        1 | nil          | nil              | nil      |
-| SC       | Balmiki      |      nil | nil          | 4                | 1        |
-| SC       | Bawaria      |      nil | nil          | nil              | 1        |
-| SC       | Bazigar      |        2 | nil          | 4                | nil      |
-| SC       | Chamar       |        9 | 4            | 6                | 17       |
-| SC       | Dhanak       |        5 | 6            | nil              | 17       |
-| SC       | Lohar        |        1 | 1            | nil              | nil      |
-| SC       | Mazhabi Sikh |        1 | nil          | nil              | nil      |
-| SC       | Nayak        |        1 | nil          | nil              | nil      |
-| SC       | Od           |        1 | nil          | 5                | nil      |
-| SC       | Rai Sikh     |       12 | nil          | nil              | nil      |
-| SC       | Rebari       |        1 | nil          | nil              | nil      |
+| Social group | Caste        | Khandrai | Cheher Kalan | Jamalpur Shekhan | Birdhana |
+|--------------+--------------+----------+--------------+------------------+----------|
+| nil          | Arora        |        2 | nil          | 2                | nil      |
+| nil          | Balmiki      |      nil | nil          | 1                | nil      |
+| nil          | Bawaria      |      nil | nil          | 1                | nil      |
+| nil          | Bazigar      |      nil | nil          | 1                | nil      |
+| nil          | Bishnoi      |        4 | nil          | nil              | nil      |
+| nil          | Chamar       |      nil | 3            | 2                | nil      |
+| nil          | Dhanak       |        2 | 2            | nil              | nil      |
+| nil          | Garg         |      nil | nil          | 1                | nil      |
+| nil          | Jat          |        3 | 7            | 4                | nil      |
+| nil          | Kamboj       |        2 | nil          | 1                | nil      |
+| nil          | Kumhar       |      nil | nil          | nil              | 1        |
+| nil          | Mali         |        1 | nil          | nil              | nil      |
+| nil          | Mehta        |        1 | nil          | nil              | nil      |
+| nil          | Od           |        1 | nil          | 3                | nil      |
+| nil          | Rai Sikh     |        1 | nil          | nil              | nil      |
+| nil          | Rebari       |        2 | nil          | nil              | nil      |
+| nil          | Saini        |      nil | nil          | 3                | nil      |
+| nil          | Teli         |        1 | nil          | nil              | nil      |
+| BC           | Bhatra sikh  |      nil | nil          | 1                | nil      |
+| BC           | Dhinwar      |        1 | nil          | nil              | nil      |
+| BC           | Jhimar       |      nil | nil          | nil              | 3        |
+| BC           | Jogi         |      nil | nil          | nil              | 1        |
+| BC           | Kamboj       |        3 | nil          | 2                | nil      |
+| BC           | Khati        |      nil | 8            | nil              | 2        |
+| BC           | Kumhar       |        1 | 2            | nil              | 4        |
+| BC           | Lohar        |        1 | nil          | 1                | nil      |
+| BC           | Nai          |        2 | 3            | 2                | nil      |
+| BC           | Rebari       |        6 | nil          | nil              | nil      |
+| BC           | Saini        |      nil | nil          | 8                | nil      |
+| BC           | Yadav        |      nil | nil          | nil              | 1        |
+| Other        | Arora        |        1 | nil          | nil              | nil      |
+| Other        | Baniya       |        1 | 2            | nil              | nil      |
+| Other        | Bishnoi      |        5 | nil          | nil              | nil      |
+| Other        | Brahmin      |      nil | 3            | nil              | 1        |
+| Other        | Jat          |        6 | 3            | 4                | 23       |
+| Other        | Khati        |      nil | nil          | 3                | nil      |
+| Other        | Mehta        |        5 | nil          | nil              | nil      |
+| Other        | Sunar        |        1 | nil          | nil              | nil      |
+| SC           | Balmiki      |      nil | nil          | 4                | 1        |
+| SC           | Bawaria      |      nil | nil          | nil              | 1        |
+| SC           | Bazigar      |        2 | nil          | 4                | nil      |
+| SC           | Chamar       |        9 | 4            | 6                | 17       |
+| SC           | Dhanak       |        5 | 6            | nil              | 17       |
+| SC           | Lohar        |        1 | 1            | nil              | nil      |
+| SC           | Mazhabi Sikh |        1 | nil          | nil              | nil      |
+| SC           | Nayak        |        1 | nil          | nil              | nil      |
+| SC           | Od           |        1 | nil          | 5                | nil      |
+| SC           | Rai Sikh     |       12 | nil          | nil              | nil      |
+| SC           | Rebari       |        1 | nil          | nil              | nil      |
 
-
+** Land relations
+** Food security
+** Cropping pattern, Production, Input Use
+** Labour Deployment
+** Employment
+** Housing and Sanitation
+** Health and Education
+** Assets and Indebtedness
