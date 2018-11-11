@@ -47,7 +47,8 @@ CLOSED: [2018-11-11 Sun 05:56]
 ***** TODO Comments on FIES questions
 ***** TODO Crops filter
 ***** TODO CodePlaces
-***** TODO Make a block/page-wise table of data operators
+***** DONE Make a block/page-wise table of data operators
+CLOSED: [2018-11-11 Sun 06:59]
 
 * Inconsistencies in Data                                       :Sonia:Jesim:
 ** Households for which data are missing for critical variables
