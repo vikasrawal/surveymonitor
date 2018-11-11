@@ -4,7 +4,6 @@
 #+LATEX_HEADER: \usepackage{booktabs}
 #+LATEX_HEADER: \usepackage{tabularx}
 #+TODO: TODO EDIT CHECK | DONE
-# #+INCLUDE: table_format.org
 #+PROPERTY: header-args:R :session haryana :eval never-export
 
 * Preliminaries                                                    :noexport:
@@ -132,6 +131,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 **** TODO Majhabi Sikh and Rai Sikh are perhaps same
 **** TODO Jhimar and Dhinvar are same
 **** TODO Lohar categorised as both BC and SC
+
 ** Abnormal asset prices
 
 #+NAME: asset_outlier_code
@@ -159,23 +159,29 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
   merge(t4,code,by.x="asset_id",by.y="id")->t4
 
   data.table(rbind(t0,t1,t2,t3))->t
-  merge(household,villages,by.x="village_id",by.y="id")->household
-  merge(t,household,by.x="sno_id",by.y="id")->t
+  merge(household,villages,by.x="village_id",by.y="id")->h
+  merge(t,h,by.x="sno_id",by.y="id")->t
   t$value/t$no->t$price
   t[!is.na(price)]->t
-  t[asset=="Scooter/motorcycle"][price>100000][,.(village_name.x,household_number,asset,price)]->t1
-  rbind(t1,t[asset=="Refrigerator"][price>10000][,.(village_name.x,household_number,asset,price)])->t1
+  t[asset=="Scooter/motorcycle"][price>100000][,.(village_name,household_number,asset,price)]->t1
+  rbind(t1,t[asset=="Refrigerator"][price>10000][,.(village_name,household_number,asset,price)])->t1
+  rbind(t1,t[asset=="Almirah/cupboard"][price>10000][,.(village_name,household_number,asset,price)])->t1
+t1
+
 #+END_SRC
 
 #+name: asset_outlier
 #+CAPTION: Abnormal values of asset prices
 #+RESULTS: asset_outlier_code
-| village_name.x | household_number | asset              |   price |
-|----------------+------------------+--------------------+---------|
-| Khandrai       |               27 | Scooter/motorcycle | 1500000 |
-| Cheher Kalan   |               50 | Scooter/motorcycle |  125000 |
-| Cheher Kalan   |               50 | Scooter/motorcycle |  125000 |
-| Cheher Kalan   |               50 | Scooter/motorcycle |  125000 |
+| village_name     | household_number | asset              |   price |
+|------------------+------------------+--------------------+---------|
+| Khandrai         |               27 | Scooter/motorcycle | 1500000 |
+| Cheher Kalan     |               50 | Scooter/motorcycle |  125000 |
+| Cheher Kalan     |               50 | Scooter/motorcycle |  125000 |
+| Cheher Kalan     |               50 | Scooter/motorcycle |  125000 |
+| Cheher Kalan     |               22 | Refrigerator       |   20000 |
+| Khandrai         |                1 | Refrigerator       |   25000 |
+| Jamalpur Shekhan |                9 | Almirah/cupboard   |   35000 |
 
 
 * Emerging patterns
