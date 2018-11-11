@@ -166,22 +166,23 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
   t[asset=="Scooter/motorcycle"][price>100000][,.(village_name,household_number,asset,price)]->t1
   rbind(t1,t[asset=="Refrigerator"][price>10000][,.(village_name,household_number,asset,price)])->t1
   rbind(t1,t[asset=="Almirah/cupboard"][price>10000][,.(village_name,household_number,asset,price)])->t1
-t1
-
+  rbind(t1,t[asset=="Tape recorder/Two-in-one"][price>5000][,.(village_name,household_number,asset,price)])->t1
+  t1
 #+END_SRC
 
 #+name: asset_outlier
 #+CAPTION: Abnormal values of asset prices
 #+RESULTS: asset_outlier_code
-| village_name     | household_number | asset              |   price |
-|------------------+------------------+--------------------+---------|
-| Khandrai         |               27 | Scooter/motorcycle | 1500000 |
-| Cheher Kalan     |               50 | Scooter/motorcycle |  125000 |
-| Cheher Kalan     |               50 | Scooter/motorcycle |  125000 |
-| Cheher Kalan     |               50 | Scooter/motorcycle |  125000 |
-| Cheher Kalan     |               22 | Refrigerator       |   20000 |
-| Khandrai         |                1 | Refrigerator       |   25000 |
-| Jamalpur Shekhan |                9 | Almirah/cupboard   |   35000 |
+| village_name     | household_number | asset                    |   price |
+|------------------+------------------+--------------------------+---------|
+| Khandrai         |               27 | Scooter/motorcycle       | 1500000 |
+| Cheher Kalan     |               50 | Scooter/motorcycle       |  125000 |
+| Cheher Kalan     |               50 | Scooter/motorcycle       |  125000 |
+| Cheher Kalan     |               50 | Scooter/motorcycle       |  125000 |
+| Cheher Kalan     |               22 | Refrigerator             |   20000 |
+| Khandrai         |                1 | Refrigerator             |   25000 |
+| Jamalpur Shekhan |                9 | Almirah/cupboard         |   35000 |
+| Khandrai         |                5 | Tape recorder/Two-in-one |   45000 |
 
 
 * Emerging patterns
