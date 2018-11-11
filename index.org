@@ -1,6 +1,6 @@
 #+TITLE: Monitoring Data Entry for Haryana Surveys
 #+AUTHOR: SSER
-#+OPTIONS: toc:nil H:3 ^:{}
+#+OPTIONS: H:3 ^:{}
 #+LATEX_HEADER: \usepackage{booktabs}
 #+LATEX_HEADER: \usepackage{tabularx}
 #+TODO: TODO EDIT CHECK | DONE
