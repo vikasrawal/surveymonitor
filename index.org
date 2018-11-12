@@ -32,20 +32,24 @@ require(data.table)
   data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
 #+END_SRC
 
-* Tasks to do
+* Overall Decisions
+
+This section records any overall decisions that are taken.
+
 **** TODO Decide on how to deal with ranges
-**** TODO Social groups
+**** TODO Fix social group for each caste
 + Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.
 **** TODO Sample weights
 + Vikas needs to check the sampling scripts and get the sampling weights.
 **** DONE Standard values of assets                                :Vikas:
 CLOSED: [2018-11-11 Sun 05:56]
 ***** Compute unit price from available data, and provide a table of summary statistics for each type of asset
-**** Database corrections                                          :Vikas:
+
+* Database corrections                                                :Vikas:
 ***** TODO FIES filter on names
 ***** TODO Comments on FIES questions
 ***** TODO Crops filter
-***** TODO CodePlaces
+***** DONE CodePlaces
 ***** DONE Make a block/page-wise table of data operators
 CLOSED: [2018-11-11 Sun 06:59]
 
@@ -183,7 +187,6 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 | Khandrai         |                1 | Refrigerator             |   25000 |
 | Jamalpur Shekhan |                9 | Almirah/cupboard         |   35000 |
 | Khandrai         |                5 | Tape recorder/Two-in-one |   45000 |
-
 
 * Emerging patterns
 
