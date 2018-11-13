@@ -234,35 +234,35 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org200c392">1. Overall Decisions</a></li>
-<li><a href="#org9b47de7">2. Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
-<li><a href="#org59aa1ee">3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
+<li><a href="#org515aec2">1. Overall Decisions</a></li>
+<li><a href="#org717bbcc">2. Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
+<li><a href="#orge42580d">3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
 <ul>
-<li><a href="#orgc894047">3.1. Households for which data are missing for critical variables</a></li>
-<li><a href="#org27c3603">3.2. Data categorisation issues</a></li>
-<li><a href="#orgcec5d76">3.3. Abnormal asset prices</a></li>
+<li><a href="#org948f1f5">3.1. Households for which data are missing for critical variables</a></li>
+<li><a href="#org0062777">3.2. Data categorisation issues</a></li>
+<li><a href="#orga41ab47">3.3. Abnormal asset prices</a></li>
 </ul>
 </li>
-<li><a href="#orgc25cde0">4. Emerging patterns</a>
+<li><a href="#org4950415">4. Emerging patterns</a>
 <ul>
-<li><a href="#org9f2f625">4.1. Caste Composition</a></li>
-<li><a href="#org7acc91b">4.2. Land relations</a></li>
-<li><a href="#org658da77">4.3. Food security</a></li>
-<li><a href="#orgb1aa537">4.4. Cropping pattern, Production, Input use</a></li>
-<li><a href="#orga6487ab">4.5. Labour Deployment</a></li>
-<li><a href="#org2a2e333">4.6. Employment</a></li>
-<li><a href="#orgd6704df">4.7. Livestock</a></li>
-<li><a href="#org820a00d">4.8. Housing and Sanitation</a></li>
-<li><a href="#org640e45e">4.9. Health and Education</a></li>
-<li><a href="#org25bd225">4.10. Assets and Indebtedness</a></li>
+<li><a href="#org48a5449">4.1. Caste Composition</a></li>
+<li><a href="#org5e3daaf">4.2. Land relations</a></li>
+<li><a href="#orgb46c870">4.3. Food security</a></li>
+<li><a href="#org7755999">4.4. Cropping pattern, Production, Input use</a></li>
+<li><a href="#org9e19b18">4.5. Labour Deployment</a></li>
+<li><a href="#orgecd88c9">4.6. Employment</a></li>
+<li><a href="#org33a6636">4.7. Livestock</a></li>
+<li><a href="#orgd83b490">4.8. Housing and Sanitation</a></li>
+<li><a href="#org54679a7">4.9. Health and Education</a></li>
+<li><a href="#org9792e19">4.10. Assets and Indebtedness</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org200c392" class="outline-2">
-<h2 id="org200c392"><span class="section-number-2">1</span> Overall Decisions</h2>
+<div id="outline-container-org515aec2" class="outline-2">
+<h2 id="org515aec2"><span class="section-number-2">1</span> Overall Decisions</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This section records any overall decisions that are taken.
@@ -270,59 +270,59 @@ This section records any overall decisions that are taken.
 </div>
 
 <ol class="org-ol">
-<li><a id="org8c1d83e"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
-<li><a id="org8e8075d"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
+<li><a id="org7fa5672"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
+<li><a id="orgaf6b35c"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
 <div class="outline-text-5" id="text-1-0-0-2">
 <ul class="org-ul">
 <li>Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.</li>
 </ul>
 </div>
 </li>
-<li><a id="org92e1172"></a><span class="todo TODO">TODO</span> Sample weights<br />
+<li><a id="org5b11dae"></a><span class="todo TODO">TODO</span> Sample weights<br />
 <div class="outline-text-5" id="text-1-0-0-3">
 <ul class="org-ul">
 <li>Vikas needs to check the sampling scripts and get the sampling weights.</li>
 </ul>
 </div>
 </li>
-<li><a id="orgae87d29"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
+<li><a id="org20576a4"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
 <div class="outline-text-5" id="text-1-0-0-4">
 </div>
 <ol class="org-ol">
-<li><a id="orge61ef13"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
+<li><a id="org21527cf"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
 </ol>
 </li>
 </ol>
 </div>
 
-<div id="outline-container-org9b47de7" class="outline-2">
-<h2 id="org9b47de7"><span class="section-number-2">2</span> Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
+<div id="outline-container-org717bbcc" class="outline-2">
+<h2 id="org717bbcc"><span class="section-number-2">2</span> Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
 <div class="outline-text-2" id="text-2">
 </div>
 <ol class="org-ol">
-<li><a id="org53a11b5"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
-<li><a id="org58e13bf"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
-<li><a id="orgd48e139"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
-<li><a id="orgaf51db1"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
-<li><a id="org0e6b7a3"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
+<li><a id="orgd5e272e"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
+<li><a id="org7fd4204"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
+<li><a id="org44df446"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
+<li><a id="org1318796"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
+<li><a id="org841c691"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
 <div class="outline-text-6" id="text-2-0-0-0-5">
 </div>
 </li>
 </ol>
 </div>
 
-<div id="outline-container-org59aa1ee" class="outline-2">
-<h2 id="org59aa1ee"><span class="section-number-2">3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
+<div id="outline-container-orge42580d" class="outline-2">
+<h2 id="orge42580d"><span class="section-number-2">3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgc894047" class="outline-3">
-<h3 id="orgc894047"><span class="section-number-3">3.1</span> Households for which data are missing for critical variables</h3>
+<div id="outline-container-org948f1f5" class="outline-3">
+<h3 id="org948f1f5"><span class="section-number-3">3.1</span> Households for which data are missing for critical variables</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 </p>
 
-<table id="org43dbd96" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org60a5589" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 1:</span> Households with data missing for critical variables</caption>
 
 <colgroup>
@@ -389,21 +389,21 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-org27c3603" class="outline-3">
-<h3 id="org27c3603"><span class="section-number-3">3.2</span> Data categorisation issues</h3>
+<div id="outline-container-org0062777" class="outline-3">
+<h3 id="org0062777"><span class="section-number-3">3.2</span> Data categorisation issues</h3>
 <div class="outline-text-3" id="text-3-2">
 </div>
 <ol class="org-ol">
-<li><a id="org52216d9"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
-<li><a id="org9189aac"></a><span class="todo TODO">TODO</span> Jhimar and Dhinvar are same<br /></li>
-<li><a id="org1ae6872"></a><span class="todo TODO">TODO</span> Lohar categorised as both BC and SC<br /></li>
+<li><a id="org773f9f8"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
+<li><a id="orga02dceb"></a><span class="todo TODO">TODO</span> Jhimar and Dhinvar are same<br /></li>
+<li><a id="orgb47e6ff"></a><span class="todo TODO">TODO</span> Lohar categorised as both BC and SC<br /></li>
 </ol>
 </div>
 
-<div id="outline-container-orgcec5d76" class="outline-3">
-<h3 id="orgcec5d76"><span class="section-number-3">3.3</span> Abnormal asset prices</h3>
+<div id="outline-container-orga41ab47" class="outline-3">
+<h3 id="orga41ab47"><span class="section-number-3">3.3</span> Abnormal asset prices</h3>
 <div class="outline-text-3" id="text-3-3">
-<table id="org3ed2677" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgcfa326e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 2:</span> Abnormal values of asset prices</caption>
 
 <colgroup>
@@ -464,18 +464,18 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-orgc25cde0" class="outline-2">
-<h2 id="orgc25cde0"><span class="section-number-2">4</span> Emerging patterns</h2>
+<div id="outline-container-org4950415" class="outline-2">
+<h2 id="org4950415"><span class="section-number-2">4</span> Emerging patterns</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 </p>
 </div>
 
-<div id="outline-container-org9f2f625" class="outline-3">
-<h3 id="org9f2f625"><span class="section-number-3">4.1</span> Caste Composition</h3>
+<div id="outline-container-org48a5449" class="outline-3">
+<h3 id="org48a5449"><span class="section-number-3">4.1</span> Caste Composition</h3>
 <div class="outline-text-3" id="text-4-1">
-<table id="org630f0c2" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgd5df511" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 3:</span> Caste representation in the sample</caption>
 
 <colgroup>
@@ -857,34 +857,34 @@ This section will provide a compilation of tables and graphs on different aspect
 </div>
 </div>
 
-<div id="outline-container-org7acc91b" class="outline-3">
-<h3 id="org7acc91b"><span class="section-number-3">4.2</span> Land relations</h3>
+<div id="outline-container-org5e3daaf" class="outline-3">
+<h3 id="org5e3daaf"><span class="section-number-3">4.2</span> Land relations</h3>
 </div>
-<div id="outline-container-org658da77" class="outline-3">
-<h3 id="org658da77"><span class="section-number-3">4.3</span> Food security</h3>
+<div id="outline-container-orgb46c870" class="outline-3">
+<h3 id="orgb46c870"><span class="section-number-3">4.3</span> Food security</h3>
 </div>
-<div id="outline-container-orgb1aa537" class="outline-3">
-<h3 id="orgb1aa537"><span class="section-number-3">4.4</span> Cropping pattern, Production, Input use</h3>
+<div id="outline-container-org7755999" class="outline-3">
+<h3 id="org7755999"><span class="section-number-3">4.4</span> Cropping pattern, Production, Input use</h3>
 </div>
-<div id="outline-container-orga6487ab" class="outline-3">
-<h3 id="orga6487ab"><span class="section-number-3">4.5</span> Labour Deployment</h3>
+<div id="outline-container-org9e19b18" class="outline-3">
+<h3 id="org9e19b18"><span class="section-number-3">4.5</span> Labour Deployment</h3>
 </div>
-<div id="outline-container-org2a2e333" class="outline-3">
-<h3 id="org2a2e333"><span class="section-number-3">4.6</span> Employment</h3>
+<div id="outline-container-orgecd88c9" class="outline-3">
+<h3 id="orgecd88c9"><span class="section-number-3">4.6</span> Employment</h3>
 </div>
-<div id="outline-container-orgd6704df" class="outline-3">
-<h3 id="orgd6704df"><span class="section-number-3">4.7</span> Livestock</h3>
+<div id="outline-container-org33a6636" class="outline-3">
+<h3 id="org33a6636"><span class="section-number-3">4.7</span> Livestock</h3>
 </div>
-<div id="outline-container-org820a00d" class="outline-3">
-<h3 id="org820a00d"><span class="section-number-3">4.8</span> Housing and Sanitation</h3>
+<div id="outline-container-orgd83b490" class="outline-3">
+<h3 id="orgd83b490"><span class="section-number-3">4.8</span> Housing and Sanitation</h3>
 </div>
-<div id="outline-container-org640e45e" class="outline-3">
-<h3 id="org640e45e"><span class="section-number-3">4.9</span> Health and Education</h3>
+<div id="outline-container-org54679a7" class="outline-3">
+<h3 id="org54679a7"><span class="section-number-3">4.9</span> Health and Education</h3>
 </div>
-<div id="outline-container-org25bd225" class="outline-3">
-<h3 id="org25bd225"><span class="section-number-3">4.10</span> Assets and Indebtedness</h3>
+<div id="outline-container-org9792e19" class="outline-3">
+<h3 id="org9792e19"><span class="section-number-3">4.10</span> Assets and Indebtedness</h3>
 <div class="outline-text-3" id="text-4-10">
-<table id="org5e059d8" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org427b63a" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 4:</span> Summary statistics for unit prices of assets</caption>
 
 <colgroup>
