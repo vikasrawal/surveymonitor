@@ -53,6 +53,8 @@ CLOSED: [2018-11-11 Sun 05:56]
 ***** DONE Make a block/page-wise table of data operators
 CLOSED: [2018-11-11 Sun 06:59]
 
+***** Type of contract in labouring out should be foreign key
+
 * Inconsistencies in Data                                       :Sonia:Jesim:
 ** Households for which data are missing for critical variables
 
@@ -68,14 +70,8 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 #+NAME: missing-data-code
 #+CAPTION: Households with data missing for critical variables
 #+RESULTS: missing-data-code
-| village_name     | household_number | blankfield | detail  |
-|------------------+------------------+------------+---------|
-| Jamalpur Shekhan |               61 | if_sc_st   | Balmiki |
-| Jamalpur Shekhan |               66 | if_sc_st   | Od      |
-| Jamalpur Shekhan |               71 | if_sc_st   | Saini   |
-| Jamalpur Shekhan |               76 | if_sc_st   | Bazigar |
-| Jamalpur Shekhan |               77 | if_sc_st   | Saini   |
-| Jamalpur Shekhan |               78 | if_sc_st   | Saini   |
+| village_name | household_number | blankfield | detail |
+|--------------+------------------+------------+--------|
 
 ** Data categorisation issues
 **** TODO Majhabi Sikh and Rai Sikh are perhaps same
@@ -131,6 +127,8 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 | Jamalpur Shekhan |               67 | Refrigerator       |  14000 |
 | Jamalpur Shekhan |                9 | Almirah/cupboard   |  35000 |
 
+**** Match homestead land with housing information. Check if value of house and land are recorded.
+
 * Emerging patterns
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
@@ -139,59 +137,59 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-merge(household,villages,by.x="village_id",by.y="id")->t
-  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
+  merge(household,villages,by.x="village_id",by.y="id")->t
+    merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
   t[,.(Number=length(household_number)),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
-  t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
-  names(t1)[c(3:6)]<-villages$village_name
-  names(t1)[c(1:2)]<-c("Social group","Caste")
-  t1
+    t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
+    names(t1)[c(3:6)]<-unique(t$village_name)
+    names(t1)[c(1:2)]<-c("Social group","Caste")
+    t1
 #+END_SRC
 
 #+NAME: caste-composition-code
 #+CAPTION: Caste representation in the sample
 #+RESULTS: caste-composition-code
-| Social group | Caste          | Khandrai | Cheher Kalan | Jamalpur Shekhan | Birdhana |
-|--------------+----------------+----------+--------------+------------------+----------|
-| nil          | Balmiki        |      nil | nil          | 1                | nil      |
-| nil          | Bazigar        |      nil | nil          | 1                | nil      |
-| nil          | Od             |      nil | nil          | 1                | nil      |
-| nil          | Saini          |      nil | nil          | 3                | nil      |
-| BC           | Bhatra sikh    |      nil | nil          | 1                | nil      |
-| BC           | Jhimar/Dhinwar |        1 | nil          | nil              | 3        |
-| BC           | Jogi           |      nil | nil          | nil              | 1        |
-| BC           | Kamboj         |        5 | nil          | 3                | nil      |
-| BC           | Khati          |      nil | 9            | 1                | 2        |
-| BC           | Kumhar         |        1 | 2            | nil              | 5        |
-| BC           | Lodhi          |        1 | nil          | nil              | nil      |
-| BC           | Lohar          |        1 | nil          | 1                | nil      |
-| BC           | Mali           |        1 | nil          | nil              | nil      |
-| BC           | Nai            |        2 | 5            | 3                | nil      |
-| BC           | Rebari         |        9 | nil          | nil              | nil      |
-| BC           | Saini          |      nil | nil          | 11               | nil      |
-| BC           | Teli           |        1 | nil          | nil              | nil      |
-| BC           | Yadav          |      nil | nil          | nil              | 1        |
-| Other        | Arora          |        3 | nil          | 3                | nil      |
-| Other        | Baniya         |        1 | 3            | nil              | nil      |
-| Other        | Bishnoi        |       11 | nil          | nil              | nil      |
-| Other        | Brahmin        |      nil | 6            | nil              | 1        |
-| Other        | Garg           |      nil | nil          | 1                | nil      |
-| Other        | Jat            |       12 | 10           | 9                | 23       |
-| Other        | Khati          |      nil | nil          | 3                | nil      |
-| Other        | Mehta          |        6 | nil          | nil              | nil      |
-| Other        | Sunar          |        1 | 1            | nil              | nil      |
-| SC           | Balmiki        |      nil | nil          | 6                | 1        |
-| SC           | Bawaria        |      nil | nil          | 1                | 1        |
-| SC           | Bazigar        |        2 | nil          | 6                | nil      |
-| SC           | Chamar         |       13 | 7            | 8                | 17       |
-| SC           | Dhanak         |        8 | 9            | nil              | 17       |
-| SC           | Lohar          |        1 | 1            | nil              | nil      |
-| SC           | Mazhabi Sikh   |        1 | nil          | nil              | nil      |
-| SC           | Meena          |        1 | nil          | nil              | nil      |
-| SC           | Nayak          |        2 | nil          | nil              | nil      |
-| SC           | Od             |        3 | nil          | 15               | nil      |
-| SC           | Rai Sikh       |       15 | nil          | nil              | nil      |
-| SC           | Rebari         |        1 | nil          | nil              | nil      |
+| Social group | Caste          | Birdhana | Jamalpur Shekhan | Khandrai | Cheher Kalan |
+|--------------+----------------+----------+------------------+----------+--------------|
+| nil          | Balmiki        |      nil | nil              | 1        | nil          |
+| nil          | Bazigar        |      nil | nil              | 1        | nil          |
+| nil          | Od             |      nil | nil              | 1        | nil          |
+| nil          | Saini          |      nil | nil              | 3        | nil          |
+| BC           | Bhatra sikh    |      nil | nil              | 1        | nil          |
+| BC           | Jhimar/Dhinwar |        1 | nil              | nil      | 3            |
+| BC           | Jogi           |      nil | nil              | nil      | 1            |
+| BC           | Kamboj         |        5 | nil              | 3        | nil          |
+| BC           | Khati          |      nil | 9                | 1        | 2            |
+| BC           | Kumhar         |        1 | 2                | nil      | 5            |
+| BC           | Lodhi          |        1 | nil              | nil      | nil          |
+| BC           | Lohar          |        1 | nil              | 1        | nil          |
+| BC           | Mali           |        1 | nil              | nil      | nil          |
+| BC           | Nai            |        2 | 5                | 3        | nil          |
+| BC           | Rebari         |        9 | nil              | nil      | nil          |
+| BC           | Saini          |      nil | nil              | 11       | nil          |
+| BC           | Teli           |        1 | nil              | nil      | nil          |
+| BC           | Yadav          |      nil | nil              | nil      | 1            |
+| Other        | Arora          |        3 | nil              | 3        | nil          |
+| Other        | Baniya         |        1 | 3                | nil      | nil          |
+| Other        | Bishnoi        |       11 | nil              | nil      | nil          |
+| Other        | Brahmin        |      nil | 6                | nil      | 1            |
+| Other        | Garg           |      nil | nil              | 1        | nil          |
+| Other        | Jat            |       12 | 10               | 9        | 23           |
+| Other        | Khati          |      nil | nil              | 3        | nil          |
+| Other        | Mehta          |        6 | nil              | nil      | nil          |
+| Other        | Sunar          |        1 | 1                | nil      | nil          |
+| SC           | Balmiki        |      nil | nil              | 6        | 1            |
+| SC           | Bawaria        |      nil | nil              | 1        | 1            |
+| SC           | Bazigar        |        2 | nil              | 6        | nil          |
+| SC           | Chamar         |       13 | 7                | 8        | 17           |
+| SC           | Dhanak         |        8 | 9                | nil      | 17           |
+| SC           | Lohar          |        1 | 1                | nil      | nil          |
+| SC           | Mazhabi Sikh   |        1 | nil              | nil      | nil          |
+| SC           | Meena          |        1 | nil              | nil      | nil          |
+| SC           | Nayak          |        2 | nil              | nil      | nil          |
+| SC           | Od             |        3 | nil              | 15       | nil          |
+| SC           | Rai Sikh       |       15 | nil              | nil      | nil          |
+| SC           | Rebari         |        1 | nil              | nil      | nil          |
 
 ** Land relations
 ** Food security
@@ -203,92 +201,5 @@ merge(household,villages,by.x="village_id",by.y="id")->t
 ** Health and Education
 ** Assets and Indebtedness
 
-#+NAME: asset_unit_values_code
-#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+#+INCLUDE: assets.org
 
-    dbReadTable(surveypg,"ruralsurvey_asset_ownership_other")->t0
-    dbReadTable(surveypg,"ruralsurvey_code_asset_others")->code
-    merge(t0,code,by.x="asset_id",by.y="id")->t0
-
-    dbReadTable(surveypg,"ruralsurvey_asset_ownership_transport")->t1
-    dbReadTable(surveypg,"ruralsurvey_code_asset_transport")->code
-    merge(t1,code,by.x="asset_id",by.y="id")->t1
-
-    dbReadTable(surveypg,"ruralsurvey_asset_ownership_electrical")->t2
-    dbReadTable(surveypg,"ruralsurvey_code_asset_electrical")->code
-    merge(t2,code,by.x="asset_id",by.y="id")->t2
-
-    dbReadTable(surveypg,"ruralsurvey_asset_ownership_furniture")->t3
-    dbReadTable(surveypg,"ruralsurvey_code_asset_furniture")->code
-    merge(t3,code,by.x="asset_id",by.y="id")->t3
-
-
-    dbReadTable(surveypg,"ruralsurvey_asset_ownership_inventories")->t4
-    dbReadTable(surveypg,"ruralsurvey_code_asset_inventories")->code
-    merge(t4,code,by.x="asset_id",by.y="id")->t4
-
-    data.table(rbind(t0,t1,t2,t3))->t
-    round(t$value/t$no)->t$price
-    t[is.na(price)]->miss
-    t[!is.na(price)]->t
-    t[,as.list(summary(price)),keyby=asset]->t1
-
-    t1[,Mean:=round(Mean)]->t1
-    t[,.N,keyby=asset]->t2
-    miss[,.(Total_number=.N),keyby=asset]->t3
-  merge(t1,t2,by="asset")->t1
-  merge(t1,t3,by="asset",all.y=T)
-#+END_SRC
-
-#+NAME: asset_unit_values
-#+CAPTION: Summary statistics for unit prices of assets
-#+RESULTS: asset_unit_values_code
-| asset                                               |  Min. | 1st Qu. | Median |   Mean | 3rd Qu. |   Max. |   N | Total_number |
-|-----------------------------------------------------+-------+---------+--------+--------+---------+--------+-----+--------------|
-| Air-conditioner                                     |   500 |    6625 |  12750 |  12750 |   18875 |  25000 |   2 |           23 |
-| Almirah/cupboard                                    |  4000 |   11750 |  19500 |  19500 |   27250 |  35000 |   2 |          150 |
-| B/W TV                                              |   nil |     nil |    nil |    nil |     nil |    nil | nil |           12 |
-| Bed                                                 |   nil |     nil |    nil |    nil |     nil |    nil | nil |          152 |
-| Bicycle                                             |   200 |     600 |   1200 |   1989 |    1500 |  10000 |   9 |          104 |
-| Biogas plant                                        |   nil |     nil |    nil |    nil |     nil |    nil | nil |            4 |
-| Bus                                                 |   nil |     nil |    nil |    nil |     nil |    nil | nil |            2 |
-| Cable connection                                    |   150 |     150 |    150 |    583 |   412.5 |   2400 |   6 |           88 |
-| Capital equipment owned in non-agriculture business |   nil |     nil |    nil |    nil |     nil |    nil | nil |            1 |
-| Car/Jeep                                            | 40000 |  125000 |  2e+05 | 204545 |  287500 |  4e+05 |  11 |           29 |
-| Ceiling fan                                         |   600 |   612.5 |    625 |   2075 |  2812.5 |   5000 |   3 |          238 |
-| Chair/stool/bench                                   |   300 |     300 |    300 |    300 |     300 |    300 |   1 |          201 |
-| Clock                                               |   150 |     150 |    150 |    150 |     150 |    150 |   1 |           20 |
-| Colour TV                                           |  2000 |    2250 |   5000 |   8357 |    6000 |  35000 |   7 |          219 |
-| Computer                                            | 10000 |   12500 |  15000 |  15000 |   17500 |  20000 |   3 |           30 |
-| Cooking gas+gas stove                               |   500 |    1250 |   1500 |   1625 |    1875 |   3000 |   4 |          244 |
-| Cooler                                              |   750 |    2250 |   3000 |   3536 |    4250 |   8000 |   7 |          165 |
-| Cot/Charpai                                         |   400 |     475 |    550 |    844 |  918.75 |   1875 |   4 |          262 |
-| DVD/VCD/CD player                                   |  3000 |    3000 |   3000 |   3000 |    3000 |   3000 |   1 |            1 |
-| Dish antenna                                        |  1500 |    1500 |   1500 |   1500 |    1500 |   1500 |   1 |          117 |
-| Dressing table                                      |  4000 |    4000 |   4000 |   4000 |    4000 |   4000 |   1 |           55 |
-| Electric heater                                     |   nil |     nil |    nil |    nil |     nil |    nil | nil |           10 |
-| Generator                                           | 10000 |   15000 |  20000 |  24000 |   25000 |  50000 |   5 |           11 |
-| Handpump                                            |   nil |     nil |    nil |    nil |     nil |    nil | nil |           18 |
-| Inverter                                            |    10 |  3756.5 |   8000 |   7218 |   10500 |  14000 |   7 |          153 |
-| Iron                                                |   250 |     250 |    250 |    250 |     250 |    250 |   1 |          170 |
-| Kerosene stove                                      |   nil |     nil |    nil |    nil |     nil |    nil | nil |            6 |
-| Lorry                                               | 8e+05 |   8e+05 |  8e+05 |  8e+05 |   8e+05 |  8e+05 |   1 |            1 |
-| Microwave                                           |   nil |     nil |    nil |    nil |     nil |    nil | nil |            4 |
-| Mixer/grinder/Milk-churner                          |  1500 |    1750 |   2000 |   2000 |    2250 |   2500 |   2 |           45 |
-| Mobile phone                                        |   750 |   937.5 |   1500 |   1438 |    2000 |   2000 |   4 |          246 |
-| Moped                                               | 43000 |   43000 |  43000 |  43000 |   43000 |  43000 |   1 |           10 |
-| Other                                               |   nil |     nil |    nil |    nil |     nil |    nil | nil |            2 |
-| Other electrical appliances                         | 45000 |   45000 |  45000 |  45000 |   45000 |  45000 |   1 |            4 |
-| Other furniture                                     |   nil |     nil |    nil |    nil |     nil |    nil | nil |            4 |
-| Refrigerator                                        |  2000 |    3500 |   6000 |   9150 |   12500 |  25000 |  10 |          194 |
-| Scooter/motorcycle                                  |  2500 |   11000 |  16000 |  23434 |   30000 | 125000 |  43 |          121 |
-| Sewing machine                                      |   800 |    1000 |   1000 |   1775 |    2550 |   4000 |   8 |          185 |
-| Sofa set                                            |  1333 | 2999.75 | 4666.5 |   4666 | 6333.25 |   8000 |   2 |           67 |
-| Table                                               |   500 |     500 |    500 |    667 |     750 |   1000 |   3 |          124 |
-| Table fan                                           |   800 |     825 |    850 |    850 |     875 |    900 |   2 |          144 |
-| Telephone (fixed)                                   |   nil |     nil |    nil |    nil |     nil |    nil | nil |           10 |
-| Transistor/radio                                    |   500 |     500 |    500 |    500 |     500 |    500 |   1 |            6 |
-| Trunk/box/suitcase                                  |   250 |     625 |    875 |   1500 |    1750 |   4000 |   4 |          259 |
-| Utensils/kitchen instrument                         |   nil |     nil |    nil |    nil |     nil |    nil | nil |           64 |
-| Washing machine                                     |  2000 |    4000 |   5000 |   4571 |    5000 |   7000 |   7 |          128 |
-| Watch                                               |   nil |     nil |    nil |    nil |     nil |    nil | nil |           15 |
