@@ -255,10 +255,6 @@ This section will provide a compilation of tables and graphs on different aspect
 #+RESULTS: caste-composition-code
 | Social group | Caste          | Birdhana | Jamalpur Shekhan | Khandrai | Cheher Kalan |
 |--------------+----------------+----------+------------------+----------+--------------|
-| nil          | Balmiki        |      nil | nil              | 1        | nil          |
-| nil          | Bazigar        |      nil | nil              | 1        | nil          |
-| nil          | Od             |      nil | nil              | 1        | nil          |
-| nil          | Saini          |      nil | nil              | 3        | nil          |
 | BC           | Bhatra sikh    |      nil | nil              | 1        | nil          |
 | BC           | Jhimar/Dhinwar |        1 | nil              | nil      | 3            |
 | BC           | Jogi           |      nil | nil              | nil      | 1            |
@@ -266,11 +262,11 @@ This section will provide a compilation of tables and graphs on different aspect
 | BC           | Khati          |      nil | 9                | 1        | 2            |
 | BC           | Kumhar         |        1 | 2                | nil      | 5            |
 | BC           | Lodhi          |        1 | nil              | nil      | nil          |
-| BC           | Lohar          |        1 | nil              | 1        | nil          |
+| BC           | Lohar          |        2 | 1                | 1        | nil          |
 | BC           | Mali           |        1 | nil              | nil      | nil          |
 | BC           | Nai            |        2 | 5                | 3        | nil          |
-| BC           | Rebari         |        9 | nil              | nil      | nil          |
-| BC           | Saini          |      nil | nil              | 11       | nil          |
+| BC           | Rebari         |       10 | nil              | nil      | nil          |
+| BC           | Saini          |      nil | nil              | 14       | nil          |
 | BC           | Teli           |        1 | nil              | nil      | nil          |
 | BC           | Yadav          |      nil | nil              | nil      | 1            |
 | Other        | Arora          |        3 | nil              | 3        | nil          |
@@ -282,18 +278,16 @@ This section will provide a compilation of tables and graphs on different aspect
 | Other        | Khati          |      nil | nil              | 3        | nil          |
 | Other        | Mehta          |        6 | nil              | nil      | nil          |
 | Other        | Sunar          |        1 | 1                | nil      | nil          |
-| SC           | Balmiki        |      nil | nil              | 6        | 1            |
+| SC           | Balmiki        |      nil | nil              | 7        | 1            |
 | SC           | Bawaria        |      nil | nil              | 1        | 1            |
-| SC           | Bazigar        |        2 | nil              | 6        | nil          |
+| SC           | Bazigar        |        2 | nil              | 7        | nil          |
 | SC           | Chamar         |       13 | 7                | 8        | 17           |
 | SC           | Dhanak         |        8 | 9                | nil      | 17           |
-| SC           | Lohar          |        1 | 1                | nil      | nil          |
 | SC           | Mazhabi Sikh   |        1 | nil              | nil      | nil          |
 | SC           | Meena          |        1 | nil              | nil      | nil          |
 | SC           | Nayak          |        2 | nil              | nil      | nil          |
-| SC           | Od             |        3 | nil              | 15       | nil          |
+| SC           | Od             |        3 | nil              | 16       | nil          |
 | SC           | Rai Sikh       |       15 | nil              | nil      | nil          |
-| SC           | Rebari         |        1 | nil              | nil      | nil          |
 
 ** Land relations
 ** Food security
