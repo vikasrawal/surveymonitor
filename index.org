@@ -10,27 +10,50 @@
 
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
-
-require(RPostgreSQL)
-require(ggplot2)
-require(data.table)
-
+  require(RPostgreSQL)
+  require(ggplot2)
+  require(data.table)
+  GrepResults<-system2("ps",c("ax | grep 'ssh -L 3333'| grep 'singdehri'"),stdout=TRUE)
+  Processes<-as.numeric(sub(" .*","",GrepResults)) 
+  tools::pskill(Processes)
+  system2("ssh", c("-L3333:localhost:5432", "-N", "-T", "singdehri.sser.in"), wait=FALSE)
 #+END_SRC
 
+#+NAME: open-database-connection
+#+BEGIN_SRC R :results silent :exports none
+  require(RPostgreSQL)
+  GrepResults<-system2("ps",c("ax | grep 'ssh -L 3333'| grep 'singdehri'"),stdout=TRUE)
+  Processes<-as.numeric(sub(" .*","",GrepResults)) 
+  tools::pskill(Processes)
+  system2("ssh", c("-L3333:localhost:5432", "-N", "-T", "singdehri.sser.in"), wait=FALSE)
+  drv <- dbDriver("PostgreSQL")
+  surveypg <- dbConnect(drv, dbname = "ssersurveydata",
+                   host = "localhost", port = 3333, user="vaishali")
+#+END_SRC
 
 #+NAME: read-data-code
 #+BEGIN_SRC R :results silent :exports none
   drv <- dbDriver("PostgreSQL")
 
   surveypg <- dbConnect(drv, dbname = "ssersurveydata",
-                   host = "localhost", port = 5432,
-                   user = "ssersurveyuser")
+                   host = "localhost", port = 3333, user="ssersurveyuser")
 
+  dbListTables(surveypg)->t
   data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
+
   data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
   data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
   data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
   data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
+
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+  data.table(dbReadTable(surveypg,"ruralsurvey_current_ownership_holdings"))->ownershipholding
+  data.table(dbReadTable(surveypg,"ruralsurvey_irrigation_ownership_holdings"))->irrigation
+  #dbDisconnect(surveypg)
+
 #+END_SRC
 
 * Overall Decisions
@@ -56,8 +79,85 @@ CLOSED: [2018-11-11 Sun 06:59]
 
 ***** Type of contract in labouring out should be foreign key
 
+** Corrections in design of land tables
+
+#+NAME: separate-irrigation
+#+BEGIN_SRC R
+  drv <- dbDriver("PostgreSQL")
+
+    surveypg <- dbConnect(drv, dbname = "ssersurveydata",
+                     host = "localhost", port = 5432,)
+
+    dbListTables(surveypg)
+
+    ave(ownershipholding$id,ownershipholding$sno_id,FUN=rank)->ownershipholding$parcel_number
+    names(ownershipholding)
+    ownershipholding[,c(1,16,9:12,15,14)]->irrigation
+  irrigation[is.na(irrigation_src_type)&is.na(comments),irrigation_src_type:="Unirrigated"]
+
+  sql_truncate <- paste("TRUNCATE ", "ruralsurvey_irrigation_ownership_holdings")
+  res <- dbSendQuery(conn=surveypg, statement=sql_truncate)
+  dbWriteTable(surveypg,"ruralsurvey_irrigation_ownership_holdings",irrigation,row.names=FALSE,append=TRUE)
+    dbReadTable(surveypg,"ruralsurvey_irrigation_ownership_holdings")
+    dbDisconnect(surveypg)
+#+END_SRC
+
+#+NAME: combine-leases
+#+BEGIN_SRC R
+  drv <- dbDriver("PostgreSQL")
+
+  surveypg <- dbConnect(drv, dbname = "ssersurveydata",
+                     host = "localhost", port = 5432,)
+
+  dbListTables(surveypg)
+
+  as.data.table(dbReadTable(surveypg,"ruralsurvey_land_leased_in_fixed_rent"))->leasecontracts
+  leasecontracts$transfer_in_out<-"In"
+  leasecontracts$contract_type<-"Fixed rent"
+
+  as.data.table(dbReadTable(surveypg,"ruralsurvey_land_leased_out_fixed_rent"))->leaseoutfixed
+  leaseoutfixed$transfer_in_out<-"Out"
+  leaseoutfixed$contract_type<-"Fixed rent"
+
+  names(leasecontracts)[c(1:6)]->names(leaseoutfixed)[c(1:6)]
+  names(leaseoutfixed)[names(leaseoutfixed)=="loans_from_owner"]<-"loans_from_to_partner"
+  names(leaseoutfixed)[names(leaseoutfixed)=="tenant_caste_id"]<-"partner_caste_id"
+  names(leaseoutfixed)[names(leaseoutfixed)=="tenant_occupation_id"]<-"partner_occupation_id"
+  names(leaseoutfixed)[names(leaseoutfixed)=="kind_unit_id"]<-"crop_qty_unit_id"
+  names(leaseoutfixed)[names(leaseoutfixed)=="kind"]<-"crop_qty"
+  paste("SYO: ",leaseoutfixed$syo,"; ",leaseoutfixed$comments,sep="")->leaseoutfixed$comments
+  leaseoutfixed[,syo:=NULL]
+
+  rbindlist(list(leasecontracts,leaseoutfixed), use.names=TRUE, fill=TRUE, idcol=TRUE)->a
+  a[,.id:=NULL]
+  #ownershipholding[,c(1,16,9:12,15,14)]->irrigation
+  #irrigation[is.na(irrigation_src_type)&is.na(comments),irrigation_src_type:="Unirrigated"]
+
+
+
+  ave(a$id,a$sno_id,FUN=rank)->a$parcel_number
+
+  a[,c(41,2,3,39,40,4,5,7,19,17,16,18)]->a1
+
+  sql_truncate <- paste("TRUNCATE ", "ruralsurvey_land_tenancy_mortgage") ##unconditional DELETE FROM…
+  res <- dbSendQuery(conn=surveypg, statement=sql_truncate)
+  dbWriteTable(surveypg,"ruralsurvey_land_tenancy_mortgage",a1,row.names=FALSE,append=TRUE)
+
+  a->a2
+  a2[,transfer_in_out:=NULL]
+  a2[,contract_type:=NULL]
+  a2[,id:=NULL]
+  sql_truncate <- paste("TRUNCATE ", "ruralsurvey_land_leased_in_fixed_rent") ##unconditional DELETE FROM…
+  res <- dbSendQuery(conn=surveypg, statement=sql_truncate)
+  dbWriteTable(surveypg,"ruralsurvey_land_leased_in_fixed_rent",a2,row.names=FALSE,append=TRUE)
+
+
+
+
+  dbDisconnect(surveypg)
+#+END_SRC
 * Inconsistencies in Data                                       :Sonia:Jesim:
-** Households for which data are missing for critical variables
+** TODO Households for which data are missing for critical variables
 
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 
@@ -301,3 +401,14 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+INCLUDE: assets.org
 
+* Kill Connections                                                 :noexport:
+
+#+NAME: kill-ssh-connections
+#+BEGIN_SRC R :results silent :exports none
+  dbDisconnect(surveypg)
+  GrepResults<-system2("ps",c("ax | grep 'ssh -L 3333'| grep 'singdehri'"),stdout=TRUE)
+  Processes<-as.numeric(sub(" .*","",GrepResults)) 
+  tools::pskill(Processes)
+#+END_SRC
+
+* 

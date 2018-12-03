@@ -46,6 +46,7 @@ Get unit prices
     miss[,.(Total_number=.N),keyby=asset]->t3
   merge(t1,t2,by="asset")->t1
   merge(t1,t3,by="asset",all.y=T)
+ 
 #+END_SRC
 
 #+NAME: asset_unit_values
