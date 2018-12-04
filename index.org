@@ -70,10 +70,10 @@ CLOSED: [2018-11-11 Sun 06:59]
 
 ***** Type of contract in labouring out should be foreign key
 
-** Corrections in design of land tables
+** Corrections in design of land tables                           :noexport:
 
 #+NAME: separate-irrigation
-#+BEGIN_SRC R
+#+BEGIN_SRC R 
   drv <- dbDriver("PostgreSQL")
 
     surveypg <- dbConnect(drv, dbname = "ssersurveydata",

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-12-04 Tue 21:14 -->
+<!-- 2018-12-04 Tue 21:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Monitoring Data Entry for Haryana Surveys Asset-holdings of Rural Households in Haryana</title>
@@ -234,41 +234,37 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org8e56775">1. Overall Decisions</a></li>
-<li><a href="#org99bf603">2. Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a>
+<li><a href="#orgd5c02cc">1. Overall Decisions</a></li>
+<li><a href="#org6918327">2. Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
+<li><a href="#orgfa01662">3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
 <ul>
-<li><a href="#orga5e1c4c">2.1. Corrections in design of land tables</a></li>
+<li><a href="#org791cc95">3.1. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
+<li><a href="#org25e01d3">3.2. Data categorisation issues</a></li>
+<li><a href="#org079e0bf">3.3. Abnormal asset prices</a></li>
 </ul>
 </li>
-<li><a href="#orgc52a7c3">3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
+<li><a href="#org2a2ca92">4. Number of Rows in Database Tables</a></li>
+<li><a href="#org4788c5d">5. Emerging patterns</a>
 <ul>
-<li><a href="#org2220452">3.1. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
-<li><a href="#org6bf3647">3.2. Data categorisation issues</a></li>
-<li><a href="#orga5acf36">3.3. Abnormal asset prices</a></li>
+<li><a href="#org02f703b">5.1. Caste Composition</a></li>
+<li><a href="#org31c7c74">5.2. Land relations</a></li>
+<li><a href="#org767c08e">5.3. Food security</a></li>
+<li><a href="#org56b88d1">5.4. Cropping pattern, Production, Input use</a></li>
+<li><a href="#org7423354">5.5. Labour Deployment</a></li>
+<li><a href="#orgc067ccf">5.6. Employment</a></li>
+<li><a href="#org39d2314">5.7. Livestock</a></li>
+<li><a href="#org3db8d2c">5.8. Housing and Sanitation</a></li>
+<li><a href="#org2d5548f">5.9. Health and Education</a></li>
+<li><a href="#org61f744a">5.10. Assets and Indebtedness</a></li>
 </ul>
 </li>
-<li><a href="#org0043bff">4. Number of Rows in Database Tables</a></li>
-<li><a href="#org74d0634">5. Emerging patterns</a>
-<ul>
-<li><a href="#orgc9cc639">5.1. Caste Composition</a></li>
-<li><a href="#orgb76a67e">5.2. Land relations</a></li>
-<li><a href="#org979284c">5.3. Food security</a></li>
-<li><a href="#orgfe62e8a">5.4. Cropping pattern, Production, Input use</a></li>
-<li><a href="#orgdc324ef">5.5. Labour Deployment</a></li>
-<li><a href="#org65e9428">5.6. Employment</a></li>
-<li><a href="#org038bed1">5.7. Livestock</a></li>
-<li><a href="#org8ad6b2d">5.8. Housing and Sanitation</a></li>
-<li><a href="#orgd433401">5.9. Health and Education</a></li>
-<li><a href="#org5e683bb">5.10. Assets and Indebtedness</a></li>
-</ul>
-</li>
-<li><a href="#org030032a">6. </a></li>
+<li><a href="#orgc5d2280">6. </a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org8e56775" class="outline-2">
-<h2 id="org8e56775"><span class="section-number-2">1</span> Overall Decisions</h2>
+<div id="outline-container-orgd5c02cc" class="outline-2">
+<h2 id="orgd5c02cc"><span class="section-number-2">1</span> Overall Decisions</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This section records any overall decisions that are taken.
@@ -276,141 +272,60 @@ This section records any overall decisions that are taken.
 </div>
 
 <ol class="org-ol">
-<li><a id="orgbc4a25c"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
-<li><a id="org886e2ea"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
+<li><a id="org1e813c7"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
+<li><a id="org3beaf1b"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
 <div class="outline-text-5" id="text-1-0-0-2">
 <ul class="org-ul">
 <li>Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.</li>
 </ul>
 </div>
 </li>
-<li><a id="orga745fac"></a><span class="todo TODO">TODO</span> Sample weights<br />
+<li><a id="org42a6bb9"></a><span class="todo TODO">TODO</span> Sample weights<br />
 <div class="outline-text-5" id="text-1-0-0-3">
 <ul class="org-ul">
 <li>Vikas needs to check the sampling scripts and get the sampling weights.</li>
 </ul>
 </div>
 </li>
-<li><a id="orgc4c491d"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
+<li><a id="org42fe266"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
 <div class="outline-text-5" id="text-1-0-0-4">
 </div>
 <ol class="org-ol">
-<li><a id="orgc64956a"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
+<li><a id="orged3440c"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
 </ol>
 </li>
 </ol>
 </div>
 
-<div id="outline-container-org99bf603" class="outline-2">
-<h2 id="org99bf603"><span class="section-number-2">2</span> Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
+<div id="outline-container-org6918327" class="outline-2">
+<h2 id="org6918327"><span class="section-number-2">2</span> Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
 <div class="outline-text-2" id="text-2">
 </div>
 <ol class="org-ol">
-<li><a id="org696039f"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
-<li><a id="orgea763d0"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
-<li><a id="orge7b5af4"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
-<li><a id="orgd97c35d"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
-<li><a id="org9a924e3"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
+<li><a id="org768aae6"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
+<li><a id="org3b0a3c2"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
+<li><a id="org6dc54ad"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
+<li><a id="orgd6048a0"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
+<li><a id="orgece85a6"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
 <div class="outline-text-6" id="text-2-0-0-0-5">
 </div>
 </li>
 
-<li><a id="org0f0960e"></a>Type of contract in labouring out should be foreign key<br /></li>
+<li><a id="orgef17b9a"></a>Type of contract in labouring out should be foreign key<br /></li>
 </ol>
-
-<div id="outline-container-orga5e1c4c" class="outline-3">
-<h3 id="orga5e1c4c"><span class="section-number-3">2.1</span> Corrections in design of land tables</h3>
-<div class="outline-text-3" id="text-2-1">
-<div class="org-src-container">
-<pre class="src src-R" id="org1f9a7ff">drv <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbDriver(<span style="color: #8f5902; font-style: italic;">"PostgreSQL"</span>)
-
-  surveypg <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbConnect(drv, dbname = <span style="color: #8f5902; font-style: italic;">"ssersurveydata"</span>,
-                   host = <span style="color: #8f5902; font-style: italic;">"localhost"</span>, port = 5432,)
-
-  dbListTables(surveypg)
-
-  ave(ownershipholding$id,ownershipholding$sno_id,FUN=rank)<span style="color: #8f5902; font-style: italic;">-&gt;</span>ownershipholding$parcel_number
-  names(ownershipholding)
-  ownershipholding[,c(1,16,9:12,15,14)]<span style="color: #8f5902; font-style: italic;">-&gt;</span>irrigation
-irrigation[is.na(irrigation_src_type)&amp;is.na(comments),irrigation_src_type:=<span style="color: #8f5902; font-style: italic;">"Unirrigated"</span>]
-
-sql_truncate <span style="color: #8f5902; font-style: italic;">&lt;-</span> paste(<span style="color: #8f5902; font-style: italic;">"TRUNCATE "</span>, <span style="color: #8f5902; font-style: italic;">"ruralsurvey_irrigation_ownership_holdings"</span>)
-res <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbSendQuery(conn=surveypg, statement=sql_truncate)
-dbWriteTable(surveypg,<span style="color: #8f5902; font-style: italic;">"ruralsurvey_irrigation_ownership_holdings"</span>,irrigation,row.names=<span style="color: #a40000;">FALSE</span>,append=<span style="color: #a40000;">TRUE</span>)
-  dbReadTable(surveypg,<span style="color: #8f5902; font-style: italic;">"ruralsurvey_irrigation_ownership_holdings"</span>)
-  dbDisconnect(surveypg)
-</pre>
 </div>
-
-<div class="org-src-container">
-<pre class="src src-R" id="orgc74d364">drv <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbDriver(<span style="color: #8f5902; font-style: italic;">"PostgreSQL"</span>)
-
-surveypg <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbConnect(drv, dbname = <span style="color: #8f5902; font-style: italic;">"ssersurveydata"</span>,
-                   host = <span style="color: #8f5902; font-style: italic;">"localhost"</span>, port = 5432,)
-
-dbListTables(surveypg)
-
-as.data.table(dbReadTable(surveypg,<span style="color: #8f5902; font-style: italic;">"ruralsurvey_land_leased_in_fixed_rent"</span>))<span style="color: #8f5902; font-style: italic;">-&gt;</span>leasecontracts
-leasecontracts$transfer_in_out<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"In"</span>
-leasecontracts$contract_type<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"Fixed rent"</span>
-
-as.data.table(dbReadTable(surveypg,<span style="color: #8f5902; font-style: italic;">"ruralsurvey_land_leased_out_fixed_rent"</span>))<span style="color: #8f5902; font-style: italic;">-&gt;</span>leaseoutfixed
-leaseoutfixed$transfer_in_out<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"Out"</span>
-leaseoutfixed$contract_type<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"Fixed rent"</span>
-
-names(leasecontracts)[c(1:6)]<span style="color: #8f5902; font-style: italic;">-&gt;</span>names(leaseoutfixed)[c(1:6)]
-names(leaseoutfixed)[names(leaseoutfixed)==<span style="color: #8f5902; font-style: italic;">"loans_from_owner"</span>]<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"loans_from_to_partner"</span>
-names(leaseoutfixed)[names(leaseoutfixed)==<span style="color: #8f5902; font-style: italic;">"tenant_caste_id"</span>]<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"partner_caste_id"</span>
-names(leaseoutfixed)[names(leaseoutfixed)==<span style="color: #8f5902; font-style: italic;">"tenant_occupation_id"</span>]<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"partner_occupation_id"</span>
-names(leaseoutfixed)[names(leaseoutfixed)==<span style="color: #8f5902; font-style: italic;">"kind_unit_id"</span>]<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"crop_qty_unit_id"</span>
-names(leaseoutfixed)[names(leaseoutfixed)==<span style="color: #8f5902; font-style: italic;">"kind"</span>]<span style="color: #8f5902; font-style: italic;">&lt;-</span><span style="color: #8f5902; font-style: italic;">"crop_qty"</span>
-paste(<span style="color: #8f5902; font-style: italic;">"SYO: "</span>,leaseoutfixed$syo,<span style="color: #8f5902; font-style: italic;">"; "</span>,leaseoutfixed$comments,sep=<span style="color: #8f5902; font-style: italic;">""</span>)<span style="color: #8f5902; font-style: italic;">-&gt;</span>leaseoutfixed$comments
-leaseoutfixed[,syo:=<span style="color: #a40000;">NULL</span>]
-
-rbindlist(list(leasecontracts,leaseoutfixed), use.names=<span style="color: #a40000;">TRUE</span>, fill=<span style="color: #a40000;">TRUE</span>, idcol=<span style="color: #a40000;">TRUE</span>)<span style="color: #8f5902; font-style: italic;">-&gt;</span>a
-a[,.id:=<span style="color: #a40000;">NULL</span>]
-<span style="color: #888a85; background-color: #ffffff; font-style: italic;">#</span><span style="color: #888a85; background-color: #ffffff; font-style: italic;">ownershipholding[,c(1,16,9:12,15,14)]-&gt;irrigation</span>
-<span style="color: #888a85; background-color: #ffffff; font-style: italic;">#</span><span style="color: #888a85; background-color: #ffffff; font-style: italic;">irrigation[is.na(irrigation_src_type)&amp;is.na(comments),irrigation_src_type:="Unirrigated"]</span>
-
-
-
-ave(a$id,a$sno_id,FUN=rank)<span style="color: #8f5902; font-style: italic;">-&gt;</span>a$parcel_number
-
-a[,c(41,2,3,39,40,4,5,7,19,17,16,18)]<span style="color: #8f5902; font-style: italic;">-&gt;</span>a1
-
-sql_truncate <span style="color: #8f5902; font-style: italic;">&lt;-</span> paste(<span style="color: #8f5902; font-style: italic;">"TRUNCATE "</span>, <span style="color: #8f5902; font-style: italic;">"ruralsurvey_land_tenancy_mortgage"</span>) <span style="color: #888a85; background-color: #ffffff; font-style: italic;">##</span><span style="color: #888a85; background-color: #ffffff; font-style: italic;">unconditional DELETE FROM&#8230;</span>
-res <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbSendQuery(conn=surveypg, statement=sql_truncate)
-dbWriteTable(surveypg,<span style="color: #8f5902; font-style: italic;">"ruralsurvey_land_tenancy_mortgage"</span>,a1,row.names=<span style="color: #a40000;">FALSE</span>,append=<span style="color: #a40000;">TRUE</span>)
-
-a<span style="color: #8f5902; font-style: italic;">-&gt;</span>a2
-a2[,transfer_in_out:=<span style="color: #a40000;">NULL</span>]
-a2[,contract_type:=<span style="color: #a40000;">NULL</span>]
-a2[,id:=<span style="color: #a40000;">NULL</span>]
-sql_truncate <span style="color: #8f5902; font-style: italic;">&lt;-</span> paste(<span style="color: #8f5902; font-style: italic;">"TRUNCATE "</span>, <span style="color: #8f5902; font-style: italic;">"ruralsurvey_land_leased_in_fixed_rent"</span>) <span style="color: #888a85; background-color: #ffffff; font-style: italic;">##</span><span style="color: #888a85; background-color: #ffffff; font-style: italic;">unconditional DELETE FROM&#8230;</span>
-res <span style="color: #8f5902; font-style: italic;">&lt;-</span> dbSendQuery(conn=surveypg, statement=sql_truncate)
-dbWriteTable(surveypg,<span style="color: #8f5902; font-style: italic;">"ruralsurvey_land_leased_in_fixed_rent"</span>,a2,row.names=<span style="color: #a40000;">FALSE</span>,append=<span style="color: #a40000;">TRUE</span>)
-
-
-
-
-dbDisconnect(surveypg)
-</pre>
-</div>
-</div>
-</div>
-</div>
-<div id="outline-container-orgc52a7c3" class="outline-2">
-<h2 id="orgc52a7c3"><span class="section-number-2">3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
+<div id="outline-container-orgfa01662" class="outline-2">
+<h2 id="orgfa01662"><span class="section-number-2">3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org2220452" class="outline-3">
-<h3 id="org2220452"><span class="section-number-3">3.1</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h3>
+<div id="outline-container-org791cc95" class="outline-3">
+<h3 id="org791cc95"><span class="section-number-3">3.1</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 </p>
 
-<table id="org5115953" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org2154e4d" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 1:</span> Households with data missing for critical variables</caption>
 
 <colgroup>
@@ -1254,21 +1169,21 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-org6bf3647" class="outline-3">
-<h3 id="org6bf3647"><span class="section-number-3">3.2</span> Data categorisation issues</h3>
+<div id="outline-container-org25e01d3" class="outline-3">
+<h3 id="org25e01d3"><span class="section-number-3">3.2</span> Data categorisation issues</h3>
 <div class="outline-text-3" id="text-3-2">
 </div>
 <ol class="org-ol">
-<li><a id="orgfdf6bb3"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
-<li><a id="orgc7f32ec"></a><span class="todo TODO">TODO</span> Jhimar and Dhinvar are same<br /></li>
-<li><a id="orga7ba56a"></a><span class="todo TODO">TODO</span> Lohar categorised as both BC and SC<br /></li>
+<li><a id="orgfa6b37d"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
+<li><a id="orgba1153c"></a><span class="todo TODO">TODO</span> Jhimar and Dhinvar are same<br /></li>
+<li><a id="orgead91fd"></a><span class="todo TODO">TODO</span> Lohar categorised as both BC and SC<br /></li>
 </ol>
 </div>
 
-<div id="outline-container-orga5acf36" class="outline-3">
-<h3 id="orga5acf36"><span class="section-number-3">3.3</span> Abnormal asset prices</h3>
+<div id="outline-container-org079e0bf" class="outline-3">
+<h3 id="org079e0bf"><span class="section-number-3">3.3</span> Abnormal asset prices</h3>
 <div class="outline-text-3" id="text-3-3">
-<table id="org5fadd01" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb1fc386" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 2:</span> Abnormal values of asset prices</caption>
 
 <colgroup>
@@ -1328,16 +1243,16 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 
 <ol class="org-ol">
-<li><a id="orgde2f947"></a>Match homestead land with housing information. Check if value of house and land are recorded.<br /></li>
+<li><a id="org2243f6c"></a>Match homestead land with housing information. Check if value of house and land are recorded.<br /></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org0043bff" class="outline-2">
-<h2 id="org0043bff"><span class="section-number-2">4</span> Number of Rows in Database Tables</h2>
+<div id="outline-container-org2a2ca92" class="outline-2">
+<h2 id="org2a2ca92"><span class="section-number-2">4</span> Number of Rows in Database Tables</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
-<pre class="src src-sql" id="org52d6947"><span style="color: #204a87;">SELECT</span> relname,n_live_tup
+<pre class="src src-sql" id="org19c31a9"><span style="color: #204a87;">SELECT</span> relname,n_live_tup
 <span style="color: #204a87;">FROM</span> pg_stat_user_tables
 <span style="color: #204a87;">ORDER</span> <span style="color: #204a87;">BY</span> n_live_tup <span style="color: #204a87;">DESC</span>;
 </pre>
@@ -1345,18 +1260,18 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-org74d0634" class="outline-2">
-<h2 id="org74d0634"><span class="section-number-2">5</span> Emerging patterns</h2>
+<div id="outline-container-org4788c5d" class="outline-2">
+<h2 id="org4788c5d"><span class="section-number-2">5</span> Emerging patterns</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 </p>
 </div>
 
-<div id="outline-container-orgc9cc639" class="outline-3">
-<h3 id="orgc9cc639"><span class="section-number-3">5.1</span> Caste Composition</h3>
+<div id="outline-container-org02f703b" class="outline-3">
+<h3 id="org02f703b"><span class="section-number-3">5.1</span> Caste Composition</h3>
 <div class="outline-text-3" id="text-5-1">
-<table id="org1d966a2" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb3b0e6f" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 3:</span> Caste representation in the sample</caption>
 
 <colgroup>
@@ -1684,39 +1599,39 @@ This section will provide a compilation of tables and graphs on different aspect
 </div>
 </div>
 
-<div id="outline-container-orgb76a67e" class="outline-3">
-<h3 id="orgb76a67e"><span class="section-number-3">5.2</span> Land relations</h3>
+<div id="outline-container-org31c7c74" class="outline-3">
+<h3 id="org31c7c74"><span class="section-number-3">5.2</span> Land relations</h3>
 </div>
-<div id="outline-container-org979284c" class="outline-3">
-<h3 id="org979284c"><span class="section-number-3">5.3</span> Food security</h3>
+<div id="outline-container-org767c08e" class="outline-3">
+<h3 id="org767c08e"><span class="section-number-3">5.3</span> Food security</h3>
 </div>
-<div id="outline-container-orgfe62e8a" class="outline-3">
-<h3 id="orgfe62e8a"><span class="section-number-3">5.4</span> Cropping pattern, Production, Input use</h3>
+<div id="outline-container-org56b88d1" class="outline-3">
+<h3 id="org56b88d1"><span class="section-number-3">5.4</span> Cropping pattern, Production, Input use</h3>
 </div>
-<div id="outline-container-orgdc324ef" class="outline-3">
-<h3 id="orgdc324ef"><span class="section-number-3">5.5</span> Labour Deployment</h3>
+<div id="outline-container-org7423354" class="outline-3">
+<h3 id="org7423354"><span class="section-number-3">5.5</span> Labour Deployment</h3>
 </div>
-<div id="outline-container-org65e9428" class="outline-3">
-<h3 id="org65e9428"><span class="section-number-3">5.6</span> Employment</h3>
+<div id="outline-container-orgc067ccf" class="outline-3">
+<h3 id="orgc067ccf"><span class="section-number-3">5.6</span> Employment</h3>
 </div>
-<div id="outline-container-org038bed1" class="outline-3">
-<h3 id="org038bed1"><span class="section-number-3">5.7</span> Livestock</h3>
+<div id="outline-container-org39d2314" class="outline-3">
+<h3 id="org39d2314"><span class="section-number-3">5.7</span> Livestock</h3>
 </div>
-<div id="outline-container-org8ad6b2d" class="outline-3">
-<h3 id="org8ad6b2d"><span class="section-number-3">5.8</span> Housing and Sanitation</h3>
+<div id="outline-container-org3db8d2c" class="outline-3">
+<h3 id="org3db8d2c"><span class="section-number-3">5.8</span> Housing and Sanitation</h3>
 </div>
-<div id="outline-container-orgd433401" class="outline-3">
-<h3 id="orgd433401"><span class="section-number-3">5.9</span> Health and Education</h3>
+<div id="outline-container-org2d5548f" class="outline-3">
+<h3 id="org2d5548f"><span class="section-number-3">5.9</span> Health and Education</h3>
 </div>
-<div id="outline-container-org5e683bb" class="outline-3">
-<h3 id="org5e683bb"><span class="section-number-3">5.10</span> Assets and Indebtedness</h3>
+<div id="outline-container-org61f744a" class="outline-3">
+<h3 id="org61f744a"><span class="section-number-3">5.10</span> Assets and Indebtedness</h3>
 <div class="outline-text-3" id="text-5-10">
 <p>
 Get unit prices
 </p>
 
 
-<table id="org7e02723" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org5beae9f" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 4:</span> Summary statistics for unit prices of assets</caption>
 
 <colgroup>
@@ -2333,13 +2248,13 @@ Get unit prices
 </div>
 </div>
 
-<div id="outline-container-org030032a" class="outline-2">
-<h2 id="org030032a"><span class="section-number-2">6</span> </h2>
+<div id="outline-container-orgc5d2280" class="outline-2">
+<h2 id="orgc5d2280"><span class="section-number-2">6</span> </h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: SSER SSER</p>
-<p class="date">Created: 2018-12-04 Tue 21:14</p>
+<p class="date">Created: 2018-12-04 Tue 21:32</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
