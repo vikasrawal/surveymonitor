@@ -527,6 +527,114 @@ This section will provide a compilation of tables and graphs on different aspect
 | SC           | Od             |        3 | nil              | 16       | nil          |
 | SC           | Rai Sikh       |       15 | nil              | nil      | nil          |
 
+** Occupations
+
+#+NAME: occupation-preliminary-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->codeoccupation
+  codeoccupation[order(id)]->codeoccupation
+  factor(codeoccupation$id)->codeoccupation$id2
+  levels(codeoccupation$id2)<-codeoccupation$occupation_category
+  codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
+  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+  merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
+  household[,c(1,2,3,12,24,25,26)]->t
+  merge(occupations,t,by.x="sno_id",by.y="id")->occupations
+  merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
+  merge(occupations,villages,by.x="village_id",by.y="id")->occupations
+  member[,c(1,3,4,5,16)]->t
+  merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"))->occupations
+  occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
+  t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(village_name,occupation_category)][!is.na(V1)&!is.na(V2)]->t
+  names(t)[c(3:4)]<-levels(factor(occupations$sex))
+  t
+#+END_SRC
+
+#+NAME: occupation
+#+CAPTION: Number of sample workers by occupation
+#+RESULTS: occupation-preliminary-code
+| village_name     | occupation_category                        |   F |  M |
+|------------------+--------------------------------------------+-----+----|
+| Birdhana         | Peasant                                    |  29 | 73 |
+| Birdhana         | Tenant peasant                             |   2 |  1 |
+| Birdhana         | Tending animals                            |  97 | 56 |
+| Birdhana         | Agricultural labour                        |  30 | 21 |
+| Birdhana         | Tailor                                     |   7 |  2 |
+| Birdhana         | NREGA workers/Labour in other public works |  11 |  5 |
+| Birdhana         | Casual non-agricultural labour (other)     |   2 | 20 |
+| Birdhana         | Teachers                                   |   2 |  1 |
+| Birdhana         | Salaried government employee (other)       |   2 |  7 |
+| Birdhana         | Salaried private office worker             |   1 |  3 |
+| Birdhana         | Salaried private worker (other)            |   1 | 14 |
+| Birdhana         | Student                                    |  84 | 86 |
+| Birdhana         | Housework                                  | 153 |  3 |
+| Birdhana         | Unable to work because of medical reasons  |   2 |  4 |
+| Birdhana         | Sweetmeat seller/Halwai                    |   1 |  4 |
+| Birdhana         | Longterm agricultural worker - Siri        |   1 |  7 |
+| Birdhana         | Welfare pension beneficiary                |  16 | 19 |
+| Birdhana         | Apprentice                                 |   1 |  5 |
+| Cheher Kalan     | Peasant                                    |  23 | 46 |
+| Cheher Kalan     | Tending animals                            |  45 | 16 |
+| Cheher Kalan     | Agricultural labour                        |  18 | 28 |
+| Cheher Kalan     | Mason                                      |   1 |  3 |
+| Cheher Kalan     | NREGA workers/Labour in other public works |   4 |  4 |
+| Cheher Kalan     | Casual non-agricultural labour (other)     |   1 |  5 |
+| Cheher Kalan     | Teachers                                   |   2 |  1 |
+| Cheher Kalan     | Salaried government employee (other)       |   3 |  5 |
+| Cheher Kalan     | Shopkeeper                                 |   2 |  8 |
+| Cheher Kalan     | Student                                    |  39 | 50 |
+| Cheher Kalan     | Housework                                  |  54 |  5 |
+| Cheher Kalan     | Too old to work                            |   4 |  3 |
+| Cheher Kalan     | Unable to work because of medical reasons  |   1 |  1 |
+| Cheher Kalan     | Driver                                     |   1 |  2 |
+| Cheher Kalan     | Retired pensioner                          |   1 |  3 |
+| Cheher Kalan     | Welfare pension beneficiary                |  15 | 13 |
+| Gijji            | Peasant                                    |   3 | 14 |
+| Gijji            | Tending animals                            |  20 | 13 |
+| Gijji            | Agricultural labour                        |  20 | 20 |
+| Gijji            | Construction labour                        |   1 |  6 |
+| Gijji            | NREGA workers/Labour in other public works |   9 |  8 |
+| Gijji            | Salaried private worker (other)            |   1 | 18 |
+| Gijji            | Factory/business owner                     |   1 |  3 |
+| Gijji            | Student                                    |  23 | 30 |
+| Gijji            | Housework                                  |  63 |  6 |
+| Gijji            | Unable to work because of medical reasons  |   1 |  2 |
+| Gijji            | Welfare pension beneficiary                |   7 |  5 |
+| Jamalpur Shekhan | Peasant                                    |  17 | 36 |
+| Jamalpur Shekhan | Tending animals                            |  53 | 32 |
+| Jamalpur Shekhan | Agricultural labour                        |  36 | 31 |
+| Jamalpur Shekhan | Barber                                     |   1 |  3 |
+| Jamalpur Shekhan | Tailor                                     |   7 |  2 |
+| Jamalpur Shekhan | Construction labour                        |   1 | 23 |
+| Jamalpur Shekhan | Domestic work                              |   4 |  2 |
+| Jamalpur Shekhan | NREGA workers/Labour in other public works |  17 |  9 |
+| Jamalpur Shekhan | Salaried government employee (other)       |   2 |  2 |
+| Jamalpur Shekhan | Shopkeeper                                 |   8 | 14 |
+| Jamalpur Shekhan | Student                                    |  47 | 65 |
+| Jamalpur Shekhan | Housework                                  |  90 |  3 |
+| Jamalpur Shekhan | Too old to work                            |   2 |  1 |
+| Jamalpur Shekhan | Unable to work because of medical reasons  |   1 |  3 |
+| Jamalpur Shekhan | Other                                      |   1 |  5 |
+| Jamalpur Shekhan | Retired pensioner                          |   1 |  1 |
+| Jamalpur Shekhan | Welfare pension beneficiary                |  23 | 15 |
+| Khandrai         | Peasant                                    |  16 | 40 |
+| Khandrai         | Tending animals                            |  48 | 26 |
+| Khandrai         | Agricultural labour                        |  22 | 24 |
+| Khandrai         | Construction labour                        |   1 |  8 |
+| Khandrai         | Domestic work                              |   2 |  1 |
+| Khandrai         | NREGA workers/Labour in other public works |   1 |  1 |
+| Khandrai         | Casual non-agricultural labour (other)     |   4 | 26 |
+| Khandrai         | Teachers                                   |   3 |  2 |
+| Khandrai         | Salaried government employee (other)       |   5 |  5 |
+| Khandrai         | Salaried private worker (other)            |   1 | 12 |
+| Khandrai         | Shopkeeper                                 |   3 |  6 |
+| Khandrai         | Factory/business owner                     |   3 | 13 |
+| Khandrai         | Student                                    |  53 | 66 |
+| Khandrai         | Housework                                  | 113 |  2 |
+| Khandrai         | Too old to work                            |   3 |  6 |
+| Khandrai         | Unable to work because of medical reasons  |   2 |  6 |
+
 ** Land relations
 ** Food security
 ** Cropping pattern, Production, Input use
