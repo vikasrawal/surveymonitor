@@ -327,7 +327,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 * Number of Rows in Database Tables
 
 #+NAME: tablerows-code 
-#+BEGIN_SRC sql :engine postgresql :dbhost localhost :dbuser ssersurveyuser :database ssersurveydata :colnames yes
+#+BEGIN_SRC sql :engine postgresql :dbhost localhost :dbuser ssersurveyuser :database ssersurveydata :colnames yes :exports results
 SELECT relname,n_live_tup
 FROM pg_stat_user_tables
 ORDER BY n_live_tup DESC;
