@@ -152,6 +152,41 @@ CLOSED: [2018-11-11 Sun 06:59]
 
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 
+
+#+NAME: identifying-missing-data
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->codeoccupation
+  codeoccupation[order(id)]->codeoccupation
+  factor(codeoccupation$id)->codeoccupation$id2
+  levels(codeoccupation$id2)<-codeoccupation$occupation_category
+  codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
+  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+  merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
+  member[,c(1,3,4,5,16)]->t
+  merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"),all.y=T)->occupations
+  household[,c(1,2,3,12,24,25,26)]->t
+  merge(occupations,t,by.x="sno_id",by.y="id")->occupations
+  merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
+  merge(occupations,villages,by.x="village_id",by.y="id")->occupations
+  occupations[is.na(id)&age>7,.(village_name,household_number,person_number,name,sex,age)]
+#+END_SRC
+
+#+NAME: missing-occupations
+#+CAPTION: These persons have no information on occupations
+#+RESULTS: identifying-missing-data
+| village_name     | household_number | name        | sex | age |
+|------------------+------------------+-------------+-----+-----|
+| Cheher Kalan     |              101 | Amarchand   | M   |  74 |
+| Cheher Kalan     |              101 | Chamha Devi | F   |  70 |
+| Cheher Kalan     |               45 | Tanuj Kumar | M   |   8 |
+| Birdhana         |              106 | Jamnadash   | M   |  75 |
+| Jamalpur Shekhan |               55 | Raj Kumar   | M   |   8 |
+| Jamalpur Shekhan |               14 | Sanjana     | F   |   9 |
+
+
+
+
 #+NAME: missing-data-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
   merge(household,villages,by.x="village_id",by.y="id")->t
@@ -528,6 +563,8 @@ This section will provide a compilation of tables and graphs on different aspect
 | SC           | Rai Sikh       |       15 | nil              | nil      | nil          |
 
 ** Occupations
+
+
 
 #+NAME: occupation-preliminary-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
