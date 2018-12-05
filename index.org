@@ -198,110 +198,25 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 #+NAME: missing-data-code
 #+CAPTION: Households with data missing for critical variables
 #+RESULTS: missing-data-code
-| village_name     | household_number | age.x | blankfield     | detail          |
-|------------------+------------------+-------+----------------+-----------------|
-| Birdhana         |               63 |    31 | marital_status | Son             |
-| Birdhana         |               71 |    24 | marital_status | Son             |
-| Birdhana         |               71 |    23 | marital_status | Son             |
-| Birdhana         |              101 |    27 | marital_status | Son             |
-| Cheher Kalan     |               10 |    76 | marital_status | Self            |
-| Cheher Kalan     |               10 |    19 | marital_status | Granddaughter   |
-| Cheher Kalan     |               10 |    15 | marital_status | Granddaughter   |
-| Cheher Kalan     |               10 |    15 | marital_status | Granddaughter   |
-| Cheher Kalan     |               10 |    13 | marital_status | Granddaughter   |
-| Cheher Kalan     |               10 |    17 | marital_status | Grandson        |
-| Cheher Kalan     |               10 |    42 | marital_status | Daughter-in-law |
-| Cheher Kalan     |               11 |     4 | marital_status | Son             |
-| Cheher Kalan     |               15 |  0.25 | marital_status | Granddaughter   |
-| Cheher Kalan     |               19 |    19 | marital_status | Son             |
-| Cheher Kalan     |               24 |    40 | marital_status | Son             |
-| Cheher Kalan     |               24 |    20 | marital_status | Grandson        |
-| Cheher Kalan     |               24 |    23 | marital_status | Grandson        |
-| Cheher Kalan     |               24 |     9 | marital_status | Grandson        |
-| Cheher Kalan     |               24 |    30 | marital_status | Daughter-in-law |
-| Cheher Kalan     |               24 |    37 | marital_status | Daughter-in-law |
-| Cheher Kalan     |               26 |     0 | marital_status | Granddaughter   |
-| Cheher Kalan     |               27 |    23 | marital_status | Son             |
-| Cheher Kalan     |               27 |    14 | marital_status | Son             |
-| Cheher Kalan     |               28 |     7 | marital_status | Son             |
-| Cheher Kalan     |               28 |     6 | marital_status | Son             |
-| Cheher Kalan     |               29 |    11 | marital_status | Son             |
-| Cheher Kalan     |               29 |     4 | marital_status | Daughter        |
-| Cheher Kalan     |               37 |    16 | marital_status | Granddaughter   |
-| Cheher Kalan     |               37 |     2 | marital_status | Granddaughter   |
-| Cheher Kalan     |               41 |   5.6 | marital_status | Granddaughter   |
-| Cheher Kalan     |               41 |   2.1 | marital_status | Grandson        |
-| Cheher Kalan     |               42 |    17 | marital_status | Son             |
-| Cheher Kalan     |               42 |    20 | marital_status | Daughter        |
-| Cheher Kalan     |               42 |    15 | marital_status | Daughter        |
-| Cheher Kalan     |               43 |     1 | marital_status | Granddaughter   |
-| Cheher Kalan     |               43 |     9 | marital_status | Grandson        |
-| Cheher Kalan     |               43 |     8 | marital_status | Grandson        |
-| Cheher Kalan     |               43 |     3 | marital_status | Grandson        |
-| Cheher Kalan     |               43 |     3 | marital_status | Grandson        |
-| Cheher Kalan     |               45 |    10 | marital_status | Granddaughter   |
-| Cheher Kalan     |               45 |     8 | marital_status | Grandson        |
-| Cheher Kalan     |               46 |     6 | marital_status | Granddaughter   |
-| Cheher Kalan     |               46 |     3 | marital_status | Granddaughter   |
-| Cheher Kalan     |               46 |     4 | marital_status | Grandson        |
-| Cheher Kalan     |               46 |    13 | marital_status | Grandson        |
-| Cheher Kalan     |               46 |    25 | marital_status | Daughter-in-law |
-| Cheher Kalan     |               47 |    12 | marital_status | Son             |
-| Cheher Kalan     |               47 |    10 | marital_status | Son             |
-| Cheher Kalan     |               47 |    15 | marital_status | Daughter        |
-| Cheher Kalan     |               49 |    50 | marital_status | Brother         |
-| Cheher Kalan     |               50 |    20 | marital_status | Granddaughter   |
-| Cheher Kalan     |               50 |     2 | marital_status | Granddaughter   |
-| Cheher Kalan     |               50 |     5 | marital_status | Grandson        |
-| Cheher Kalan     |               51 |    50 | marital_status | Son             |
-| Cheher Kalan     |               51 |    17 | marital_status | Granddaughter   |
-| Cheher Kalan     |               51 |    23 | marital_status | Grandson        |
-| Cheher Kalan     |               51 |    14 | marital_status | Grandson        |
-| Cheher Kalan     |               51 |    40 | marital_status | Daughter-in-law |
-| Cheher Kalan     |               52 |   0.3 | marital_status | Grandson        |
-| Cheher Kalan     |               53 |    16 | marital_status | Daughter        |
-| Cheher Kalan     |               53 |    11 | marital_status | Daughter        |
-| Jamalpur Shekhan |                3 |    13 | marital_status | Grandson        |
-| Jamalpur Shekhan |                3 |     9 | marital_status | Grandson        |
-| Jamalpur Shekhan |                6 |     4 | marital_status | Daughter        |
-| Jamalpur Shekhan |                8 |    14 | marital_status | Grandson        |
-| Jamalpur Shekhan |                8 |    12 | marital_status | Grandson        |
-| Jamalpur Shekhan |               10 |   0.4 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               12 |    18 | marital_status | Son             |
-| Jamalpur Shekhan |               12 |    16 | marital_status | Son             |
-| Jamalpur Shekhan |               14 |     6 | marital_status | Daughter        |
-| Jamalpur Shekhan |               29 |     3 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               29 |   1.5 | marital_status | Grandson        |
-| Jamalpur Shekhan |               31 |    34 | marital_status | Son             |
-| Jamalpur Shekhan |               31 |   2.2 | marital_status | Grandson        |
-| Jamalpur Shekhan |               34 |     6 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               34 |     2 | marital_status | Grandson        |
-| Jamalpur Shekhan |               37 |   nil | marital_status | Mother          |
-| Jamalpur Shekhan |               38 |    55 | marital_status | Self            |
-| Jamalpur Shekhan |               38 |    18 | marital_status | Son             |
-| Jamalpur Shekhan |               41 |     5 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               41 |     3 | marital_status | Grandson        |
-| Jamalpur Shekhan |               43 |    90 | marital_status | Self            |
-| Jamalpur Shekhan |               50 |    35 | marital_status | Son             |
-| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson        |
-| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson        |
-| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson        |
-| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson        |
-| Jamalpur Shekhan |               54 |    33 | marital_status | Son             |
-| Jamalpur Shekhan |               54 |   2.5 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               54 |    28 | marital_status | Grandson        |
-| Jamalpur Shekhan |               54 |   nil | marital_status | Grandson        |
-| Jamalpur Shekhan |               54 |   1.5 | marital_status | Grandson        |
-| Jamalpur Shekhan |               55 |     6 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               55 |    10 | marital_status | Grandson        |
-| Jamalpur Shekhan |               55 |     8 | marital_status | Grandson        |
-| Jamalpur Shekhan |               56 |   4.6 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               56 |    10 | marital_status | Grandson        |
-| Jamalpur Shekhan |               59 |    11 | marital_status | Son             |
-| Jamalpur Shekhan |               67 |     8 | marital_status | Granddaughter   |
-| Jamalpur Shekhan |               67 |     6 | marital_status | Grandson        |
-| Jamalpur Shekhan |               67 |     4 | marital_status | Grandson        |
-| Jamalpur Shekhan |               73 |    80 | marital_status | Mother          |
+| village_name     | household_number | age.x | blankfield     | detail        |
+|------------------+------------------+-------+----------------+---------------|
+| Birdhana         |               63 |    31 | marital_status | Son           |
+| Birdhana         |               71 |    24 | marital_status | Son           |
+| Birdhana         |               71 |    23 | marital_status | Son           |
+| Birdhana         |              101 |    27 | marital_status | Son           |
+| Cheher Kalan     |               27 |    23 | marital_status | Son           |
+| Cheher Kalan     |               27 |    14 | marital_status | Son           |
+| Cheher Kalan     |               45 |    10 | marital_status | Granddaughter |
+| Cheher Kalan     |               45 |     8 | marital_status | Grandson      |
+| Jamalpur Shekhan |               31 |    34 | marital_status | Son           |
+| Jamalpur Shekhan |               37 |   nil | marital_status | Mother        |
+| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson      |
+| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson      |
+| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson      |
+| Jamalpur Shekhan |               51 |   nil | marital_status | Grandson      |
+| Jamalpur Shekhan |               56 |   4.5 | marital_status | Granddaughter |
+| Jamalpur Shekhan |               56 |    10 | marital_status | Grandson      |
+| Jamalpur Shekhan |               73 |    80 | marital_status | Mother        |
 
 ** Data categorisation issues
 **** TODO Majhabi Sikh and Rai Sikh are perhaps same
