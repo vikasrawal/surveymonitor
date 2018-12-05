@@ -152,7 +152,6 @@ CLOSED: [2018-11-11 Sun 06:59]
 
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 
-
 #+NAME: identifying-missing-data
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
 
@@ -183,9 +182,6 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 | Birdhana         |              106 | Jamnadash   | M   |  75 |
 | Jamalpur Shekhan |               55 | Raj Kumar   | M   |   8 |
 | Jamalpur Shekhan |               14 | Sanjana     | F   |   9 |
-
-
-
 
 #+NAME: missing-data-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -223,6 +219,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 **** TODO Jhimar and Dhinvar are same
 **** TODO Lohar categorised as both BC and SC
 
+**** TODO Change occupation category "Deals in livestock" to "Livestock trader" (if that is what is implied)
 ** Abnormal asset prices
 
 #+NAME: asset_outlier_code
@@ -483,7 +480,6 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+NAME: occupation-preliminary-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-
   data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->codeoccupation
   codeoccupation[order(id)]->codeoccupation
   factor(codeoccupation$id)->codeoccupation$id2
@@ -497,6 +493,44 @@ This section will provide a compilation of tables and graphs on different aspect
   merge(occupations,villages,by.x="village_id",by.y="id")->occupations
   member[,c(1,3,4,5,16)]->t
   merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"))->occupations
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Sweetmeat seller/Halwai"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Shopkeeper"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Trader/Merchant"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Caterer"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Private tutor"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Private school owner"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Coaching centre owner"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Street vendor/seller"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Milk dairy owner"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Doctor"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Advocate/Lawyer"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Factory/business owner"]<-"Self-employed, business owner"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Retired pensioner"]<-"Recipient of Pension/Remittance"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Widow pension beneficiary"]<-"Recipient of Pension/Remittance"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Welfare pension beneficiary"]<-"Recipient of Pension/Remittance"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Barber"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Blacksmith"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Cobbler"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Weaver"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Dhobi/launderer"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Potmaker"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Mason"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Artisan"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Tailor"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Carpenter"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Goldsmith"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Electrician"]<-"Self-employed artisan/service provider"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Plumber"]<-"Self-employed artisan/service provider"
+
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried government employee (other)"]<-"Salaried government employee"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Army service"]<-"Salaried government employee"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Police"]<-"Salaried government employee"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Village officials"]<-"Salaried government employee"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Teachers"]<-"Salaried government employee"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried private office worker"]<-"Salaried private employee"
+  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried private worker (other)"]<-"Salaried private employee"
+
+
   occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
   t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(village_name,occupation_category)][!is.na(V1)&!is.na(V2)]->t
   names(t)[c(3:4)]<-levels(factor(occupations$sex))
@@ -512,76 +546,70 @@ This section will provide a compilation of tables and graphs on different aspect
 | Birdhana         | Tenant peasant                             |   2 |  1 |
 | Birdhana         | Tending animals                            |  97 | 56 |
 | Birdhana         | Agricultural labour                        |  30 | 21 |
-| Birdhana         | Tailor                                     |   7 |  2 |
+| Birdhana         | Self-employed artisan/service provider     |   7 |  7 |
 | Birdhana         | NREGA workers/Labour in other public works |  11 |  5 |
 | Birdhana         | Casual non-agricultural labour (other)     |   2 | 20 |
-| Birdhana         | Teachers                                   |   2 |  1 |
-| Birdhana         | Salaried government employee (other)       |   2 |  7 |
-| Birdhana         | Salaried private office worker             |   1 |  3 |
-| Birdhana         | Salaried private worker (other)            |   1 | 14 |
+| Birdhana         | Salaried government employee               |   4 |  9 |
+| Birdhana         | Salaried private employee                  |   2 | 17 |
+| Birdhana         | Self-employed, business owner              |   1 | 42 |
 | Birdhana         | Student                                    |  84 | 86 |
 | Birdhana         | Housework                                  | 153 |  3 |
 | Birdhana         | Unable to work because of medical reasons  |   2 |  4 |
-| Birdhana         | Sweetmeat seller/Halwai                    |   1 |  4 |
 | Birdhana         | Longterm agricultural worker - Siri        |   1 |  7 |
-| Birdhana         | Welfare pension beneficiary                |  16 | 19 |
+| Birdhana         | Recipient of Pension/Remittance            |  28 | 22 |
 | Birdhana         | Apprentice                                 |   1 |  5 |
 | Cheher Kalan     | Peasant                                    |  23 | 46 |
 | Cheher Kalan     | Tending animals                            |  45 | 16 |
 | Cheher Kalan     | Agricultural labour                        |  18 | 28 |
-| Cheher Kalan     | Mason                                      |   1 |  3 |
+| Cheher Kalan     | Self-employed artisan/service provider     |   5 | 11 |
 | Cheher Kalan     | NREGA workers/Labour in other public works |   4 |  4 |
 | Cheher Kalan     | Casual non-agricultural labour (other)     |   1 |  5 |
-| Cheher Kalan     | Teachers                                   |   2 |  1 |
-| Cheher Kalan     | Salaried government employee (other)       |   3 |  5 |
-| Cheher Kalan     | Shopkeeper                                 |   2 |  8 |
+| Cheher Kalan     | Salaried government employee               |   5 |  7 |
+| Cheher Kalan     | Self-employed, business owner              |   2 | 16 |
 | Cheher Kalan     | Student                                    |  39 | 50 |
 | Cheher Kalan     | Housework                                  |  54 |  5 |
 | Cheher Kalan     | Too old to work                            |   4 |  3 |
 | Cheher Kalan     | Unable to work because of medical reasons  |   1 |  1 |
 | Cheher Kalan     | Driver                                     |   1 |  2 |
-| Cheher Kalan     | Retired pensioner                          |   1 |  3 |
-| Cheher Kalan     | Welfare pension beneficiary                |  15 | 13 |
+| Cheher Kalan     | Recipient of Pension/Remittance            |  18 | 16 |
 | Gijji            | Peasant                                    |   3 | 14 |
 | Gijji            | Tending animals                            |  20 | 13 |
 | Gijji            | Agricultural labour                        |  20 | 20 |
 | Gijji            | Construction labour                        |   1 |  6 |
 | Gijji            | NREGA workers/Labour in other public works |   9 |  8 |
-| Gijji            | Salaried private worker (other)            |   1 | 18 |
-| Gijji            | Factory/business owner                     |   1 |  3 |
+| Gijji            | Salaried government employee               |   1 |  7 |
+| Gijji            | Salaried private employee                  |   1 | 18 |
+| Gijji            | Self-employed, business owner              |   1 | 16 |
 | Gijji            | Student                                    |  23 | 30 |
 | Gijji            | Housework                                  |  63 |  6 |
 | Gijji            | Unable to work because of medical reasons  |   1 |  2 |
-| Gijji            | Welfare pension beneficiary                |   7 |  5 |
+| Gijji            | Recipient of Pension/Remittance            |  10 |  9 |
 | Jamalpur Shekhan | Peasant                                    |  17 | 36 |
 | Jamalpur Shekhan | Tending animals                            |  53 | 32 |
 | Jamalpur Shekhan | Agricultural labour                        |  36 | 31 |
-| Jamalpur Shekhan | Barber                                     |   1 |  3 |
-| Jamalpur Shekhan | Tailor                                     |   7 |  2 |
+| Jamalpur Shekhan | Self-employed artisan/service provider     |   8 | 10 |
 | Jamalpur Shekhan | Construction labour                        |   1 | 23 |
 | Jamalpur Shekhan | Domestic work                              |   4 |  2 |
 | Jamalpur Shekhan | NREGA workers/Labour in other public works |  17 |  9 |
-| Jamalpur Shekhan | Salaried government employee (other)       |   2 |  2 |
-| Jamalpur Shekhan | Shopkeeper                                 |   8 | 14 |
+| Jamalpur Shekhan | Salaried government employee               |   2 |  3 |
+| Jamalpur Shekhan | Self-employed, business owner              |   9 | 34 |
 | Jamalpur Shekhan | Student                                    |  47 | 65 |
 | Jamalpur Shekhan | Housework                                  |  90 |  3 |
 | Jamalpur Shekhan | Too old to work                            |   2 |  1 |
 | Jamalpur Shekhan | Unable to work because of medical reasons  |   1 |  3 |
 | Jamalpur Shekhan | Other                                      |   1 |  5 |
-| Jamalpur Shekhan | Retired pensioner                          |   1 |  1 |
-| Jamalpur Shekhan | Welfare pension beneficiary                |  23 | 15 |
+| Jamalpur Shekhan | Recipient of Pension/Remittance            |  24 | 16 |
 | Khandrai         | Peasant                                    |  16 | 40 |
 | Khandrai         | Tending animals                            |  48 | 26 |
 | Khandrai         | Agricultural labour                        |  22 | 24 |
+| Khandrai         | Self-employed artisan/service provider     |   4 |  3 |
 | Khandrai         | Construction labour                        |   1 |  8 |
 | Khandrai         | Domestic work                              |   2 |  1 |
 | Khandrai         | NREGA workers/Labour in other public works |   1 |  1 |
 | Khandrai         | Casual non-agricultural labour (other)     |   4 | 26 |
-| Khandrai         | Teachers                                   |   3 |  2 |
-| Khandrai         | Salaried government employee (other)       |   5 |  5 |
-| Khandrai         | Salaried private worker (other)            |   1 | 12 |
-| Khandrai         | Shopkeeper                                 |   3 |  6 |
-| Khandrai         | Factory/business owner                     |   3 | 13 |
+| Khandrai         | Salaried government employee               |   8 |  8 |
+| Khandrai         | Salaried private employee                  |   1 | 12 |
+| Khandrai         | Self-employed, business owner              |   6 | 24 |
 | Khandrai         | Student                                    |  53 | 66 |
 | Khandrai         | Housework                                  | 113 |  2 |
 | Khandrai         | Too old to work                            |   3 |  6 |
