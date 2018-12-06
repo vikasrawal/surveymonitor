@@ -25,6 +25,7 @@
 
 
 
+
 * Errors in ownership holdings
 #+NAME: error-ownership
 #+BEGIN_SRC R :results value silent :exports none 
