@@ -5,6 +5,7 @@
 #+LATEX_HEADER: \usepackage{tabularx}
 #+TODO: TODO EDIT CHECK | DONE
 #+PROPERTY: header-args:R :session haryana :eval never-export
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 * Preliminaries                                                    :noexport:
 
@@ -479,142 +480,118 @@ This section will provide a compilation of tables and graphs on different aspect
 
 
 #+NAME: occupation-preliminary-code
-#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+#+BEGIN_SRC R :results value :exports results :colnames no :hline no
   data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->codeoccupation
-  codeoccupation[order(id)]->codeoccupation
-  factor(codeoccupation$id)->codeoccupation$id2
-  levels(codeoccupation$id2)<-codeoccupation$occupation_category
-  codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
-  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
-  merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
-  household[,c(1,2,3,12,24,25,26)]->t
-  merge(occupations,t,by.x="sno_id",by.y="id")->occupations
-  merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
-  merge(occupations,villages,by.x="village_id",by.y="id")->occupations
-  member[,c(1,3,4,5,16)]->t
-  merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"))->occupations
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Sweetmeat seller/Halwai"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Shopkeeper"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Trader/Merchant"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Caterer"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Private tutor"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Private school owner"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Coaching centre owner"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Street vendor/seller"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Milk dairy owner"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Doctor"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Advocate/Lawyer"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Factory/business owner"]<-"Self-employed, business owner"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Retired pensioner"]<-"Recipient of Pension/Remittance"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Widow pension beneficiary"]<-"Recipient of Pension/Remittance"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Welfare pension beneficiary"]<-"Recipient of Pension/Remittance"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Barber"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Blacksmith"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Cobbler"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Weaver"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Dhobi/launderer"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Potmaker"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Mason"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Artisan"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Tailor"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Carpenter"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Goldsmith"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Electrician"]<-"Self-employed artisan/service provider"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Plumber"]<-"Self-employed artisan/service provider"
+    codeoccupation[order(id)]->codeoccupation
+    factor(codeoccupation$id)->codeoccupation$id2
+    levels(codeoccupation$id2)<-codeoccupation$occupation_category
+    codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
+    data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+    merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
+    household[,c(1,2,3,12,24,25,26)]->t
+    merge(occupations,t,by.x="sno_id",by.y="id")->occupations
+    merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
+    merge(occupations,villages,by.x="village_id",by.y="id")->occupations
+    member[,c(1,3,4,5,16)]->t
+    merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"))->occupations
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Sweetmeat seller/Halwai"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Shopkeeper"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Trader/Merchant"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Caterer"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Private tutor"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Private school owner"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Coaching centre owner"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Street vendor/seller"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Milk dairy owner"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Deals in livestock"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Livestock trader"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Doctor"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Advocate/Lawyer"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Factory/business owner"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Mechanic"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Moneylender"]<-"Self-employed, business owner"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Retired pensioner"]<-"Recipient of pension/remittance"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Widow pension beneficiary"]<-"Recipient of pension/remittance"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Welfare pension beneficiary"]<-"Recipient of pension/remittance"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Barber"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Blacksmith"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Cobbler"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Weaver"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Dhobi/launderer"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Potmaker"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Mason"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Artisan"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Tailor"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Carpenter"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Goldsmith"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Electrician"]<-"Caste occupations/artisans"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Plumber"]<-"Caste occupations/artisans"
 
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried government employee (other)"]<-"Salaried government employee"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Army service"]<-"Salaried government employee"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Police"]<-"Salaried government employee"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Village officials"]<-"Salaried government employee"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Teachers"]<-"Salaried government employee"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried private office worker"]<-"Salaried private employee"
-  levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried private worker (other)"]<-"Salaried private employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried government employee (other)"]<-"Salaried government employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Army service"]<-"Salaried government employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Police"]<-"Salaried government employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Village officials"]<-"Salaried government employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Teachers"]<-"Salaried government employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried private office worker"]<-"Salaried private employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Salaried private worker (other)"]<-"Salaried private employee"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Driver"]<-"Salaried private employee"
 
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Construction labour"]<-"Non-agricultural manual labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Sweeper/cleaner"]<-"Non-agricultural manual labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Casual non-agricultural labour (other)"]<-"Non-agricultural manual labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="NREGA workers/Labour in other public works"]<-"Non-agricultural manual labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Domestic work"]<-"Non-agricultural manual labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Too old to work"]<-"Unable to work because of age or poor health"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Unable to work because of medical reasons"]<-"Unable to work because of age or poor health"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Child not going to school or work"]<-"Unable to work because of age or poor health"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Agricultural machinery operator"]<-"Agricultural labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Specialised agricultural labour"]<-"Agricultural labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Longterm agricultural worker - Siri"]<-"Agricultural labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Longterm agricultural worker - other"]<-"Agricultural labour"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Tenant peasant"]<-"Peasant"
+    levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Apprentice"]<-"Student"
+
+  factor(occupations$occupation_category,levels=c("Landlord","Peasant","Tending animals","Agricultural labour","Non-agricultural manual labour","Salaried government employee","Salaried private employee","Self-employed, business owner","Caste occupations/artisans","Recipient of pension/remittance","Apprentice","Collection of CPRs","Unemployed","Student","Housework","Unable to work because of age or poor health","Other"))->occupations$occupation_category
 
   occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
-  t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(village_name,occupation_category)][!is.na(V1)&!is.na(V2)]->t
-  names(t)[c(3:4)]<-levels(factor(occupations$sex))
-  t
+  t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(occupation_category)]->t
+  #transpose(CJ(unique(occupations$village_name),unique(occupations$sex)))->name
+  CJ(unique(occupations$village_name),unique(occupations$sex))->tabhead
+  c(1:nrow(tabhead))->tabhead$rank
+  ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
+  ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
+  tabhead$V1[tabhead$rank!=1]<-""
+  ifelse(!is.na(tabhead$V1),paste("<",tabhead$len,"colc>",tabhead$V1,sep=""),NA)->tabhead$V1
+  transpose(tabhead[,c(1:2)])->tabhead
+  as.data.frame(rbind(tabhead,t,fill=TRUE))->t
+  levels(t[ncol(t)])
+  names(t)[length(names(t))]->t[1,ncol(t)]
+  t[,c(ncol(t),1:ncol(t)-1)]
+
 #+END_SRC
 
 #+NAME: occupation
 #+CAPTION: Number of sample workers by occupation
 #+RESULTS: occupation-preliminary-code
-| village_name     | occupation_category                        |   F |  M |
-|------------------+--------------------------------------------+-----+----|
-| Birdhana         | Peasant                                    |  29 | 73 |
-| Birdhana         | Tenant peasant                             |   2 |  1 |
-| Birdhana         | Tending animals                            |  97 | 56 |
-| Birdhana         | Agricultural labour                        |  30 | 21 |
-| Birdhana         | Self-employed artisan/service provider     |   7 |  7 |
-| Birdhana         | NREGA workers/Labour in other public works |  11 |  5 |
-| Birdhana         | Casual non-agricultural labour (other)     |   2 | 20 |
-| Birdhana         | Salaried government employee               |   4 |  9 |
-| Birdhana         | Salaried private employee                  |   2 | 17 |
-| Birdhana         | Self-employed, business owner              |   1 | 42 |
-| Birdhana         | Student                                    |  84 | 86 |
-| Birdhana         | Housework                                  | 153 |  3 |
-| Birdhana         | Unable to work because of medical reasons  |   2 |  4 |
-| Birdhana         | Longterm agricultural worker - Siri        |   1 |  7 |
-| Birdhana         | Recipient of Pension/Remittance            |  28 | 22 |
-| Birdhana         | Apprentice                                 |   1 |  5 |
-| Cheher Kalan     | Peasant                                    |  23 | 46 |
-| Cheher Kalan     | Tending animals                            |  45 | 16 |
-| Cheher Kalan     | Agricultural labour                        |  18 | 28 |
-| Cheher Kalan     | Self-employed artisan/service provider     |   5 | 11 |
-| Cheher Kalan     | NREGA workers/Labour in other public works |   4 |  4 |
-| Cheher Kalan     | Casual non-agricultural labour (other)     |   1 |  5 |
-| Cheher Kalan     | Salaried government employee               |   5 |  7 |
-| Cheher Kalan     | Self-employed, business owner              |   2 | 16 |
-| Cheher Kalan     | Student                                    |  39 | 50 |
-| Cheher Kalan     | Housework                                  |  54 |  5 |
-| Cheher Kalan     | Too old to work                            |   4 |  3 |
-| Cheher Kalan     | Unable to work because of medical reasons  |   1 |  1 |
-| Cheher Kalan     | Driver                                     |   1 |  2 |
-| Cheher Kalan     | Recipient of Pension/Remittance            |  18 | 16 |
-| Gijji            | Peasant                                    |   3 | 14 |
-| Gijji            | Tending animals                            |  20 | 13 |
-| Gijji            | Agricultural labour                        |  20 | 20 |
-| Gijji            | Construction labour                        |   1 |  6 |
-| Gijji            | NREGA workers/Labour in other public works |   9 |  8 |
-| Gijji            | Salaried government employee               |   1 |  7 |
-| Gijji            | Salaried private employee                  |   1 | 18 |
-| Gijji            | Self-employed, business owner              |   1 | 16 |
-| Gijji            | Student                                    |  23 | 30 |
-| Gijji            | Housework                                  |  63 |  6 |
-| Gijji            | Unable to work because of medical reasons  |   1 |  2 |
-| Gijji            | Recipient of Pension/Remittance            |  10 |  9 |
-| Jamalpur Shekhan | Peasant                                    |  17 | 36 |
-| Jamalpur Shekhan | Tending animals                            |  53 | 32 |
-| Jamalpur Shekhan | Agricultural labour                        |  36 | 31 |
-| Jamalpur Shekhan | Self-employed artisan/service provider     |   8 | 10 |
-| Jamalpur Shekhan | Construction labour                        |   1 | 23 |
-| Jamalpur Shekhan | Domestic work                              |   4 |  2 |
-| Jamalpur Shekhan | NREGA workers/Labour in other public works |  17 |  9 |
-| Jamalpur Shekhan | Salaried government employee               |   2 |  3 |
-| Jamalpur Shekhan | Self-employed, business owner              |   9 | 34 |
-| Jamalpur Shekhan | Student                                    |  47 | 65 |
-| Jamalpur Shekhan | Housework                                  |  90 |  3 |
-| Jamalpur Shekhan | Too old to work                            |   2 |  1 |
-| Jamalpur Shekhan | Unable to work because of medical reasons  |   1 |  3 |
-| Jamalpur Shekhan | Other                                      |   1 |  5 |
-| Jamalpur Shekhan | Recipient of Pension/Remittance            |  24 | 16 |
-| Khandrai         | Peasant                                    |  16 | 40 |
-| Khandrai         | Tending animals                            |  48 | 26 |
-| Khandrai         | Agricultural labour                        |  22 | 24 |
-| Khandrai         | Self-employed artisan/service provider     |   4 |  3 |
-| Khandrai         | Construction labour                        |   1 |  8 |
-| Khandrai         | Domestic work                              |   2 |  1 |
-| Khandrai         | NREGA workers/Labour in other public works |   1 |  1 |
-| Khandrai         | Casual non-agricultural labour (other)     |   4 | 26 |
-| Khandrai         | Salaried government employee               |   8 |  8 |
-| Khandrai         | Salaried private employee                  |   1 | 12 |
-| Khandrai         | Self-employed, business owner              |   6 | 24 |
-| Khandrai         | Student                                    |  53 | 66 |
-| Khandrai         | Housework                                  | 113 |  2 |
-| Khandrai         | Too old to work                            |   3 |  6 |
-| Khandrai         | Unable to work because of medical reasons  |   2 |  6 |
+| nil                                          | Birdhana | Birdhana | Cheher Kalan | Cheher Kalan | Gijji | Gijji | Jamalpur Shekhan | Jamalpur Shekhan | Khandrai | Khandrai |
+| nil                                          |        F |        M |            F |            M |     F |     M |                F |                M |        F |        M |
+| Landlord                                     |      nil |        2 |          nil |            1 |   nil |   nil |              nil |                1 |      nil |        1 |
+| Peasant                                      |       31 |       74 |           23 |           46 |     3 |    14 |               17 |               36 |       16 |       40 |
+| Tending animals                              |       97 |       56 |           45 |           16 |    20 |    13 |               53 |               32 |       48 |       26 |
+| Agricultural labour                          |       31 |       29 |           18 |           28 |    20 |    20 |               37 |               31 |       22 |       25 |
+| Non-agricultural manual labour               |       14 |       41 |           18 |           19 |    10 |    16 |               22 |               42 |        8 |       36 |
+| Salaried government employee                 |        4 |        9 |            5 |            7 |     1 |     7 |                2 |                3 |        8 |        8 |
+| Salaried private employee                    |        2 |       29 |            1 |            8 |     1 |    23 |              nil |               20 |        1 |       16 |
+| Self-employed, business owner                |        1 |       45 |            2 |           17 |     1 |    16 |                9 |               38 |        6 |       25 |
+| Caste occupations/artisans                   |        7 |        7 |            5 |           11 |   nil |     3 |                8 |               10 |        4 |        3 |
+| Recipient of pension/remittance              |       28 |       22 |           18 |           16 |    10 |     9 |               24 |               16 |        4 |      nil |
+| Unemployed                                   |      nil |        1 |          nil |            4 |   nil |     4 |              nil |                1 |        1 |      nil |
+| Student                                      |       85 |       91 |           39 |           50 |    23 |    31 |               47 |               68 |       53 |       68 |
+| Housework                                    |      153 |        3 |           54 |            5 |    63 |     6 |               90 |                3 |      113 |        2 |
+| Unable to work because of age or poor health |        2 |        5 |            5 |            5 |     1 |     4 |                3 |                4 |        5 |       12 |
+| Other                                        |      nil |        1 |          nil |            1 |   nil |     2 |                1 |                5 |      nil |        1 |
 
+** 
 ** Land relations
 ** Food security
 ** Cropping pattern, Production, Input use

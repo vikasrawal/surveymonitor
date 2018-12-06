@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-12-05 Wed 07:49 -->
+<!-- 2018-12-06 Thu 10:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Monitoring Data Entry for Haryana Surveys Asset-holdings of Rural Households in Haryana</title>
@@ -180,6 +180,12 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -234,38 +240,39 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgef938b0">1. Overall Decisions</a></li>
-<li><a href="#orge0a7073">2. Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
-<li><a href="#org18a9604">3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
+<li><a href="#org6d5d56a">1. Overall Decisions</a></li>
+<li><a href="#orga59e798">2. Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
+<li><a href="#org3d85b7d">3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
 <ul>
-<li><a href="#orgd9fbd8d">3.1. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
-<li><a href="#org3373859">3.2. Data categorisation issues</a></li>
-<li><a href="#orgcdf5592">3.3. Abnormal asset prices</a></li>
+<li><a href="#orgdaed539">3.1. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
+<li><a href="#orgae9d77a">3.2. Data categorisation issues</a></li>
+<li><a href="#org8050046">3.3. Abnormal asset prices</a></li>
 </ul>
 </li>
-<li><a href="#orgc2b12bb">4. Number of Rows in Database Tables</a></li>
-<li><a href="#orgef99acc">5. Emerging patterns</a>
+<li><a href="#orgca0112c">4. Number of Rows in Database Tables</a></li>
+<li><a href="#orgfa66d18">5. Emerging patterns</a>
 <ul>
-<li><a href="#orgd424b29">5.1. Caste Composition</a></li>
-<li><a href="#orgccdfc51">5.2. Occupations</a></li>
-<li><a href="#org59e9535">5.3. Land relations</a></li>
-<li><a href="#org4a30055">5.4. Food security</a></li>
-<li><a href="#org8d95077">5.5. Cropping pattern, Production, Input use</a></li>
-<li><a href="#org0b968ba">5.6. Labour Deployment</a></li>
-<li><a href="#orgabc02d9">5.7. Employment</a></li>
-<li><a href="#org0b37cff">5.8. Livestock</a></li>
-<li><a href="#org50a1fc4">5.9. Housing and Sanitation</a></li>
-<li><a href="#orge2cd927">5.10. Health and Education</a></li>
-<li><a href="#orgfdb4c38">5.11. Assets and Indebtedness</a></li>
+<li><a href="#org9b24774">5.1. Caste Composition</a></li>
+<li><a href="#org2c1f664">5.2. Occupations</a></li>
+<li><a href="#orgc56be8d">5.3. </a></li>
+<li><a href="#org0967386">5.4. Land relations</a></li>
+<li><a href="#org9445e8f">5.5. Food security</a></li>
+<li><a href="#org218b959">5.6. Cropping pattern, Production, Input use</a></li>
+<li><a href="#org53a0640">5.7. Labour Deployment</a></li>
+<li><a href="#org7304ace">5.8. Employment</a></li>
+<li><a href="#orgd538c9b">5.9. Livestock</a></li>
+<li><a href="#org3ea8484">5.10. Housing and Sanitation</a></li>
+<li><a href="#orgd88efa2">5.11. Health and Education</a></li>
+<li><a href="#orgdcc9363">5.12. Assets and Indebtedness</a></li>
 </ul>
 </li>
-<li><a href="#org50d2d84">6. </a></li>
+<li><a href="#orge466ed9">6. </a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgef938b0" class="outline-2">
-<h2 id="orgef938b0"><span class="section-number-2">1</span> Overall Decisions</h2>
+<div id="outline-container-org6d5d56a" class="outline-2">
+<h2 id="org6d5d56a"><span class="section-number-2">1</span> Overall Decisions</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This section records any overall decisions that are taken.
@@ -273,60 +280,60 @@ This section records any overall decisions that are taken.
 </div>
 
 <ol class="org-ol">
-<li><a id="org9cb1839"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
-<li><a id="org927fb4f"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
+<li><a id="orgf775650"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
+<li><a id="orgb83a0c4"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
 <div class="outline-text-5" id="text-1-0-0-2">
 <ul class="org-ul">
 <li>Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.</li>
 </ul>
 </div>
 </li>
-<li><a id="org97fe0df"></a><span class="todo TODO">TODO</span> Sample weights<br />
+<li><a id="orgd6509af"></a><span class="todo TODO">TODO</span> Sample weights<br />
 <div class="outline-text-5" id="text-1-0-0-3">
 <ul class="org-ul">
 <li>Vikas needs to check the sampling scripts and get the sampling weights.</li>
 </ul>
 </div>
 </li>
-<li><a id="orgd425d5d"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
+<li><a id="org630622f"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
 <div class="outline-text-5" id="text-1-0-0-4">
 </div>
 <ol class="org-ol">
-<li><a id="orgde47609"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
+<li><a id="org733d86f"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
 </ol>
 </li>
 </ol>
 </div>
 
-<div id="outline-container-orge0a7073" class="outline-2">
-<h2 id="orge0a7073"><span class="section-number-2">2</span> Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
+<div id="outline-container-orga59e798" class="outline-2">
+<h2 id="orga59e798"><span class="section-number-2">2</span> Database corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
 <div class="outline-text-2" id="text-2">
 </div>
 <ol class="org-ol">
-<li><a id="orgf048414"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
-<li><a id="org3c17557"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
-<li><a id="org730ceee"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
-<li><a id="org2291067"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
-<li><a id="org647e250"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
+<li><a id="org11a4130"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
+<li><a id="orge6682a3"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
+<li><a id="orga86aa00"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
+<li><a id="org060e8f4"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
+<li><a id="orgd66d489"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
 <div class="outline-text-6" id="text-2-0-0-0-5">
 </div>
 </li>
 
-<li><a id="org3f7f1cf"></a>Type of contract in labouring out should be foreign key<br /></li>
+<li><a id="org2c54a36"></a>Type of contract in labouring out should be foreign key<br /></li>
 </ol>
 </div>
-<div id="outline-container-org18a9604" class="outline-2">
-<h2 id="org18a9604"><span class="section-number-2">3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
+<div id="outline-container-org3d85b7d" class="outline-2">
+<h2 id="org3d85b7d"><span class="section-number-2">3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgd9fbd8d" class="outline-3">
-<h3 id="orgd9fbd8d"><span class="section-number-3">3.1</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h3>
+<div id="outline-container-orgdaed539" class="outline-3">
+<h3 id="orgdaed539"><span class="section-number-3">3.1</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 </p>
 
-<table id="org99d9d7d" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgbd536d0" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 1:</span> These persons have no information on occupations</caption>
 
 <colgroup>
@@ -400,7 +407,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </tbody>
 </table>
 
-<table id="org002b526" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb7d8f25" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 2:</span> Households with data missing for critical variables</caption>
 
 <colgroup>
@@ -499,7 +506,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 <tr>
 <td class="org-left">Jamalpur Shekhan</td>
 <td class="org-right">37</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">marital_status</td>
 <td class="org-left">Mother</td>
 </tr>
@@ -507,7 +514,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 <tr>
 <td class="org-left">Jamalpur Shekhan</td>
 <td class="org-right">51</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">marital_status</td>
 <td class="org-left">Grandson</td>
 </tr>
@@ -515,7 +522,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 <tr>
 <td class="org-left">Jamalpur Shekhan</td>
 <td class="org-right">51</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">marital_status</td>
 <td class="org-left">Grandson</td>
 </tr>
@@ -523,7 +530,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 <tr>
 <td class="org-left">Jamalpur Shekhan</td>
 <td class="org-right">51</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">marital_status</td>
 <td class="org-left">Grandson</td>
 </tr>
@@ -531,7 +538,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 <tr>
 <td class="org-left">Jamalpur Shekhan</td>
 <td class="org-right">51</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">marital_status</td>
 <td class="org-left">Grandson</td>
 </tr>
@@ -564,22 +571,22 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-org3373859" class="outline-3">
-<h3 id="org3373859"><span class="section-number-3">3.2</span> Data categorisation issues</h3>
+<div id="outline-container-orgae9d77a" class="outline-3">
+<h3 id="orgae9d77a"><span class="section-number-3">3.2</span> Data categorisation issues</h3>
 <div class="outline-text-3" id="text-3-2">
 </div>
 <ol class="org-ol">
-<li><a id="orge5c3257"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
-<li><a id="org78133ae"></a><span class="todo TODO">TODO</span> Jhimar and Dhinvar are same<br /></li>
-<li><a id="org76ea267"></a><span class="todo TODO">TODO</span> Lohar categorised as both BC and SC<br /></li>
+<li><a id="org2f0527d"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
+<li><a id="orgae4ed5d"></a><span class="todo TODO">TODO</span> Jhimar and Dhinvar are same<br /></li>
+<li><a id="org96c2d13"></a><span class="todo TODO">TODO</span> Lohar categorised as both BC and SC<br /></li>
 
-<li><a id="orgb50f29a"></a><span class="todo TODO">TODO</span> Change occupation category &ldquo;Deals in livestock&rdquo; to &ldquo;Livestock trader&rdquo; (if that is what is implied)<br /></li>
+<li><a id="orga917ed1"></a><span class="todo TODO">TODO</span> Change occupation category &ldquo;Deals in livestock&rdquo; to &ldquo;Livestock trader&rdquo; (if that is what is implied)<br /></li>
 </ol>
 </div>
-<div id="outline-container-orgcdf5592" class="outline-3">
-<h3 id="orgcdf5592"><span class="section-number-3">3.3</span> Abnormal asset prices</h3>
+<div id="outline-container-org8050046" class="outline-3">
+<h3 id="org8050046"><span class="section-number-3">3.3</span> Abnormal asset prices</h3>
 <div class="outline-text-3" id="text-3-3">
-<table id="org3bd9da5" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org42302b3" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 3:</span> Abnormal values of asset prices</caption>
 
 <colgroup>
@@ -639,15 +646,15 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 
 <ol class="org-ol">
-<li><a id="org216a65c"></a>Match homestead land with housing information. Check if value of house and land are recorded.<br /></li>
+<li><a id="org7f6e7f2"></a>Match homestead land with housing information. Check if value of house and land are recorded.<br /></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-orgc2b12bb" class="outline-2">
-<h2 id="orgc2b12bb"><span class="section-number-2">4</span> Number of Rows in Database Tables</h2>
+<div id="outline-container-orgca0112c" class="outline-2">
+<h2 id="orgca0112c"><span class="section-number-2">4</span> Number of Rows in Database Tables</h2>
 <div class="outline-text-2" id="text-4">
-<table id="orgfc73c40" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgcd366dd" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 4:</span> Number of rows in each database table</caption>
 
 <colgroup>
@@ -1326,18 +1333,18 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-orgef99acc" class="outline-2">
-<h2 id="orgef99acc"><span class="section-number-2">5</span> Emerging patterns</h2>
+<div id="outline-container-orgfa66d18" class="outline-2">
+<h2 id="orgfa66d18"><span class="section-number-2">5</span> Emerging patterns</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 </p>
 </div>
 
-<div id="outline-container-orgd424b29" class="outline-3">
-<h3 id="orgd424b29"><span class="section-number-3">5.1</span> Caste Composition</h3>
+<div id="outline-container-org9b24774" class="outline-3">
+<h3 id="org9b24774"><span class="section-number-3">5.1</span> Caste Composition</h3>
 <div class="outline-text-3" id="text-5-1">
-<table id="org2f85132" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org0db9e77" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 5:</span> Caste representation in the sample</caption>
 
 <colgroup>
@@ -1367,27 +1374,27 @@ This section will provide a compilation of tables and graphs on different aspect
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Bhatra sikh</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
 <td class="org-left">1</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Jhimar/Dhinwar</td>
 <td class="org-right">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 <td class="org-left">3</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Jogi</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 <td class="org-left">1</td>
 </tr>
 
@@ -1395,15 +1402,15 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">BC</td>
 <td class="org-left">Kamboj</td>
 <td class="org-right">5</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">3</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Khati</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">9</td>
 <td class="org-left">1</td>
 <td class="org-left">2</td>
@@ -1414,7 +1421,7 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">Kumhar</td>
 <td class="org-right">1</td>
 <td class="org-left">2</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">5</td>
 </tr>
 
@@ -1422,9 +1429,9 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">BC</td>
 <td class="org-left">Lodhi</td>
 <td class="org-right">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
@@ -1433,16 +1440,16 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-right">2</td>
 <td class="org-left">1</td>
 <td class="org-left">1</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Mali</td>
 <td class="org-right">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
@@ -1451,42 +1458,42 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-right">2</td>
 <td class="org-left">5</td>
 <td class="org-left">3</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Rebari</td>
 <td class="org-right">10</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Saini</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
 <td class="org-left">14</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Teli</td>
 <td class="org-right">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">BC</td>
 <td class="org-left">Yadav</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 <td class="org-left">1</td>
 </tr>
 
@@ -1494,9 +1501,9 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">Other</td>
 <td class="org-left">Arora</td>
 <td class="org-right">3</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">3</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
@@ -1504,35 +1511,35 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">Baniya</td>
 <td class="org-right">1</td>
 <td class="org-left">3</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">Other</td>
 <td class="org-left">Bishnoi</td>
 <td class="org-right">11</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">Other</td>
 <td class="org-left">Brahmin</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
 <td class="org-left">6</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">1</td>
 </tr>
 
 <tr>
 <td class="org-left">Other</td>
 <td class="org-left">Garg</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
 <td class="org-left">1</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
@@ -1547,19 +1554,19 @@ This section will provide a compilation of tables and graphs on different aspect
 <tr>
 <td class="org-left">Other</td>
 <td class="org-left">Khati</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
 <td class="org-left">3</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">Other</td>
 <td class="org-left">Mehta</td>
 <td class="org-right">6</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
@@ -1567,15 +1574,15 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">Sunar</td>
 <td class="org-right">1</td>
 <td class="org-left">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">SC</td>
 <td class="org-left">Balmiki</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
 <td class="org-left">7</td>
 <td class="org-left">1</td>
 </tr>
@@ -1583,8 +1590,8 @@ This section will provide a compilation of tables and graphs on different aspect
 <tr>
 <td class="org-left">SC</td>
 <td class="org-left">Bawaria</td>
-<td class="org-right">nil</td>
-<td class="org-left">nil</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
 <td class="org-left">1</td>
 <td class="org-left">1</td>
 </tr>
@@ -1593,9 +1600,9 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">SC</td>
 <td class="org-left">Bazigar</td>
 <td class="org-right">2</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">7</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
@@ -1612,7 +1619,7 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">Dhanak</td>
 <td class="org-right">8</td>
 <td class="org-left">9</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">17</td>
 </tr>
 
@@ -1620,616 +1627,359 @@ This section will provide a compilation of tables and graphs on different aspect
 <td class="org-left">SC</td>
 <td class="org-left">Mazhabi Sikh</td>
 <td class="org-right">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">SC</td>
 <td class="org-left">Meena</td>
 <td class="org-right">1</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">SC</td>
 <td class="org-left">Nayak</td>
 <td class="org-right">2</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">SC</td>
 <td class="org-left">Od</td>
 <td class="org-right">3</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 <td class="org-left">16</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
 </tr>
 
 <tr>
 <td class="org-left">SC</td>
 <td class="org-left">Rai Sikh</td>
 <td class="org-right">15</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
-<td class="org-left">nil</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
+<td class="org-left">---</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 
-<div id="outline-container-orgccdfc51" class="outline-3">
-<h3 id="orgccdfc51"><span class="section-number-3">5.2</span> Occupations</h3>
+<div id="outline-container-org2c1f664" class="outline-3">
+<h3 id="org2c1f664"><span class="section-number-3">5.2</span> Occupations</h3>
 <div class="outline-text-3" id="text-5-2">
-<table id="orgdd481e3" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org260151c" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 6:</span> Number of sample workers by occupation</caption>
 
 <colgroup>
 <col  class="org-left" />
 
-<col  class="org-left" />
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
 
 <col  class="org-right" />
 
 <col  class="org-right" />
 </colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">village_name</th>
-<th scope="col" class="org-left">occupation_category</th>
-<th scope="col" class="org-right">F</th>
-<th scope="col" class="org-right">M</th>
-</tr>
-</thead>
 <tbody>
 <tr>
-<td class="org-left">Birdhana</td>
+<td class="org-left">---</td>
+<td class="org-right">Birdhana</td>
+<td class="org-right">Birdhana</td>
+<td class="org-right">Cheher Kalan</td>
+<td class="org-right">Cheher Kalan</td>
+<td class="org-right">Gijji</td>
+<td class="org-right">Gijji</td>
+<td class="org-right">Jamalpur Shekhan</td>
+<td class="org-right">Jamalpur Shekhan</td>
+<td class="org-right">Khandrai</td>
+<td class="org-right">Khandrai</td>
+</tr>
+
+<tr>
+<td class="org-left">---</td>
+<td class="org-right">F</td>
+<td class="org-right">M</td>
+<td class="org-right">F</td>
+<td class="org-right">M</td>
+<td class="org-right">F</td>
+<td class="org-right">M</td>
+<td class="org-right">F</td>
+<td class="org-right">M</td>
+<td class="org-right">F</td>
+<td class="org-right">M</td>
+</tr>
+
+<tr>
+<td class="org-left">Landlord</td>
+<td class="org-right">---</td>
+<td class="org-right">2</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
 <td class="org-left">Peasant</td>
-<td class="org-right">29</td>
-<td class="org-right">73</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Tenant peasant</td>
-<td class="org-right">2</td>
-<td class="org-right">1</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Tending animals</td>
-<td class="org-right">97</td>
-<td class="org-right">56</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Agricultural labour</td>
-<td class="org-right">30</td>
-<td class="org-right">21</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Self-employed artisan/service provider</td>
-<td class="org-right">7</td>
-<td class="org-right">7</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">NREGA workers/Labour in other public works</td>
-<td class="org-right">11</td>
-<td class="org-right">5</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Casual non-agricultural labour (other)</td>
-<td class="org-right">2</td>
-<td class="org-right">20</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Salaried government employee</td>
-<td class="org-right">4</td>
-<td class="org-right">9</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Salaried private employee</td>
-<td class="org-right">2</td>
-<td class="org-right">17</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Self-employed, business owner</td>
-<td class="org-right">1</td>
-<td class="org-right">42</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Student</td>
-<td class="org-right">84</td>
-<td class="org-right">86</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Housework</td>
-<td class="org-right">153</td>
-<td class="org-right">3</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Unable to work because of medical reasons</td>
-<td class="org-right">2</td>
-<td class="org-right">4</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Longterm agricultural worker - Siri</td>
-<td class="org-right">1</td>
-<td class="org-right">7</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Recipient of Pension/Remittance</td>
-<td class="org-right">28</td>
-<td class="org-right">22</td>
-</tr>
-
-<tr>
-<td class="org-left">Birdhana</td>
-<td class="org-left">Apprentice</td>
-<td class="org-right">1</td>
-<td class="org-right">5</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Peasant</td>
+<td class="org-right">31</td>
+<td class="org-right">74</td>
 <td class="org-right">23</td>
 <td class="org-right">46</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Tending animals</td>
-<td class="org-right">45</td>
-<td class="org-right">16</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Agricultural labour</td>
-<td class="org-right">18</td>
-<td class="org-right">28</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Self-employed artisan/service provider</td>
-<td class="org-right">5</td>
-<td class="org-right">11</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">NREGA workers/Labour in other public works</td>
-<td class="org-right">4</td>
-<td class="org-right">4</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Casual non-agricultural labour (other)</td>
-<td class="org-right">1</td>
-<td class="org-right">5</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Salaried government employee</td>
-<td class="org-right">5</td>
-<td class="org-right">7</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Self-employed, business owner</td>
-<td class="org-right">2</td>
-<td class="org-right">16</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Student</td>
-<td class="org-right">39</td>
-<td class="org-right">50</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Housework</td>
-<td class="org-right">54</td>
-<td class="org-right">5</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Too old to work</td>
-<td class="org-right">4</td>
-<td class="org-right">3</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Unable to work because of medical reasons</td>
-<td class="org-right">1</td>
-<td class="org-right">1</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Driver</td>
-<td class="org-right">1</td>
-<td class="org-right">2</td>
-</tr>
-
-<tr>
-<td class="org-left">Cheher Kalan</td>
-<td class="org-left">Recipient of Pension/Remittance</td>
-<td class="org-right">18</td>
-<td class="org-right">16</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Peasant</td>
 <td class="org-right">3</td>
 <td class="org-right">14</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Tending animals</td>
-<td class="org-right">20</td>
-<td class="org-right">13</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Agricultural labour</td>
-<td class="org-right">20</td>
-<td class="org-right">20</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Construction labour</td>
-<td class="org-right">1</td>
-<td class="org-right">6</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">NREGA workers/Labour in other public works</td>
-<td class="org-right">9</td>
-<td class="org-right">8</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Salaried government employee</td>
-<td class="org-right">1</td>
-<td class="org-right">7</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Salaried private employee</td>
-<td class="org-right">1</td>
-<td class="org-right">18</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Self-employed, business owner</td>
-<td class="org-right">1</td>
-<td class="org-right">16</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Student</td>
-<td class="org-right">23</td>
-<td class="org-right">30</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Housework</td>
-<td class="org-right">63</td>
-<td class="org-right">6</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Unable to work because of medical reasons</td>
-<td class="org-right">1</td>
-<td class="org-right">2</td>
-</tr>
-
-<tr>
-<td class="org-left">Gijji</td>
-<td class="org-left">Recipient of Pension/Remittance</td>
-<td class="org-right">10</td>
-<td class="org-right">9</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Peasant</td>
 <td class="org-right">17</td>
 <td class="org-right">36</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Tending animals</td>
-<td class="org-right">53</td>
-<td class="org-right">32</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Agricultural labour</td>
-<td class="org-right">36</td>
-<td class="org-right">31</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Self-employed artisan/service provider</td>
-<td class="org-right">8</td>
-<td class="org-right">10</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Construction labour</td>
-<td class="org-right">1</td>
-<td class="org-right">23</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Domestic work</td>
-<td class="org-right">4</td>
-<td class="org-right">2</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">NREGA workers/Labour in other public works</td>
-<td class="org-right">17</td>
-<td class="org-right">9</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Salaried government employee</td>
-<td class="org-right">2</td>
-<td class="org-right">3</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Self-employed, business owner</td>
-<td class="org-right">9</td>
-<td class="org-right">34</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Student</td>
-<td class="org-right">47</td>
-<td class="org-right">65</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Housework</td>
-<td class="org-right">90</td>
-<td class="org-right">3</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Too old to work</td>
-<td class="org-right">2</td>
-<td class="org-right">1</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Unable to work because of medical reasons</td>
-<td class="org-right">1</td>
-<td class="org-right">3</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Other</td>
-<td class="org-right">1</td>
-<td class="org-right">5</td>
-</tr>
-
-<tr>
-<td class="org-left">Jamalpur Shekhan</td>
-<td class="org-left">Recipient of Pension/Remittance</td>
-<td class="org-right">24</td>
-<td class="org-right">16</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Peasant</td>
 <td class="org-right">16</td>
 <td class="org-right">40</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
 <td class="org-left">Tending animals</td>
+<td class="org-right">97</td>
+<td class="org-right">56</td>
+<td class="org-right">45</td>
+<td class="org-right">16</td>
+<td class="org-right">20</td>
+<td class="org-right">13</td>
+<td class="org-right">53</td>
+<td class="org-right">32</td>
 <td class="org-right">48</td>
 <td class="org-right">26</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
 <td class="org-left">Agricultural labour</td>
+<td class="org-right">31</td>
+<td class="org-right">29</td>
+<td class="org-right">18</td>
+<td class="org-right">28</td>
+<td class="org-right">20</td>
+<td class="org-right">20</td>
+<td class="org-right">37</td>
+<td class="org-right">31</td>
 <td class="org-right">22</td>
-<td class="org-right">24</td>
+<td class="org-right">25</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Self-employed artisan/service provider</td>
+<td class="org-left">Non-agricultural manual labour</td>
+<td class="org-right">14</td>
+<td class="org-right">41</td>
+<td class="org-right">18</td>
+<td class="org-right">19</td>
+<td class="org-right">10</td>
+<td class="org-right">16</td>
+<td class="org-right">22</td>
+<td class="org-right">42</td>
+<td class="org-right">8</td>
+<td class="org-right">36</td>
+</tr>
+
+<tr>
+<td class="org-left">Salaried government employee</td>
+<td class="org-right">4</td>
+<td class="org-right">9</td>
+<td class="org-right">5</td>
+<td class="org-right">7</td>
+<td class="org-right">1</td>
+<td class="org-right">7</td>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+<td class="org-right">8</td>
+<td class="org-right">8</td>
+</tr>
+
+<tr>
+<td class="org-left">Salaried private employee</td>
+<td class="org-right">2</td>
+<td class="org-right">29</td>
+<td class="org-right">1</td>
+<td class="org-right">8</td>
+<td class="org-right">1</td>
+<td class="org-right">23</td>
+<td class="org-right">---</td>
+<td class="org-right">20</td>
+<td class="org-right">1</td>
+<td class="org-right">16</td>
+</tr>
+
+<tr>
+<td class="org-left">Self-employed, business owner</td>
+<td class="org-right">1</td>
+<td class="org-right">45</td>
+<td class="org-right">2</td>
+<td class="org-right">17</td>
+<td class="org-right">1</td>
+<td class="org-right">16</td>
+<td class="org-right">9</td>
+<td class="org-right">38</td>
+<td class="org-right">6</td>
+<td class="org-right">25</td>
+</tr>
+
+<tr>
+<td class="org-left">Caste occupations/artisans</td>
+<td class="org-right">7</td>
+<td class="org-right">7</td>
+<td class="org-right">5</td>
+<td class="org-right">11</td>
+<td class="org-right">---</td>
+<td class="org-right">3</td>
+<td class="org-right">8</td>
+<td class="org-right">10</td>
 <td class="org-right">4</td>
 <td class="org-right">3</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Construction labour</td>
-<td class="org-right">1</td>
-<td class="org-right">8</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Domestic work</td>
-<td class="org-right">2</td>
-<td class="org-right">1</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">NREGA workers/Labour in other public works</td>
-<td class="org-right">1</td>
-<td class="org-right">1</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Casual non-agricultural labour (other)</td>
-<td class="org-right">4</td>
-<td class="org-right">26</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Salaried government employee</td>
-<td class="org-right">8</td>
-<td class="org-right">8</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Salaried private employee</td>
-<td class="org-right">1</td>
-<td class="org-right">12</td>
-</tr>
-
-<tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Self-employed, business owner</td>
-<td class="org-right">6</td>
+<td class="org-left">Recipient of pension/remittance</td>
+<td class="org-right">28</td>
+<td class="org-right">22</td>
+<td class="org-right">18</td>
+<td class="org-right">16</td>
+<td class="org-right">10</td>
+<td class="org-right">9</td>
 <td class="org-right">24</td>
+<td class="org-right">16</td>
+<td class="org-right">4</td>
+<td class="org-right">---</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
+<td class="org-left">Unemployed</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+<td class="org-right">---</td>
+<td class="org-right">4</td>
+<td class="org-right">---</td>
+<td class="org-right">4</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">---</td>
+</tr>
+
+<tr>
 <td class="org-left">Student</td>
+<td class="org-right">85</td>
+<td class="org-right">91</td>
+<td class="org-right">39</td>
+<td class="org-right">50</td>
+<td class="org-right">23</td>
+<td class="org-right">31</td>
+<td class="org-right">47</td>
+<td class="org-right">68</td>
 <td class="org-right">53</td>
-<td class="org-right">66</td>
+<td class="org-right">68</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
 <td class="org-left">Housework</td>
+<td class="org-right">153</td>
+<td class="org-right">3</td>
+<td class="org-right">54</td>
+<td class="org-right">5</td>
+<td class="org-right">63</td>
+<td class="org-right">6</td>
+<td class="org-right">90</td>
+<td class="org-right">3</td>
 <td class="org-right">113</td>
 <td class="org-right">2</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Too old to work</td>
+<td class="org-left">Unable to work because of age or poor health</td>
+<td class="org-right">2</td>
+<td class="org-right">5</td>
+<td class="org-right">5</td>
+<td class="org-right">5</td>
+<td class="org-right">1</td>
+<td class="org-right">4</td>
 <td class="org-right">3</td>
-<td class="org-right">6</td>
+<td class="org-right">4</td>
+<td class="org-right">5</td>
+<td class="org-right">12</td>
 </tr>
 
 <tr>
-<td class="org-left">Khandrai</td>
-<td class="org-left">Unable to work because of medical reasons</td>
+<td class="org-left">Other</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
+<td class="org-right">---</td>
 <td class="org-right">2</td>
-<td class="org-right">6</td>
+<td class="org-right">1</td>
+<td class="org-right">5</td>
+<td class="org-right">---</td>
+<td class="org-right">1</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 
-<div id="outline-container-org59e9535" class="outline-3">
-<h3 id="org59e9535"><span class="section-number-3">5.3</span> Land relations</h3>
+<div id="outline-container-orgc56be8d" class="outline-3">
+<h3 id="orgc56be8d"><span class="section-number-3">5.3</span> </h3>
 </div>
-<div id="outline-container-org4a30055" class="outline-3">
-<h3 id="org4a30055"><span class="section-number-3">5.4</span> Food security</h3>
+<div id="outline-container-org0967386" class="outline-3">
+<h3 id="org0967386"><span class="section-number-3">5.4</span> Land relations</h3>
 </div>
-<div id="outline-container-org8d95077" class="outline-3">
-<h3 id="org8d95077"><span class="section-number-3">5.5</span> Cropping pattern, Production, Input use</h3>
+<div id="outline-container-org9445e8f" class="outline-3">
+<h3 id="org9445e8f"><span class="section-number-3">5.5</span> Food security</h3>
 </div>
-<div id="outline-container-org0b968ba" class="outline-3">
-<h3 id="org0b968ba"><span class="section-number-3">5.6</span> Labour Deployment</h3>
+<div id="outline-container-org218b959" class="outline-3">
+<h3 id="org218b959"><span class="section-number-3">5.6</span> Cropping pattern, Production, Input use</h3>
 </div>
-<div id="outline-container-orgabc02d9" class="outline-3">
-<h3 id="orgabc02d9"><span class="section-number-3">5.7</span> Employment</h3>
+<div id="outline-container-org53a0640" class="outline-3">
+<h3 id="org53a0640"><span class="section-number-3">5.7</span> Labour Deployment</h3>
 </div>
-<div id="outline-container-org0b37cff" class="outline-3">
-<h3 id="org0b37cff"><span class="section-number-3">5.8</span> Livestock</h3>
+<div id="outline-container-org7304ace" class="outline-3">
+<h3 id="org7304ace"><span class="section-number-3">5.8</span> Employment</h3>
 </div>
-<div id="outline-container-org50a1fc4" class="outline-3">
-<h3 id="org50a1fc4"><span class="section-number-3">5.9</span> Housing and Sanitation</h3>
+<div id="outline-container-orgd538c9b" class="outline-3">
+<h3 id="orgd538c9b"><span class="section-number-3">5.9</span> Livestock</h3>
 </div>
-<div id="outline-container-orge2cd927" class="outline-3">
-<h3 id="orge2cd927"><span class="section-number-3">5.10</span> Health and Education</h3>
+<div id="outline-container-org3ea8484" class="outline-3">
+<h3 id="org3ea8484"><span class="section-number-3">5.10</span> Housing and Sanitation</h3>
 </div>
-<div id="outline-container-orgfdb4c38" class="outline-3">
-<h3 id="orgfdb4c38"><span class="section-number-3">5.11</span> Assets and Indebtedness</h3>
-<div class="outline-text-3" id="text-5-11">
+<div id="outline-container-orgd88efa2" class="outline-3">
+<h3 id="orgd88efa2"><span class="section-number-3">5.11</span> Health and Education</h3>
+</div>
+<div id="outline-container-orgdcc9363" class="outline-3">
+<h3 id="orgdcc9363"><span class="section-number-3">5.12</span> Assets and Indebtedness</h3>
+<div class="outline-text-3" id="text-5-12">
 <p>
 Get unit prices
 </p>
 
 
-<table id="org1d5bf47" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb53369e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 7:</span> Summary statistics for unit prices of assets</caption>
 
 <colgroup>
@@ -2291,25 +2041,25 @@ Get unit prices
 
 <tr>
 <td class="org-left">B/W TV</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">12</td>
 </tr>
 
 <tr>
 <td class="org-left">Bed</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">152</td>
 </tr>
 
@@ -2327,25 +2077,25 @@ Get unit prices
 
 <tr>
 <td class="org-left">Biogas plant</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">4</td>
 </tr>
 
 <tr>
 <td class="org-left">Bus</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">2</td>
 </tr>
 
@@ -2363,13 +2113,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Capital equipment owned in non-agriculture business</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">1</td>
 </tr>
 
@@ -2519,25 +2269,25 @@ Get unit prices
 
 <tr>
 <td class="org-left">Electric heater</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">10</td>
 </tr>
 
 <tr>
 <td class="org-left">Gas stove</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">1</td>
 </tr>
 
@@ -2555,13 +2305,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Handpump</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">18</td>
 </tr>
 
@@ -2591,13 +2341,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Kerosene stove</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">6</td>
 </tr>
 
@@ -2615,13 +2365,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Microwave</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">4</td>
 </tr>
 
@@ -2663,13 +2413,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Other</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">2</td>
 </tr>
 
@@ -2687,13 +2437,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Other furniture</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">4</td>
 </tr>
 
@@ -2771,13 +2521,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Telephone (fixed)</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">10</td>
 </tr>
 
@@ -2807,13 +2557,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Utensils/kitchen instrument</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">64</td>
 </tr>
 
@@ -2831,13 +2581,13 @@ Get unit prices
 
 <tr>
 <td class="org-left">Watch</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
-<td class="org-right">nil</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
 <td class="org-right">15</td>
 </tr>
 </tbody>
@@ -2846,13 +2596,13 @@ Get unit prices
 </div>
 </div>
 
-<div id="outline-container-org50d2d84" class="outline-2">
-<h2 id="org50d2d84"><span class="section-number-2">6</span> </h2>
+<div id="outline-container-orge466ed9" class="outline-2">
+<h2 id="orge466ed9"><span class="section-number-2">6</span> </h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: SSER SSER</p>
-<p class="date">Created: 2018-12-05 Wed 07:49</p>
+<p class="date">Created: 2018-12-06 Thu 10:38</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
