@@ -1,5 +1,5 @@
-#+TITLE: 
-#+AUTHOR: SSER
+#+TITLE:
+#+AUTHOR:
 #+OPTIONS: H:3 ^:{}
 #+LATEX_HEADER: \usepackage{booktabs}
 #+LATEX_HEADER: \usepackage{tabularx}
