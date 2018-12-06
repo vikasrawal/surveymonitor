@@ -62,7 +62,7 @@ This section records any overall decisions that are taken.
 CLOSED: [2018-11-11 Sun 05:56]
 ***** Compute unit price from available data, and provide a table of summary statistics for each type of asset
 
-* Database corrections                                                :Vikas:
+* Database Corrections                                                :Vikas:
 ***** TODO FIES filter on names
 ***** TODO Comments on FIES questions
 ***** TODO Crops filter
@@ -481,7 +481,7 @@ This section will provide a compilation of tables and graphs on different aspect
 
 
 #+NAME: occupation-preliminary-code
-#+BEGIN_SRC R :results value :exports results :colnames no :hline no
+#+BEGIN_SRC R :results silent :exports none
   data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->codeoccupation
     codeoccupation[order(id)]->codeoccupation
     factor(codeoccupation$id)->codeoccupation$id2
@@ -554,6 +554,10 @@ This section will provide a compilation of tables and graphs on different aspect
 
   factor(occupations$occupation_category,levels=c("Landlord","Peasant","Tending animals","Agricultural labour","Non-agricultural manual labour","Salaried government employee","Salaried private employee","Self-employed, business owner","Caste occupations/artisans","Recipient of pension/remittance","Apprentice","Collection of CPRs","Unemployed","Student","Housework","Unable to work because of age or poor health","Other"))->occupations$occupation_category
 
+#+END_SRC
+
+#+NAME: occupation-table1-code
+#+BEGIN_SRC R :results value :exports results :colnames no :hline no
   occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
   t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(occupation_category)]->t
   #transpose(CJ(unique(occupations$village_name),unique(occupations$sex)))->name
@@ -562,7 +566,7 @@ This section will provide a compilation of tables and graphs on different aspect
   ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
   ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
   tabhead$V1[tabhead$rank!=1]<-""
-  ifelse(!is.na(tabhead$V1),paste("<",tabhead$len,"colc>",tabhead$V1,sep=""),NA)->tabhead$V1
+  ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
   transpose(tabhead[,c(1:2)])->tabhead
   as.data.frame(rbind(tabhead,t,fill=TRUE))->t
   levels(t[ncol(t)])
@@ -573,24 +577,24 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+NAME: occupation
 #+CAPTION: Number of sample workers by occupation
-#+RESULTS: occupation-preliminary-code
-| nil                                          | Birdhana | Birdhana | Cheher Kalan | Cheher Kalan | Gijji | Gijji | Jamalpur Shekhan | Jamalpur Shekhan | Khandrai | Khandrai |
-| nil                                          |        F |        M |            F |            M |     F |     M |                F |                M |        F |        M |
-| Landlord                                     |      nil |        2 |          nil |            1 |   nil |   nil |              nil |                1 |      nil |        1 |
-| Peasant                                      |       31 |       74 |           23 |           46 |     3 |    14 |               17 |               36 |       16 |       40 |
-| Tending animals                              |       97 |       56 |           45 |           16 |    20 |    13 |               53 |               32 |       48 |       26 |
-| Agricultural labour                          |       31 |       29 |           18 |           28 |    20 |    20 |               37 |               31 |       22 |       25 |
-| Non-agricultural manual labour               |       14 |       41 |           18 |           19 |    10 |    16 |               22 |               42 |        8 |       36 |
-| Salaried government employee                 |        4 |        9 |            5 |            7 |     1 |     7 |                2 |                3 |        8 |        8 |
-| Salaried private employee                    |        2 |       29 |            1 |            8 |     1 |    23 |              nil |               20 |        1 |       16 |
-| Self-employed, business owner                |        1 |       45 |            2 |           17 |     1 |    16 |                9 |               38 |        6 |       25 |
-| Caste occupations/artisans                   |        7 |        7 |            5 |           11 |   nil |     3 |                8 |               10 |        4 |        3 |
-| Recipient of pension/remittance              |       28 |       22 |           18 |           16 |    10 |     9 |               24 |               16 |        4 |      nil |
-| Unemployed                                   |      nil |        1 |          nil |            4 |   nil |     4 |              nil |                1 |        1 |      nil |
-| Student                                      |       85 |       91 |           39 |           50 |    23 |    31 |               47 |               68 |       53 |       68 |
-| Housework                                    |      153 |        3 |           54 |            5 |    63 |     6 |               90 |                3 |      113 |        2 |
-| Unable to work because of age or poor health |        2 |        5 |            5 |            5 |     1 |     4 |                3 |                4 |        5 |       12 |
-| Other                                        |      nil |        1 |          nil |            1 |   nil |     2 |                1 |                5 |      nil |        1 |
+#+RESULTS: occupation-table1-code
+| nil                                          | <2colc>Birdhana |    | <2colc>Cheher Kalan |    | <2colc>Gijji |     | <2colc>Jamalpur Shekhan |    | <2colc>Khandrai |     |
+| nil                                          |               F |  M |                   F |  M |            F |   M |                       F |  M |               F |   M |
+| Landlord                                     |             nil |  2 |                 nil |  1 |          nil | nil |                     nil |  1 |             nil |   1 |
+| Peasant                                      |              31 | 74 |                  23 | 46 |            3 |  14 |                      17 | 36 |              16 |  40 |
+| Tending animals                              |              97 | 56 |                  45 | 16 |           20 |  13 |                      53 | 32 |              48 |  26 |
+| Agricultural labour                          |              31 | 29 |                  18 | 28 |           20 |  20 |                      37 | 31 |              22 |  25 |
+| Non-agricultural manual labour               |              14 | 41 |                  18 | 19 |           10 |  16 |                      22 | 42 |               8 |  36 |
+| Salaried government employee                 |               4 |  9 |                   5 |  7 |            1 |   7 |                       2 |  3 |               8 |   8 |
+| Salaried private employee                    |               2 | 29 |                   1 |  8 |            1 |  23 |                     nil | 20 |               1 |  16 |
+| Self-employed, business owner                |               1 | 45 |                   2 | 17 |            1 |  16 |                       9 | 38 |               6 |  25 |
+| Caste occupations/artisans                   |               7 |  7 |                   5 | 11 |          nil |   3 |                       8 | 10 |               4 |   3 |
+| Recipient of pension/remittance              |              28 | 22 |                  18 | 16 |           10 |   9 |                      24 | 16 |               4 | nil |
+| Unemployed                                   |             nil |  1 |                 nil |  4 |          nil |   4 |                     nil |  1 |               1 | nil |
+| Student                                      |              85 | 91 |                  39 | 50 |           23 |  31 |                      47 | 68 |              53 |  68 |
+| Housework                                    |             153 |  3 |                  54 |  5 |           63 |   6 |                      90 |  3 |             113 |   2 |
+| Unable to work because of age or poor health |               2 |  5 |                   5 |  5 |            1 |   4 |                       3 |  4 |               5 |  12 |
+| Other                                        |             nil |  1 |                 nil |  1 |          nil |   2 |                       1 |  5 |             nil |   1 |
 
 ** 
 ** Land relations
@@ -615,4 +619,4 @@ This section will provide a compilation of tables and graphs on different aspect
   tools::pskill(Processes)
 #+END_SRC
 
-* 
+
