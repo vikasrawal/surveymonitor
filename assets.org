@@ -1,4 +1,4 @@
-#+TITLE: Asset-holdings of Rural Households in Haryana
+#+TITLE: 
 #+AUTHOR: SSER
 #+OPTIONS: H:3 ^:{}
 #+LATEX_HEADER: \usepackage{booktabs}
