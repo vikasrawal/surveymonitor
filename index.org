@@ -273,7 +273,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 
 **** Match homestead land with housing information. Check if value of house and land are recorded.
 
-* Number of Rows in Database Tables
+* Progress of Data Entry
 
 #+NAME: tablerows-code 
 #+BEGIN_SRC sql :engine postgresql :dbhost localhost :dbuser ssersurveyuser :database ssersurveydata :colnames yes :exports results
