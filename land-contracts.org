@@ -1,0 +1,32 @@
+#+TITLE: 
+
+* Data
+#+NAME: read-data
+#+BEGIN_SRC R :results value silent :exports none :session labour
+  require(RPostgreSQL)
+  library(data.table)
+  source("~/surveymonitor/sserconnect.R")
+  dbListTables(surveypg)->t
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
+  data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
+  data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
+
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+  data.table(dbReadTable(surveypg,"ruralsurvey_current_ownership_holdings"))->ownershipholding
+  data.table(dbReadTable(surveypg,"ruralsurvey_irrigation_ownership_holdings"))->irrigation
+#+END_SRC
+
+
+
+* Errors in ownership holdings
+#+NAME: error-ownership
+#+BEGIN_SRC R :results value silent :exports none 
+#+END_SRC
+
