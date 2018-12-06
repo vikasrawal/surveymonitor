@@ -1,5 +1,5 @@
 #+TITLE: Sitemap for vikasrawal.github.io/surveymonitor
 
-- [[file:land-contracts.org][land-contracts]]
 - [[file:index.org][Monitoring Data Entry for Haryana Surveys]]
+- [[file:land-contracts.org][land-contracts]]
 - [[file:assets.org][assets]]
