@@ -1,4 +1,10 @@
-#+TITLE: 
+#+TITLE: Analysis of Land Contracts
+#+AUTHOR: SSER
+#+OPTIONS: H:3 ^:{}
+#+TODO: TODO EDIT CHECK | DONE
+#+PROPERTY: header-args:R :session haryana :eval never-export
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+#+HTML_HEAD: <style>#content{max-width:1200px;} </style>
 
 * Data
 #+NAME: read-data
