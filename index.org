@@ -12,9 +12,25 @@
 
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
-  require(RPostgreSQL)
-  require(ggplot2)
-  require(data.table)
+require(RPostgreSQL)
+require(ggplot2)
+require(data.table)
+  addhead<-function(d1,v1,v2) {
+        CJ(unique(v1),unique(v2))->tabhead
+         c(1:nrow(tabhead))->tabhead$rank
+         ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
+         ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
+         tabhead$V1[tabhead$rank!=1]<-""
+         ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
+         transpose(tabhead[,c(1:2)])->tabhead
+         as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
+         levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"")
+         names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
+         tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
+         tabhead2[2,1]<-""
+         tabhead2
+    }
+
 #+END_SRC
 
 #+NAME: open-database-connection
@@ -151,6 +167,15 @@ CLOSED: [2018-11-11 Sun 06:59]
 #+END_SRC
 
 * Inconsistencies in Data                                       :Sonia:Jesim:
+
+** Tests to be done
+
+*** Land, cropping pattern, production, input use
+**** Match operational holding
+**** Boxplots of per acre yield for different crops
+**** Boxplots of input use per acre for different crops
+*** Animal resources
+*** 
 ** TODO Households for which data are missing for critical variables
 
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
@@ -421,7 +446,6 @@ b| relname                                                         | n_live_tup 
 | ruralsurvey_access_to_education_children                        |          0 |
 | ruralsurvey_income_from_hiring_out_machinery                    |          0 |
 
-
 * Emerging patterns
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
@@ -480,8 +504,6 @@ This section will provide a compilation of tables and graphs on different aspect
 | SC           | Rai Sikh       |       15 | nil              | nil      |          nil | nil   |
 
 ** Occupations
-
-
 
 #+NAME: occupation-preliminary-code
 #+BEGIN_SRC R :results silent :exports none
@@ -560,31 +582,18 @@ This section will provide a compilation of tables and graphs on different aspect
 #+END_SRC
 
 #+NAME: occupation-table1-code
-#+BEGIN_SRC R :results value :exports results :colnames no :hline no
-  occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
-  t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(occupation_category)]->t
-  #transpose(CJ(unique(occupations$village_name),unique(occupations$sex)))->name
-  function(v1,v2) {
-
-  CJ(unique(occupations$village_name),unique(occupations$sex))->tabhead
-  c(1:nrow(tabhead))->tabhead$rank
-  ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
-  ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
-  tabhead$V1[tabhead$rank!=1]<-""
-  ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
-  transpose(tabhead[,c(1:2)])->tabhead
-  as.data.frame(rbind(tabhead,t,fill=TRUE))->t
-  levels(t[ncol(t)])
-  names(t)[length(names(t))]->t[1,ncol(t)]
-  t[,c(ncol(t),1:ncol(t)-1)]
-
+#+BEGIN_SRC R :results value :exports results :colnames no
+    occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
+  t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(occupation_category)]->t1
+  names(t1)[1]<-"Occupation categories"
+  addhead(t1,occupations$village_name,occupations$sex)
 #+END_SRC
 
 #+NAME: occupation
 #+CAPTION: Number of sample workers by occupation
 #+RESULTS: occupation-table1-code
-| nil                                          | <2colc>Birdhana |    | <2colc>Cheher Kalan |    | <2colc>Gijji |     | <2colc>Jamalpur Shekhan |    | <2colc>Khandrai |     |
-| nil                                          |               F |  M |                   F |  M |            F |   M |                       F |  M |               F |   M |
+| Occupation categories                        | <2colc>Birdhana |    | <2colc>Cheher Kalan |    | <2colc>Gijji |     | <2colc>Jamalpur Shekhan |    | <2colc>Khandrai |     |
+|                                              |               F |  M |                   F |  M |            F |   M |                       F |  M |               F |   M |
 |----------------------------------------------+-----------------+----+---------------------+----+--------------+-----+-------------------------+----+-----------------+-----|
 | Landlord                                     |             nil |  2 |                 nil |  1 |          nil | nil |                     nil |  1 |             nil |   1 |
 | Peasant                                      |              31 | 74 |                  23 | 46 |            3 |  14 |                      17 | 36 |              16 |  40 |
@@ -602,6 +611,8 @@ This section will provide a compilation of tables and graphs on different aspect
 | Unable to work because of age or poor health |               2 |  5 |                   5 |  5 |            1 |   4 |                       3 |  4 |               5 |  12 |
 | Other                                        |             nil |  1 |                 nil |  1 |          nil |   2 |                       1 |  5 |             nil |   1 |
 
+
+** 
 ** Land relations
 *** [[file:land-contracts.org][Analysis of land contracts]]
 ** Food security
