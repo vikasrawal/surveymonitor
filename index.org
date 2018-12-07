@@ -149,6 +149,7 @@ CLOSED: [2018-11-11 Sun 06:59]
 
   dbDisconnect(surveypg)
 #+END_SRC
+
 * Inconsistencies in Data                                       :Sonia:Jesim:
 ** TODO Households for which data are missing for critical variables
 
@@ -420,6 +421,7 @@ b| relname                                                         | n_live_tup 
 | ruralsurvey_access_to_education_children                        |          0 |
 | ruralsurvey_income_from_hiring_out_machinery                    |          0 |
 
+
 * Emerging patterns
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
@@ -432,7 +434,7 @@ This section will provide a compilation of tables and graphs on different aspect
     merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
   t[,.(Number=length(household_number)),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
     t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
-    names(t1)[c(3:6)]<-unique(t$village_name)
+    names(t1)[c(3:ncol(t1))]<-unique(t$village_name)
     names(t1)[c(1:2)]<-c("Social group","Caste")
     t1
 #+END_SRC
@@ -440,41 +442,42 @@ This section will provide a compilation of tables and graphs on different aspect
 #+NAME: caste-composition-code
 #+CAPTION: Caste representation in the sample
 #+RESULTS: caste-composition-code
-| Social group | Caste          | Birdhana | Jamalpur Shekhan | Khandrai | Cheher Kalan |
-|--------------+----------------+----------+------------------+----------+--------------|
-| BC           | Bhatra sikh    |      nil | nil              | 1        | nil          |
-| BC           | Jhimar/Dhinwar |        1 | nil              | nil      | 3            |
-| BC           | Jogi           |      nil | nil              | nil      | 1            |
-| BC           | Kamboj         |        5 | nil              | 3        | nil          |
-| BC           | Khati          |      nil | 9                | 1        | 2            |
-| BC           | Kumhar         |        1 | 2                | nil      | 5            |
-| BC           | Lodhi          |        1 | nil              | nil      | nil          |
-| BC           | Lohar          |        2 | 1                | 1        | nil          |
-| BC           | Mali           |        1 | nil              | nil      | nil          |
-| BC           | Nai            |        2 | 5                | 3        | nil          |
-| BC           | Rebari         |       10 | nil              | nil      | nil          |
-| BC           | Saini          |      nil | nil              | 14       | nil          |
-| BC           | Teli           |        1 | nil              | nil      | nil          |
-| BC           | Yadav          |      nil | nil              | nil      | 1            |
-| Other        | Arora          |        3 | nil              | 3        | nil          |
-| Other        | Baniya         |        1 | 3                | nil      | nil          |
-| Other        | Bishnoi        |       11 | nil              | nil      | nil          |
-| Other        | Brahmin        |      nil | 6                | nil      | 1            |
-| Other        | Garg           |      nil | nil              | 1        | nil          |
-| Other        | Jat            |       12 | 10               | 9        | 23           |
-| Other        | Khati          |      nil | nil              | 3        | nil          |
-| Other        | Mehta          |        6 | nil              | nil      | nil          |
-| Other        | Sunar          |        1 | 1                | nil      | nil          |
-| SC           | Balmiki        |      nil | nil              | 7        | 1            |
-| SC           | Bawaria        |      nil | nil              | 1        | 1            |
-| SC           | Bazigar        |        2 | nil              | 7        | nil          |
-| SC           | Chamar         |       13 | 7                | 8        | 17           |
-| SC           | Dhanak         |        8 | 9                | nil      | 17           |
-| SC           | Mazhabi Sikh   |        1 | nil              | nil      | nil          |
-| SC           | Meena          |        1 | nil              | nil      | nil          |
-| SC           | Nayak          |        2 | nil              | nil      | nil          |
-| SC           | Od             |        3 | nil              | 16       | nil          |
-| SC           | Rai Sikh       |       15 | nil              | nil      | nil          |
+| Social group | Caste          | Birdhana | Jamalpur Shekhan | Khandrai | Cheher Kalan | Gijji |
+|--------------+----------------+----------+------------------+----------+--------------+-------|
+| BC           | Bairagi        |      nil | nil              | 3        |          nil | nil   |
+| BC           | Bhatra sikh    |      nil | nil              | nil      |            1 | nil   |
+| BC           | Jhimar/Dhinwar |        1 | nil              | nil      |          nil | 3     |
+| BC           | Kamboj         |        5 | nil              | nil      |            2 | nil   |
+| BC           | Kamboj Sikh    |      nil | nil              | nil      |            1 | nil   |
+| BC           | Khati          |      nil | 9                | nil      |            1 | 2     |
+| BC           | Kumhar         |        1 | 2                | nil      |          nil | 5     |
+| BC           | Lodhi          |        1 | nil              | nil      |          nil | nil   |
+| BC           | Lohar          |        2 | 1                | nil      |            1 | nil   |
+| BC           | Mali           |        1 | nil              | nil      |          nil | nil   |
+| BC           | Nai            |        2 | 5                | nil      |            3 | nil   |
+| BC           | Rebari         |       10 | nil              | nil      |          nil | nil   |
+| BC           | Saini          |      nil | nil              | nil      |           14 | nil   |
+| BC           | Teli           |        1 | nil              | nil      |          nil | nil   |
+| Other        | Arora          |        3 | nil              | nil      |            3 | nil   |
+| Other        | Baniya         |        1 | 3                | nil      |          nil | nil   |
+| Other        | Bishnoi        |       11 | nil              | nil      |          nil | nil   |
+| Other        | Garg           |      nil | nil              | nil      |            1 | nil   |
+| Other        | Jat            |       12 | 10               | 9        |            4 | 23    |
+| Other        | Jat sikh       |      nil | nil              | nil      |            4 | nil   |
+| Other        | Khati          |      nil | nil              | nil      |            3 | nil   |
+| Other        | Meena          |      nil | nil              | nil      |            1 | nil   |
+| Other        | Mehta          |        6 | nil              | nil      |          nil | nil   |
+| Other        | Sunar          |        1 | 1                | nil      |          nil | nil   |
+| SC           | Balmiki        |      nil | nil              | nil      |            7 | 1     |
+| SC           | Bawaria        |      nil | nil              | nil      |            1 | 1     |
+| SC           | Bazigar        |        2 | nil              | nil      |            7 | nil   |
+| SC           | Chamar         |       13 | 7                | 8        |            8 | 17    |
+| SC           | Dhanak         |        8 | 10               | 22       |          nil | 17    |
+| SC           | Mazhabi Sikh   |        1 | nil              | nil      |          nil | nil   |
+| SC           | Meena          |        1 | nil              | nil      |          nil | nil   |
+| SC           | Nayak          |        2 | nil              | nil      |          nil | nil   |
+| SC           | Od             |        3 | nil              | nil      |           16 | nil   |
+| SC           | Rai Sikh       |       15 | nil              | nil      |          nil | nil   |
 
 ** Occupations
 
@@ -561,6 +564,8 @@ This section will provide a compilation of tables and graphs on different aspect
   occupations[,.(numberofworkers=length(id)),keyby=.(village_name,occupation_category,sex)]->t
   t[CJ(unique(village_name),unique(occupation_category),unique(sex))][,as.list(numberofworkers),by=.(occupation_category)]->t
   #transpose(CJ(unique(occupations$village_name),unique(occupations$sex)))->name
+  function(v1,v2) {
+
   CJ(unique(occupations$village_name),unique(occupations$sex))->tabhead
   c(1:nrow(tabhead))->tabhead$rank
   ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
