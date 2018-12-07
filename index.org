@@ -285,7 +285,7 @@ ORDER BY n_live_tup DESC;
 #+NAME: tablerows
 #+CAPTION: Number of rows in each database table
 #+RESULTS: tablerows-code
-| relname                                                         | n_live_tup |
+b| relname                                                         | n_live_tup |
 |-----------------------------------------------------------------+------------|
 | django_admin_log                                                |       5571 |
 | ruralsurvey_occupations_household_members                       |       2538 |
@@ -580,6 +580,7 @@ This section will provide a compilation of tables and graphs on different aspect
 #+RESULTS: occupation-table1-code
 | nil                                          | <2colc>Birdhana |    | <2colc>Cheher Kalan |    | <2colc>Gijji |     | <2colc>Jamalpur Shekhan |    | <2colc>Khandrai |     |
 | nil                                          |               F |  M |                   F |  M |            F |   M |                       F |  M |               F |   M |
+|----------------------------------------------+-----------------+----+---------------------+----+--------------+-----+-------------------------+----+-----------------+-----|
 | Landlord                                     |             nil |  2 |                 nil |  1 |          nil | nil |                     nil |  1 |             nil |   1 |
 | Peasant                                      |              31 | 74 |                  23 | 46 |            3 |  14 |                      17 | 36 |              16 |  40 |
 | Tending animals                              |              97 | 56 |                  45 | 16 |           20 |  13 |                      53 | 32 |              48 |  26 |
@@ -606,7 +607,6 @@ This section will provide a compilation of tables and graphs on different aspect
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
-
 
 #+INCLUDE: assets.org
 
