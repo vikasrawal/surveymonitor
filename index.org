@@ -47,7 +47,7 @@ source("sserconnect.R")
   dbListTables(surveypg)->t
 
   data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
-
+  data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
   data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
   data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
   data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
@@ -63,11 +63,147 @@ source("sserconnect.R")
 
 #+END_SRC
 
+#+NAME: list-tables-code
 #+BEGIN_SRC R :results value :exports none
   dbListTables(surveypg)->t
 #+END_SRC
 
-#+RESULTS:
+#+NAME: list-tables
+#+RESULTS: list-tables-code
+| ruralsurvey_asset_ownership_inventories                         |
+| auth_user                                                       |
+| django_migrations                                               |
+| django_session                                                  |
+| ruralsurvey_agricultural_labouring_out                          |
+| django_content_type                                             |
+| ruralsurvey_access_to_education_questions                       |
+| django_admin_log                                                |
+| auth_group                                                      |
+| auth_user_user_permissions                                      |
+| ruralsurvey_code_purpose_of_borrowing                           |
+| ruralsurvey_codevillage                                         |
+| ruralsurvey_current_ownership_holdings                          |
+| ruralsurvey_irrigation_ownership_holdings                       |
+| ruralsurvey_land_tenancy_mortgage                               |
+| ruralsurvey_agricultural_non_agricultura_labour_services        |
+| ruralsurvey_input_use_for_crops_crop_number                     |
+| auth_group_permissions                                          |
+| ruralsurvey_household                                           |
+| auth_user_groups                                                |
+| auth_permission                                                 |
+| ruralsurvey_codeoccupationcategory                              |
+| ruralsurvey_asset_ownership_other                               |
+| ruralsurvey_assets                                              |
+| ruralsurvey_member                                              |
+| ruralsurvey_animal_resources_for_last_one_year_sale_disposal    |
+| ruralsurvey_animal_resources_work_done_by_household_members     |
+| ruralsurvey_animal_resources_sale_production                    |
+| ruralsurvey_asset_ownership_land_buildings                      |
+| ruralsurvey_annual_consumption_of_major_items_of_food           |
+| ruralsurvey_codecaste                                           |
+| ruralsurvey_asset_ownership_electrical                          |
+| ruralsurvey_asset_ownership_furniture                           |
+| ruralsurvey_animal_resources_milk                               |
+| ruralsurvey_agricultural_loans_borrowed_last_year_and_repaid    |
+| ruralsurvey_animal_resources_feed                               |
+| ruralsurvey_animal_resources_for_last_one_year_inventory        |
+| ruralsurvey_animal_resources_other_costs                        |
+| ruralsurvey_access_to_education_children                        |
+| ruralsurvey_acquisition_and_loss_of_major_assets                |
+| ruralsurvey_access_to_food_in_school_or_anganwadi               |
+| ruralsurvey_code_commodity                                      |
+| ruralsurvey_code_asset_furniture                                |
+| ruralsurvey_child_help                                          |
+| ruralsurvey_code_card_type                                      |
+| ruralsurvey_code_asset                                          |
+| ruralsurvey_code_asset_others                                   |
+| ruralsurvey_code_asset_transport                                |
+| ruralsurvey_code_asset_inventories                              |
+| ruralsurvey_asset_ownership_transport                           |
+| ruralsurvey_bank_post_office_accounts                           |
+| ruralsurvey_code_asset_electrical                               |
+| ruralsurvey_business_and_artisan_earnings_household_members     |
+| ruralsurvey_business_and_artisan_earnings                       |
+| ruralsurvey_code_cooking_energy_source                          |
+| ruralsurvey_code_credit_institutions                            |
+| ruralsurvey_code_food                                           |
+| ruralsurvey_codeanimaltype                                      |
+| ruralsurvey_code_source_of_borrowing                            |
+| ruralsurvey_code_reasons_for_sale                               |
+| ruralsurvey_codeeducationalinstitution                          |
+| ruralsurvey_code_materials                                      |
+| ruralsurvey_codeinputtype                                       |
+| ruralsurvey_code_source_of_lighting                             |
+| ruralsurvey_codeitem                                            |
+| ruralsurvey_code_payer                                          |
+| ruralsurvey_code_reason_no_treatment                            |
+| ruralsurvey_codeinputcategory                                   |
+| ruralsurvey_code_others_irrigation_other_nature_ex              |
+| ruralsurvey_codemodeoftransport                                 |
+| ruralsurvey_code_informal_saving_institions                     |
+| ruralsurvey_comments_and_investigators                          |
+| ruralsurvey_codereligion                                        |
+| ruralsurvey_consumption_of_frequent_food_week                   |
+| ruralsurvey_codevariety                                         |
+| ruralsurvey_codeseasons                                         |
+| ruralsurvey_codesampletype                                      |
+| ruralsurvey_coderentunit                                        |
+| ruralsurvey_codeplaceofbirth                                    |
+| ruralsurvey_coderelationship                                    |
+| ruralsurvey_codeownershiptype                                   |
+| ruralsurvey_codetenurialstatus                                  |
+| ruralsurvey_costs                                               |
+| ruralsurvey_codepowersource                                     |
+| ruralsurvey_housing                                             |
+| ruralsurvey_experience_of_food_insecurity                       |
+| ruralsurvey_impact_of_specified_events_on_access_to_livelihoods |
+| ruralsurvey_expenditure_on_education                            |
+| ruralsurvey_housing_materials                                   |
+| ruralsurvey_housing_q                                           |
+| ruralsurvey_for_long_term_agricultural_workers                  |
+| ruralsurvey_freedom_of_employment                               |
+| ruralsurvey_income_from_hiring_out_machinery                    |
+| ruralsurvey_land_leased_in_fixed_rent                           |
+| ruralsurvey_input_use_for_crops                                 |
+| ruralsurvey_incidence_of_inpatient_treatment                    |
+| ruralsurvey_land_leased_out_fixed_rent                          |
+| ruralsurvey_land_leased_out_share_rent                          |
+| ruralsurvey_labour_days_employed_and_wage_rates_agri            |
+| ruralsurvey_land_mortgaged_in                                   |
+| ruralsurvey_income_from_salaries                                |
+| ruralsurvey_occupations_household_members                       |
+| ruralsurvey_means_of_prod                                       |
+| ruralsurvey_membership_in_self_help_groups                      |
+| ruralsurvey_non_agricultural_manual_labouring_out               |
+| ruralsurvey_nrega_job_cards                                     |
+| ruralsurvey_outstanding_loans                                   |
+| ruralsurvey_other_costs_incurred_last_year                      |
+| ruralsurvey_payments_made_to_managers_and_long_term_workers_gen |
+| ruralsurvey_land_mortgaged_out                                  |
+| ruralsurvey_medical_insurance                                   |
+| ruralsurvey_ration_cards                                        |
+| ruralsurvey_ration_question                                     |
+| ruralsurvey_sampledesign                                        |
+| ruralsurvey_scholarships_pensions_rents_remittances             |
+| ruralsurvey_use_of_informal_institutions_for_savings            |
+| ruralsurvey_purchases_from_the_public_distribution_system       |
+| ruralsurvey_wells_ownership                                     |
+| ruralsurvey_work_done_by_household_members_under_nrega          |
+| ruralsurvey_source_of_water_for_domestic_use                    |
+| ruralsurvey_codecrop                                            |
+| ruralsurvey_code_quantity_unit                                  |
+| ruralsurvey_code_description_of_buyer_lessee                    |
+| ruralsurvey_codecropcommodity                                   |
+| ruralsurvey_codecontractduration                                |
+| ruralsurvey_codeplaces                                          |
+| ruralsurvey_codeirrigationsource                                |
+| ruralsurvey_crop_sales                                          |
+| ruralsurvey_cropping_pattern_schedule_production_and_sales      |
+| ruralsurvey_incidence_of_diseases_over_last_one_month           |
+| ruralsurvey_housing_assistance                                  |
+| ruralsurvey_team_members                                        |
+| ruralsurvey_payments_made_to_managers_and_long_term_workers     |
+
 
 * Overall Decisions
 
@@ -461,55 +597,61 @@ This section will provide a compilation of tables and graphs on different aspect
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
   merge(household,villages,by.x="village_id",by.y="id")->t
-    merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
-  t[,.(Number=length(household_number)),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
-    t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
-    names(t1)[c(3:ncol(t1))]<-unique(t$village_name)
-    names(t1)[c(1:2)]<-c("Social group","Caste")
-    t1
+  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
+  merge(t,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum"),all.x=T)->t
+  t[is.na(multiplier),multiplier:=1]
+  t[,.(Number=round(sum(multiplier))),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
+  t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
+  names(t1)[c(3:ncol(t1))]<-sort(unique(t$village_name))
+  names(t1)[c(1:2)]<-c("Social group","Caste")
+  t1
 #+END_SRC
 
 #+NAME: caste-composition-code
-#+CAPTION: Caste representation in the sample
+#+CAPTION: Caste composition of households in the villages
 #+RESULTS: caste-composition-code
-| Social group | Caste          | Birdhana | Jamalpur Shekhan | Khandrai | Cheher Kalan | Gijji |
-|--------------+----------------+----------+------------------+----------+--------------+-------|
-| BC           | Bairagi        |      nil | nil              | 3        |          nil | nil   |
-| BC           | Bhatra sikh    |      nil | nil              | nil      |            1 | nil   |
-| BC           | Jhimar/Dhinwar |        1 | nil              | nil      |          nil | 3     |
-| BC           | Kamboj         |        5 | nil              | nil      |            2 | nil   |
-| BC           | Kamboj Sikh    |      nil | nil              | nil      |            1 | nil   |
-| BC           | Khati          |      nil | 9                | nil      |            1 | 2     |
-| BC           | Kumhar         |        1 | 2                | nil      |          nil | 5     |
-| BC           | Lodhi          |        1 | nil              | nil      |          nil | nil   |
-| BC           | Lohar          |        2 | 1                | nil      |            1 | nil   |
-| BC           | Mali           |        1 | nil              | nil      |          nil | nil   |
-| BC           | Nai            |        2 | 5                | nil      |            3 | nil   |
-| BC           | Rebari         |       10 | nil              | nil      |          nil | nil   |
-| BC           | Saini          |      nil | nil              | nil      |           14 | nil   |
-| BC           | Teli           |        1 | nil              | nil      |          nil | nil   |
-| Other        | Arora          |        3 | nil              | nil      |            3 | nil   |
-| Other        | Baniya         |        1 | 3                | nil      |          nil | nil   |
-| Other        | Bishnoi        |       11 | nil              | nil      |          nil | nil   |
-| Other        | Garg           |      nil | nil              | nil      |            1 | nil   |
-| Other        | Jat            |       12 | 10               | 9        |            4 | 23    |
-| Other        | Jat sikh       |      nil | nil              | nil      |            4 | nil   |
-| Other        | Khati          |      nil | nil              | nil      |            3 | nil   |
-| Other        | Meena          |      nil | nil              | nil      |            1 | nil   |
-| Other        | Mehta          |        6 | nil              | nil      |          nil | nil   |
-| Other        | Sunar          |        1 | 1                | nil      |          nil | nil   |
-| SC           | Balmiki        |      nil | nil              | nil      |            7 | 1     |
-| SC           | Bawaria        |      nil | nil              | nil      |            1 | 1     |
-| SC           | Bazigar        |        2 | nil              | nil      |            7 | nil   |
-| SC           | Chamar         |       13 | 7                | 8        |            8 | 17    |
-| SC           | Dhanak         |        8 | 10               | 22       |          nil | 17    |
-| SC           | Mazhabi Sikh   |        1 | nil              | nil      |          nil | nil   |
-| SC           | Meena          |        1 | nil              | nil      |          nil | nil   |
-| SC           | Nayak          |        2 | nil              | nil      |          nil | nil   |
-| SC           | Od             |        3 | nil              | nil      |           16 | nil   |
-| SC           | Rai Sikh       |       15 | nil              | nil      |          nil | nil   |
+| Social group | Caste              | Birdhana | Cheher Kalan | Gijji | Jamalpur Shekhan | Khandrai |
+|--------------+--------------------+----------+--------------+-------+------------------+----------|
+| BC           | Bairagi            |      nil | nil          | 17    | nil              | nil      |
+| BC           | Bhatra sikh        |      nil | nil          | nil   | 1                | nil      |
+| BC           | Chhipi             |      nil | nil          | 4     | nil              | nil      |
+| BC           | Jhimar/Dhinwar     |       31 | nil          | nil   | nil              | 47       |
+| BC           | Kamboj             |       68 | nil          | nil   | 37               | nil      |
+| BC           | Kamboj Sikh        |      nil | nil          | nil   | 11               | nil      |
+| BC           | Khati              |      nil | 30           | 8     | 18               | 9        |
+| BC           | Kumhar             |       31 | 10           | 4     | nil              | 14       |
+| BC           | Lodhi              |        1 | nil          | nil   | nil              | nil      |
+| BC           | Lohar              |       32 | 5            | 1     | 1                | nil      |
+| BC           | Mali               |       31 | nil          | nil   | nil              | nil      |
+| BC           | Manihar            |      nil | nil          | 1     | nil              | nil      |
+| BC           | Nai                |       62 | 25           | nil   | 55               | nil      |
+| BC           | Rebari             |      254 | nil          | nil   | nil              | nil      |
+| BC           | Saini              |      nil | nil          | nil   | 408              | nil      |
+| BC           | Teli               |        1 | nil          | nil   | nil              | nil      |
+| Other        | Baniya             |       31 | 9            | nil   | nil              | nil      |
+| Other        | Bishnoi            |       68 | nil          | nil   | nil              | nil      |
+| Other        | Garg               |      nil | nil          | nil   | 11               | nil      |
+| Other        | Jat                |       60 | 423          | 27    | 43               | 322      |
+| Other        | Jat sikh           |      nil | nil          | nil   | 54               | nil      |
+| Other        | Khati              |      nil | nil          | nil   | 18               | nil      |
+| Other        | Mehta/Arora/Khatri |       38 | nil          | nil   | 34               | nil      |
+| Other        | Sunar              |        5 | 3            | nil   | nil              | nil      |
+| SC           | Bairagi            |      nil | nil          | 3     | nil              | nil      |
+| SC           | Balmiki            |      nil | nil          | 8     | 153              | 4        |
+| SC           | Bawaria            |      nil | nil          | nil   | 0                | 4        |
+| SC           | Bazigar            |       32 | nil          | nil   | 111              | nil      |
+| SC           | Chamar             |      125 | 44           | 22    | 174              | 70       |
+| SC           | Dhanak             |      109 | 29           | 24    | nil              | 256      |
+| SC           | Jat                |      nil | nil          | 1     | nil              | nil      |
+| SC           | Mazhabi Sikh       |        1 | nil          | nil   | nil              | nil      |
+| SC           | Meena              |        1 | nil          | nil   | nil              | nil      |
+| SC           | Nayak              |       32 | nil          | nil   | nil              | nil      |
+| SC           | Od                 |       33 | nil          | nil   | 509              | nil      |
+| SC           | Rai Sikh           |      576 | nil          | nil   | nil              | nil      |
 
 ** Occupations
+
+
 
 #+NAME: occupation-preliminary-code
 #+BEGIN_SRC R :results silent :exports none
@@ -589,17 +731,16 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+NAME: occupation-table1-code
 #+BEGIN_SRC R :results value :exports results :colnames no
-    household[,c(1,2,26)]->t1
-    merge(member,t1,by.x="sno_id",by.y="id")->t1
-    merge(t1,villages,by.x="village_id",by.y="id")->t1
-    t1[as.numeric(age)>=7,.(population=length(id)),by=.(village_name,sex)]->t1
-    occupations[as.numeric(age)>=7,.(numberofworkers=length(id)),by=.(village_name,occupation_category,sex)]->t
-    merge(t,t1,by=c("village_name","sex"))->t
-    round(t$numberofworkers*100/t$population,1)->t$numberofworkers
-    setkey(t,village_name,sex,occupation_category)
-    t[CJ(unique(village_name),unique(sex),unique(occupation_category))][,as.list(numberofworkers),by=.(occupation_category)]->t1
-    names(t1)[1]<-c("Occupation categories")
-    addhead(t1,occupations$village_name,occupations$sex)
+  household[,c(1,2,26)]->t1
+  merge(member,t1,by.x="sno_id",by.y="id")->t1
+  merge(t1,villages,by.x="village_id",by.y="id")->t1
+  t1[as.numeric(age)>=7,.(population=length(id)),keyby=.(village_name,sex)]->t1
+  occupations[as.numeric(age)>=7,.(numberofworkers=length(id)),keyby=.(village_name,sex,occupation_category)]->t
+  t[t1] ->t
+  round(t$numberofworkers*100/t$population,1)->t$numberofworkers
+  t[CJ(unique(village_name),unique(sex),unique(occupation_category))][,as.list(numberofworkers),by=.(occupation_category)]->t1
+  names(t1)[1]<-c("Occupation categories")
+  addhead(t1,occupations$village_name,occupations$sex)
 #+END_SRC
 
 #+NAME: occupation
