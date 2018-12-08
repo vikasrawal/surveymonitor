@@ -7,6 +7,9 @@
 #+PROPERTY: header-args:R :session haryana :eval never-export
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+HTML_HEAD: <style>#content{max-width:1200px;} </style>
+#+MACRO: hlmacro (eval (org-table-insert-hline))
+
+
 
 * Preliminaries                                                    :noexport:
 
@@ -24,11 +27,12 @@ require(data.table)
          ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
          transpose(tabhead[,c(1:2)])->tabhead
          as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
-         levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"")
+         levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
          names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
+         "{{{hlmacro}}}"->tabhead2[2,ncol(tabhead2)]
          tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
-         tabhead2[2,1]<-""
-         tabhead2
+#         tabhead2[2,1]<-""
+        tabhead2
     }
 
 #+END_SRC
@@ -450,6 +454,8 @@ b| relname                                                         | n_live_tup 
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 
+
+
 ** Caste Composition
 
 #+NAME: caste-composition-code
@@ -583,25 +589,24 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+NAME: occupation-table1-code
 #+BEGIN_SRC R :results value :exports results :colnames no
-  household[,c(1,2,26)]->t1
-  merge(member,t1,by.x="sno_id",by.y="id")->t1
-  merge(t1,villages,by.x="village_id",by.y="id")->t1
-  t1[as.numeric(age)>=7,.(population=length(id)),by=.(village_name,sex)]->t1
-  occupations[as.numeric(age)>=7,.(numberofworkers=length(id)),by=.(village_name,occupation_category,sex)]->t
-  merge(t,t1,by=c("village_name","sex"))->t
-  round(t$numberofworkers*100/t$population,2)->t$numberofworkers
-  setkey(t,village_name,sex,occupation_category)
-  t[CJ(unique(village_name),unique(sex),unique(occupation_category))][,as.list(numberofworkers),by=.(occupation_category)]->t1
-  names(t1)[1]<-"Occupation categories"
-  addhead(t1,occupations$village_name,occupations$sex)
+    household[,c(1,2,26)]->t1
+    merge(member,t1,by.x="sno_id",by.y="id")->t1
+    merge(t1,villages,by.x="village_id",by.y="id")->t1
+    t1[as.numeric(age)>=7,.(population=length(id)),by=.(village_name,sex)]->t1
+    occupations[as.numeric(age)>=7,.(numberofworkers=length(id)),by=.(village_name,occupation_category,sex)]->t
+    merge(t,t1,by=c("village_name","sex"))->t
+    round(t$numberofworkers*100/t$population,2)->t$numberofworkers
+    setkey(t,village_name,sex,occupation_category)
+    t[CJ(unique(village_name),unique(sex),unique(occupation_category))][,as.list(numberofworkers),by=.(occupation_category)]->t1
+    names(t1)[1]<-c("Occupation categories")
+    addhead(t1,occupations$village_name,occupations$sex)
 #+END_SRC
 
 #+NAME: occupation
 #+CAPTION: Proportion of sample population engaged in different occupations, persons aged 7 years and above, by sex and village (per cent)
 #+RESULTS: occupation-table1-code
 | Occupation categories                        | <2colc>Birdhana |       | <2colc>Cheher Kalan |       | <2colc>Gijji |       | <2colc>Jamalpur Shekhan |       | <2colc>Khandrai |       |
-|                                              |               F |     M |                   F |     M |            F |     M |                       F |     M |               F |     M |
-|----------------------------------------------+-----------------+-------+---------------------+-------+--------------+-------+-------------------------+-------+-----------------+-------|
+| {{{hlmacro}}}                                |               F |     M |                   F |     M |            F |     M |                       F |     M |               F |     M |
 | Landlord                                     |             nil |  0.78 |                 nil |   0.7 |          nil |   nil |                     nil |  0.48 |             nil |  0.53 |
 | Peasant                                      |              12 | 28.68 |               18.55 | 32.17 |          3.9 | 13.59 |                    9.14 | 17.39 |             9.3 | 21.28 |
 | Tending animals                              |            38.4 | 21.71 |               36.29 | 11.19 |        25.97 | 12.62 |                   28.49 | 15.46 |           27.91 | 13.83 |
@@ -618,8 +623,6 @@ This section will provide a compilation of tables and graphs on different aspect
 | Unable to work because of age or poor health |             0.8 |  1.94 |                4.03 |   3.5 |          1.3 |  3.88 |                    1.61 |  1.93 |            2.91 |  6.38 |
 | Other                                        |             nil |  0.39 |                 nil |   0.7 |          nil |  1.94 |                    0.54 |  2.42 |             nil |  0.53 |
 
-
-** 
 ** Land relations
 *** [[file:land-contracts.org][Analysis of land contracts]]
 ** Food security
