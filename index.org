@@ -59,6 +59,9 @@ source("sserconnect.R")
   data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
   data.table(dbReadTable(surveypg,"ruralsurvey_current_ownership_holdings"))->ownershipholding
   data.table(dbReadTable(surveypg,"ruralsurvey_irrigation_ownership_holdings"))->irrigation
+  sampledesign[,id:=NULL]
+  merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum"),all.x=T)->household
+  household[is.na(multiplier),multiplier:=1]
   #dbDisconnect(surveypg)
 
 #+END_SRC
@@ -598,8 +601,6 @@ This section will provide a compilation of tables and graphs on different aspect
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
   merge(household,villages,by.x="village_id",by.y="id")->t
   merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
-  merge(t,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum"),all.x=T)->t
-  t[is.na(multiplier),multiplier:=1]
   t[,.(Number=round(sum(multiplier))),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
   t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
   names(t1)[c(3:ncol(t1))]<-sort(unique(t$village_name))
@@ -662,12 +663,13 @@ This section will provide a compilation of tables and graphs on different aspect
     codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
     data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
     merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
-    household[,c(1,2,3,12,24,25,26)]->t
+    household[,c(1,2,3,12,24,25,26,38)]->t
     merge(occupations,t,by.x="sno_id",by.y="id")->occupations
     merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
     merge(occupations,villages,by.x="village_id",by.y="id")->occupations
     member[,c(1,3,4,5,16)]->t
-    merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"))->occupations
+  merge(occupations,t,by.x=c("sno_id","name_id"),by.y=c("sno_id","id"))->occupations
+  #merge(occupations,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum"),all.x=T)->occupations
     levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Sweetmeat seller/Halwai"]<-"Self-employed, business owner"
     levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Shopkeeper"]<-"Self-employed, business owner"
     levels(occupations$occupation_category)[levels(occupations$occupation_category)=="Trader/Merchant"]<-"Self-employed, business owner"
@@ -731,13 +733,15 @@ This section will provide a compilation of tables and graphs on different aspect
 
 #+NAME: occupation-table1-code
 #+BEGIN_SRC R :results value :exports results :colnames no
-  household[,c(1,2,26)]->t1
+  household[,c(1,2,3,26,38)]->t1
   merge(member,t1,by.x="sno_id",by.y="id")->t1
   merge(t1,villages,by.x="village_id",by.y="id")->t1
-  t1[as.numeric(age)>=7,.(population=length(id)),keyby=.(village_name,sex)]->t1
-  occupations[as.numeric(age)>=7,.(numberofworkers=length(id)),keyby=.(village_name,sex,occupation_category)]->t
-  t[t1] ->t
+  t1[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
+  t1[as.numeric(age)>=7,.(population=sum(multiplier)),keyby=.(village_name,sex)]->t1
+  occupations[as.numeric(age)>=7,.(numberofworkers=sum(multiplier)),keyby=.(village_name,sex,occupation_category)]->t
+  merge(t,t1,by=c("village_name","sex")) ->t
   round(t$numberofworkers*100/t$population,1)->t$numberofworkers
+  setkey(t,village_name,sex,occupation_category)
   t[CJ(unique(village_name),unique(sex),unique(occupation_category))][,as.list(numberofworkers),by=.(occupation_category)]->t1
   names(t1)[1]<-c("Occupation categories")
   addhead(t1,occupations$village_name,occupations$sex)
@@ -748,21 +752,21 @@ This section will provide a compilation of tables and graphs on different aspect
 #+RESULTS: occupation-table1-code
 | Occupation categories                        | <2colc>Birdhana |      | <2colc>Cheher Kalan |      | <2colc>Gijji |      | <2colc>Jamalpur Shekhan |      | <2colc>Khandrai |      |
 | {{{hlmacro}}}                                |               F |    M |                   F |    M |            F |    M |                       F |    M |               F |    M |
-| Landlord                                     |             nil |  0.8 |                 nil |  0.7 |          nil |  nil |                     nil |  0.5 |             nil |  0.5 |
-| Peasant                                      |              12 | 28.7 |                18.5 | 32.2 |          3.9 | 13.6 |                     9.1 | 17.4 |             9.3 | 21.3 |
-| Tending animals                              |            38.4 | 21.7 |                36.3 | 11.2 |           26 | 12.6 |                    28.5 | 15.5 |            27.9 | 13.8 |
-| Agricultural labour                          |            12.4 | 11.2 |                14.5 | 19.6 |           26 | 19.4 |                    19.9 |   15 |            12.8 | 13.3 |
-| Non-agricultural manual labour               |             5.6 | 15.9 |                14.5 | 13.3 |           13 | 15.5 |                    11.8 | 20.3 |             4.7 | 19.1 |
-| Salaried government employee                 |             1.6 |  3.5 |                   4 |  4.9 |          1.3 |  6.8 |                     1.1 |  1.4 |             4.7 |  4.3 |
-| Salaried private employee                    |             0.8 | 11.2 |                 0.8 |  5.6 |          1.3 | 22.3 |                     nil |  9.7 |             0.6 |  8.5 |
-| Self-employed, business owner                |             0.4 | 17.4 |                 1.6 | 11.9 |          1.3 | 15.5 |                     4.8 | 18.4 |             3.5 | 13.3 |
-| Caste occupations/artisans                   |             2.8 |  2.7 |                   4 |  7.7 |          nil |  2.9 |                     4.3 |  4.8 |             2.3 |  1.6 |
-| Recipient of pension/remittance              |            11.2 |  8.5 |                14.5 | 11.2 |           13 |  8.7 |                    12.9 |  7.7 |             2.3 |  nil |
-| Unemployed                                   |             nil |  0.4 |                 nil |  2.8 |          nil |  3.9 |                     nil |  0.5 |             0.6 |  nil |
-| Student                                      |            26.4 | 26.4 |                25.8 | 29.4 |         27.3 | 22.3 |                    21.5 | 27.5 |            27.9 | 28.7 |
-| Housework                                    |            60.8 |  1.2 |                42.7 |  3.5 |         81.8 |  5.8 |                    47.8 |  1.4 |            65.7 |  1.1 |
-| Unable to work because of age or poor health |             0.8 |  1.9 |                   4 |  3.5 |          1.3 |  3.9 |                     1.6 |  1.9 |             2.9 |  6.4 |
-| Other                                        |             nil |  0.4 |                 nil |  0.7 |          nil |  1.9 |                     0.5 |  2.4 |             nil |  0.5 |
+| Landlord                                     |             nil |  0.3 |                 nil |  2.8 |          nil |  nil |                     nil |    0 |             nil |  0.1 |
+| Peasant                                      |            10.1 | 29.1 |                18.3 | 33.5 |         12.6 | 19.7 |                     8.5 | 13.6 |            12.1 | 23.1 |
+| Tending animals                              |            39.4 | 20.9 |                41.9 | 24.7 |         32.5 | 20.1 |                    27.8 | 14.7 |            28.2 | 14.7 |
+| Agricultural labour                          |            18.1 |   14 |                10.1 | 17.7 |         12.6 | 10.2 |                    24.4 | 17.1 |            13.5 | 10.2 |
+| Non-agricultural manual labour               |             7.7 | 21.7 |                10.3 |  5.6 |          8.1 | 18.4 |                    13.7 | 22.1 |               5 | 20.7 |
+| Salaried government employee                 |             1.2 |  2.7 |                   4 |  6.6 |          1.6 |  6.1 |                     1.1 |  2.3 |             4.6 |  5.8 |
+| Salaried private employee                    |             0.8 | 11.4 |                 0.2 |  2.2 |          1.2 | 20.7 |                     nil | 10.2 |             0.3 |  7.3 |
+| Self-employed, business owner                |             0.7 | 19.9 |                 0.4 |  4.5 |          1.6 | 11.9 |                     5.2 | 18.2 |             4.3 | 12.5 |
+| Caste occupations/artisans                   |             4.1 |  2.9 |                   1 |  5.6 |          1.2 |    2 |                       5 |  5.4 |               2 |  0.7 |
+| Recipient of pension/remittance              |            13.2 |  7.6 |                14.8 |   22 |         16.3 | 13.3 |                    11.8 |  7.6 |               4 |  nil |
+| Unemployed                                   |             nil |  0.1 |                 nil |  6.2 |          0.4 |  3.4 |                     nil |  0.3 |               1 |  nil |
+| Student                                      |            29.5 | 27.4 |                35.5 | 28.2 |         27.6 | 28.9 |                    22.6 | 29.2 |            30.7 | 33.2 |
+| Housework                                    |            59.9 |  1.6 |                36.6 |    1 |         79.7 |  2.7 |                    48.6 |  1.5 |            69.8 |  1.1 |
+| Unable to work because of age or poor health |             1.6 |  2.6 |                 3.9 |  4.2 |          0.4 |  5.4 |                     1.4 |  2.3 |             2.2 |  6.3 |
+| Other                                        |             nil |  0.8 |                 nil |  0.2 |          nil |  0.7 |                     0.3 |  2.6 |             nil |  0.2 |
 
 ** Land relations
 *** [[file:land-contracts.org][Analysis of land contracts]]
