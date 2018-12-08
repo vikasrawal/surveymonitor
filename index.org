@@ -595,7 +595,7 @@ This section will provide a compilation of tables and graphs on different aspect
     t1[as.numeric(age)>=7,.(population=length(id)),by=.(village_name,sex)]->t1
     occupations[as.numeric(age)>=7,.(numberofworkers=length(id)),by=.(village_name,occupation_category,sex)]->t
     merge(t,t1,by=c("village_name","sex"))->t
-    round(t$numberofworkers*100/t$population,2)->t$numberofworkers
+    round(t$numberofworkers*100/t$population,1)->t$numberofworkers
     setkey(t,village_name,sex,occupation_category)
     t[CJ(unique(village_name),unique(sex),unique(occupation_category))][,as.list(numberofworkers),by=.(occupation_category)]->t1
     names(t1)[1]<-c("Occupation categories")
@@ -605,23 +605,23 @@ This section will provide a compilation of tables and graphs on different aspect
 #+NAME: occupation
 #+CAPTION: Proportion of sample population engaged in different occupations, persons aged 7 years and above, by sex and village (per cent)
 #+RESULTS: occupation-table1-code
-| Occupation categories                        | <2colc>Birdhana |       | <2colc>Cheher Kalan |       | <2colc>Gijji |       | <2colc>Jamalpur Shekhan |       | <2colc>Khandrai |       |
-| {{{hlmacro}}}                                |               F |     M |                   F |     M |            F |     M |                       F |     M |               F |     M |
-| Landlord                                     |             nil |  0.78 |                 nil |   0.7 |          nil |   nil |                     nil |  0.48 |             nil |  0.53 |
-| Peasant                                      |              12 | 28.68 |               18.55 | 32.17 |          3.9 | 13.59 |                    9.14 | 17.39 |             9.3 | 21.28 |
-| Tending animals                              |            38.4 | 21.71 |               36.29 | 11.19 |        25.97 | 12.62 |                   28.49 | 15.46 |           27.91 | 13.83 |
-| Agricultural labour                          |            12.4 | 11.24 |               14.52 | 19.58 |        25.97 | 19.42 |                   19.89 | 14.98 |           12.79 |  13.3 |
-| Non-agricultural manual labour               |             5.6 | 15.89 |               14.52 | 13.29 |        12.99 | 15.53 |                   11.83 | 20.29 |            4.65 | 19.15 |
-| Salaried government employee                 |             1.6 |  3.49 |                4.03 |   4.9 |          1.3 |   6.8 |                    1.08 |  1.45 |            4.65 |  4.26 |
-| Salaried private employee                    |             0.8 | 11.24 |                0.81 |  5.59 |          1.3 | 22.33 |                     nil |  9.66 |            0.58 |  8.51 |
-| Self-employed, business owner                |             0.4 | 17.44 |                1.61 | 11.89 |          1.3 | 15.53 |                    4.84 | 18.36 |            3.49 |  13.3 |
-| Caste occupations/artisans                   |             2.8 |  2.71 |                4.03 |  7.69 |          nil |  2.91 |                     4.3 |  4.83 |            2.33 |   1.6 |
-| Recipient of pension/remittance              |            11.2 |  8.53 |               14.52 | 11.19 |        12.99 |  8.74 |                    12.9 |  7.73 |            2.33 |   nil |
-| Unemployed                                   |             nil |  0.39 |                 nil |   2.8 |          nil |  3.88 |                     nil |  0.48 |            0.58 |   nil |
-| Student                                      |            26.4 | 26.36 |               25.81 | 29.37 |        27.27 | 22.33 |                   21.51 | 27.54 |           27.91 | 28.72 |
-| Housework                                    |            60.8 |  1.16 |               42.74 |   3.5 |        81.82 |  5.83 |                   47.85 |  1.45 |            65.7 |  1.06 |
-| Unable to work because of age or poor health |             0.8 |  1.94 |                4.03 |   3.5 |          1.3 |  3.88 |                    1.61 |  1.93 |            2.91 |  6.38 |
-| Other                                        |             nil |  0.39 |                 nil |   0.7 |          nil |  1.94 |                    0.54 |  2.42 |             nil |  0.53 |
+| Occupation categories                        | <2colc>Birdhana |      | <2colc>Cheher Kalan |      | <2colc>Gijji |      | <2colc>Jamalpur Shekhan |      | <2colc>Khandrai |      |
+| {{{hlmacro}}}                                |               F |    M |                   F |    M |            F |    M |                       F |    M |               F |    M |
+| Landlord                                     |             nil |  0.8 |                 nil |  0.7 |          nil |  nil |                     nil |  0.5 |             nil |  0.5 |
+| Peasant                                      |              12 | 28.7 |                18.5 | 32.2 |          3.9 | 13.6 |                     9.1 | 17.4 |             9.3 | 21.3 |
+| Tending animals                              |            38.4 | 21.7 |                36.3 | 11.2 |           26 | 12.6 |                    28.5 | 15.5 |            27.9 | 13.8 |
+| Agricultural labour                          |            12.4 | 11.2 |                14.5 | 19.6 |           26 | 19.4 |                    19.9 |   15 |            12.8 | 13.3 |
+| Non-agricultural manual labour               |             5.6 | 15.9 |                14.5 | 13.3 |           13 | 15.5 |                    11.8 | 20.3 |             4.7 | 19.1 |
+| Salaried government employee                 |             1.6 |  3.5 |                   4 |  4.9 |          1.3 |  6.8 |                     1.1 |  1.4 |             4.7 |  4.3 |
+| Salaried private employee                    |             0.8 | 11.2 |                 0.8 |  5.6 |          1.3 | 22.3 |                     nil |  9.7 |             0.6 |  8.5 |
+| Self-employed, business owner                |             0.4 | 17.4 |                 1.6 | 11.9 |          1.3 | 15.5 |                     4.8 | 18.4 |             3.5 | 13.3 |
+| Caste occupations/artisans                   |             2.8 |  2.7 |                   4 |  7.7 |          nil |  2.9 |                     4.3 |  4.8 |             2.3 |  1.6 |
+| Recipient of pension/remittance              |            11.2 |  8.5 |                14.5 | 11.2 |           13 |  8.7 |                    12.9 |  7.7 |             2.3 |  nil |
+| Unemployed                                   |             nil |  0.4 |                 nil |  2.8 |          nil |  3.9 |                     nil |  0.5 |             0.6 |  nil |
+| Student                                      |            26.4 | 26.4 |                25.8 | 29.4 |         27.3 | 22.3 |                    21.5 | 27.5 |            27.9 | 28.7 |
+| Housework                                    |            60.8 |  1.2 |                42.7 |  3.5 |         81.8 |  5.8 |                    47.8 |  1.4 |            65.7 |  1.1 |
+| Unable to work because of age or poor health |             0.8 |  1.9 |                   4 |  3.5 |          1.3 |  3.9 |                     1.6 |  1.9 |             2.9 |  6.4 |
+| Other                                        |             nil |  0.4 |                 nil |  0.7 |          nil |  1.9 |                     0.5 |  2.4 |             nil |  0.5 |
 
 ** Land relations
 *** [[file:land-contracts.org][Analysis of land contracts]]
