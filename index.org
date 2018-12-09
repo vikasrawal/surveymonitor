@@ -207,7 +207,6 @@ source("sserconnect.R")
 | ruralsurvey_team_members                                        |
 | ruralsurvey_payments_made_to_managers_and_long_term_workers     |
 
-
 * Overall Decisions
 
 This section records any overall decisions that are taken.
@@ -220,6 +219,16 @@ This section records any overall decisions that are taken.
 **** DONE Standard values of assets                                :Vikas:
 CLOSED: [2018-11-11 Sun 05:56]
 ***** Compute unit price from available data, and provide a table of summary statistics for each type of asset
+
+* Information for Data Users
+
+** Sample design and multiplier
+
++ A table ruralsurvey_sampledesign contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field.
+
+** Birdhana dhanis
+
++ For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for "Birdhana" and "Birdhana dhanis".
 
 * Database Corrections                                                :Vikas:
 ***** TODO FIES filter on names
