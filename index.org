@@ -744,13 +744,39 @@ b| relname                                                         | n_live_tup 
 
 + For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for "Birdhana" and "Birdhana dhanis".
 
+
 ** Emerging patterns
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 
-
-
 *** Caste Composition
+
+
+#+NAME: social-group-composition-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
+  t[,.(Number=round(sum(multiplier))),keyby=.(village_name,if_sc_st)]->t1
+  ave(t1$Number,t1$village_name,FUN=sum)->t1$Total
+  round(t1$Number*100/t1$Total,1)->t1$Number
+  t1[CJ(unique(village_name),unique(if_sc_st))][,as.list(Number),by=.(if_sc_st)]->t1
+  t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4)&is.na(V5))]->t1
+  names(t1)[c(2:ncol(t1))]<-sort(unique(t$village_name))
+  factor(t1$if_sc_st,levels=c("SC","BC","Other"))->t1$if_sc_st
+  levels(t1$if_sc_st)<-c("Scheduled Castes","Backward Classes","Other Castes")
+  t1[order(t1$if_sc_st)]->t1
+  names(t1)[1]<-c("Social group")
+  t1
+#+END_SRC
+
+#+NAME: social-group-composition
+#+CAPTION: Proportion of households belonging to different social groups, by village (per cent)
+#+RESULTS: social-group-composition-code
+| Social group     | Birdhana | Cheher Kalan | Gijji | Jamalpur Shekhan | Khandrai |
+|------------------+----------+--------------+-------+------------------+----------|
+| Scheduled Castes |       56 |         12.3 |  48.3 |             57.8 |     45.6 |
+| Backward Classes |     31.5 |         11.8 |  29.2 |             32.4 |     10.1 |
+| Other Castes     |     12.5 |         75.8 |  22.5 |              9.8 |     44.4 |
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -807,12 +833,10 @@ This section will provide a compilation of tables and graphs on different aspect
 
 *** Occupations
 
-
-
 + More peasants identified among men than among women. Is it because women do not participate in farming operations? Tasks in which female labour was deployed have become mechanised/chemicalised? What are the main tasks in which women continue to work? Women routinely participate in guarding of fields and in delivering food for make workers on the farm. Delivering food on the farm is a major task that involves spending an hour or two every day. Is this accounted for anywhere? We perhaps need some case studies on this.
 + More women participating in maintenance of animal resources than participating in farm operations on household operational holdings. More women participate in maintenance of animal resources than men, though participation of men is far from being negligible.
 + A rather small proportion of workers are engaged in non-agricultural manual labour. In Cheher Kalan, a higher proportion of women did non-agricultural manual labour than men. What is it? CHECK.
-+ Proportion of receivers of pensions, scholarships and remittances is higher in Cheher Kalan than in other villages. What is the explanation? Out-migration from Cheher Kalan? 
++ Proportion of receivers of pensions, scholarships and remittances is higher in Cheher Kalan than in other villages. What is the explanation? Out-migration from Cheher Kalan?
 
 
 #+NAME: occupation-preliminary-code
@@ -931,7 +955,6 @@ This section will provide a compilation of tables and graphs on different aspect
 | Other                                        |             nil |  0.8 | nil                    |  nil |                 nil |  0.2 |          nil |  0.7 |                     0.3 |  2.6 |             nil |  0.2 |
 
 ***** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
-
 
 *** Land relations
 **** [[file:land-contracts.org][Analysis of land contracts]]
