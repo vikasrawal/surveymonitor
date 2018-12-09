@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-12-09 Sun 08:03 -->
+<!-- 2018-12-09 Sun 08:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Monitoring Data Entry for Haryana Surveys</title>
@@ -244,8 +244,9 @@ for the JavaScript code in this tag.
 <li><a href="#org442605f">1. Overall Decisions</a></li>
 <li><a href="#org3377e0f">2. Information for Data Users</a>
 <ul>
-<li><a href="#org43d8887">2.1. Sample design and multiplier</a></li>
-<li><a href="#org54d367c">2.2. Birdhana dhanis</a></li>
+<li><a href="#org60f7a46">2.1. Using this repo</a></li>
+<li><a href="#org43d8887">2.2. Sample design and multiplier</a></li>
+<li><a href="#org54d367c">2.3. Birdhana dhanis</a></li>
 </ul>
 </li>
 <li><a href="#orgef233db">3. Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
@@ -319,18 +320,28 @@ This section records any overall decisions that are taken.
 <h2 id="org3377e0f"><span class="section-number-2">2</span> Information for Data Users</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org43d8887" class="outline-3">
-<h3 id="org43d8887"><span class="section-number-3">2.1</span> Sample design and multiplier</h3>
+<div id="outline-container-org60f7a46" class="outline-3">
+<h3 id="org60f7a46"><span class="section-number-3">2.1</span> Using this repo</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
-<li>A table ruralsurvey_sampledesign contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field.</li>
+<li>Please make a git branch for your work, and push it upstream when you want something merged with the master branch.</li>
+<li>The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org43d8887" class="outline-3">
+<h3 id="org43d8887"><span class="section-number-3">2.2</span> Sample design and multiplier</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>Database Table &rsquo;ruralsurvey_sampledesign&rsquo; contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.</li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-org54d367c" class="outline-3">
-<h3 id="org54d367c"><span class="section-number-3">2.2</span> Birdhana dhanis</h3>
-<div class="outline-text-3" id="text-2-2">
+<h3 id="org54d367c"><span class="section-number-3">2.3</span> Birdhana dhanis</h3>
+<div class="outline-text-3" id="text-2-3">
 <ul class="org-ul">
 <li>For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for &ldquo;Birdhana&rdquo; and &ldquo;Birdhana dhanis&rdquo;.</li>
 </ul>
@@ -2091,7 +2102,7 @@ Get unit prices
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: SSER</p>
-<p class="date">Created: 2018-12-09 Sun 08:03</p>
+<p class="date">Created: 2018-12-09 Sun 08:48</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
