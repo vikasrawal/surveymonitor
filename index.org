@@ -392,10 +392,9 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 
 *** Data categorisation issues
 ***** TODO Majhabi Sikh and Rai Sikh are perhaps same
-***** TODO Jhimar and Dhinvar are same
-***** TODO Lohar categorised as both BC and SC
-
-***** TODO Change occupation category "Deals in livestock" to "Livestock trader" (if that is what is implied)
+***** DONE Jhimar and Dhinvar are same
+***** DONE Lohar categorised as both BC and SC
+***** TODO Change occupation category "unemployed" to "Not engaged in any specified activity"
 *** Abnormal asset prices
 
 #+NAME: asset_outlier_code
@@ -933,6 +932,7 @@ This section will provide a compilation of tables and graphs on different aspect
 
 ***** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
 
+
 *** Land relations
 **** [[file:land-contracts.org][Analysis of land contracts]]
 *** Food security
@@ -944,7 +944,8 @@ This section will provide a compilation of tables and graphs on different aspect
 *** Health and Education
 *** Assets and Indebtedness
 
-#+INCLUDE: assets.org
+#+INCLUDE:
+ assets.org
 
 * Kill Connections                                                 :noexport:
 
