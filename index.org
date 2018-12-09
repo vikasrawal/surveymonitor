@@ -752,6 +752,8 @@ This section will provide a compilation of tables and graphs on different aspect
 *** Caste Composition
 
 
+Cheher Kalan is a predominantly Jat village with very few households belonging to dalit and OBC castes. Jamalpur Shekhan is dominated by households belonging to dalit and OBC castes, with very few other caste Hindu households.
+
 #+NAME: social-group-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
   merge(household,villages,by.x="village_id",by.y="id")->t
