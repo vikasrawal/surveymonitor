@@ -1,4 +1,4 @@
-#+TITLE: Monitoring Data Entry for Haryana Surveys
+#+TITLE: Data Entry and Analysis of Data from the Haryana Surveys
 #+AUTHOR: SSER
 #+OPTIONS: H:3 ^:{}
 #+LATEX_HEADER: \usepackage{booktabs}
@@ -207,43 +207,29 @@ source("sserconnect.R")
 | ruralsurvey_team_members                                        |
 | ruralsurvey_payments_made_to_managers_and_long_term_workers     |
 
-* Overall Decisions
+* Data Entry
+** Overall Decisions Regarding Data Entry
 
 This section records any overall decisions that are taken.
 
-**** TODO Decide on how to deal with ranges
-**** TODO Fix social group for each caste
+***** TODO Decide on how to deal with ranges
+***** TODO Fix social group for each caste
 + Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.
-**** DONE Standard values of assets                                :Vikas:
+***** DONE Standard values of assets                              :Vikas:
 CLOSED: [2018-11-11 Sun 05:56]
-***** Compute unit price from available data, and provide a table of summary statistics for each type of asset
+****** Compute unit price from available data, and provide a table of summary statistics for each type of asset
 
-* Information for Data Users
-
-** Using this repo
-
-+ Please make a git branch for your work, and push it upstream when you want something merged with the master branch.
-+ The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.
-
-** Sample design and multiplier
-
-+ Database Table 'ruralsurvey_sampledesign' contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.
-
-** Birdhana dhanis
-
-+ For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for "Birdhana" and "Birdhana dhanis".
-
-* Database Corrections                                                :Vikas:
-***** TODO FIES filter on names
-***** TODO Comments on FIES questions
-***** TODO Crops filter
-***** DONE CodePlaces
-***** DONE Make a block/page-wise table of data operators
+** Database Corrections                                              :Vikas:
+****** TODO FIES filter on names
+****** TODO Comments on FIES questions
+****** TODO Crops filter
+****** DONE CodePlaces
+****** DONE Make a block/page-wise table of data operators
 CLOSED: [2018-11-11 Sun 06:59]
 
-***** Type of contract in labouring out should be foreign key
+****** Type of contract in labouring out should be foreign key
 
-** Corrections in design of land tables                           :noexport:
+*** Corrections in design of land tables                         :noexport:
 
 #+NAME: separate-irrigation
 #+BEGIN_SRC R 
@@ -321,17 +307,17 @@ CLOSED: [2018-11-11 Sun 06:59]
   dbDisconnect(surveypg)
 #+END_SRC
 
-* Inconsistencies in Data                                       :Sonia:Jesim:
+** Inconsistencies in Data                                     :Sonia:Jesim:
 
-** Tests to be done
+*** Tests to be done
 
-*** Land, cropping pattern, production, input use
-**** Match operational holding
-**** Boxplots of per acre yield for different crops
-**** Boxplots of input use per acre for different crops
-*** Animal resources
-*** 
-** TODO Households for which data are missing for critical variables
+**** Land, cropping pattern, production, input use
+***** Match operational holding
+***** Boxplots of per acre yield for different crops
+***** Boxplots of input use per acre for different crops
+**** Animal resources
+**** 
+*** TODO Households for which data are missing for critical variables
 
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 
@@ -397,13 +383,13 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 | Jamalpur Shekhan |               56 |    10 | marital_status | Grandson      |
 | Jamalpur Shekhan |               73 |    80 | marital_status | Mother        |
 
-** Data categorisation issues
-**** TODO Majhabi Sikh and Rai Sikh are perhaps same
-**** TODO Jhimar and Dhinvar are same
-**** TODO Lohar categorised as both BC and SC
+*** Data categorisation issues
+***** TODO Majhabi Sikh and Rai Sikh are perhaps same
+***** TODO Jhimar and Dhinvar are same
+***** TODO Lohar categorised as both BC and SC
 
-**** TODO Change occupation category "Deals in livestock" to "Livestock trader" (if that is what is implied)
-** Abnormal asset prices
+***** TODO Change occupation category "Deals in livestock" to "Livestock trader" (if that is what is implied)
+*** Abnormal asset prices
 
 #+NAME: asset_outlier_code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -452,9 +438,9 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 | Jamalpur Shekhan |               67 | Refrigerator       |  14000 |
 | Jamalpur Shekhan |                9 | Almirah/cupboard   |  35000 |
 
-**** Match homestead land with housing information. Check if value of house and land are recorded.
+***** Match homestead land with housing information. Check if value of house and land are recorded.
 
-* Progress of Data Entry                                           :noexport:
+** Progress of Data Entry                                         :noexport:
 
 #+NAME: tablerows-code 
 #+BEGIN_SRC sql :engine postgresql :dbhost localhost :dbuser ssersurveyuser :database ssersurveydata :colnames yes :exports results
@@ -736,13 +722,29 @@ b| relname                                                         | n_live_tup 
 | ruralsurvey_access_to_education_children                        |          0 |
 | ruralsurvey_income_from_hiring_out_machinery                    |          0 |
 
-* Emerging patterns
+* Analysis of Data
+** Information for Data Users
+
+*** Using this repo
+
++ Please make a git branch for your work, and push it upstream when you want something merged with the master branch.
++ The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.
+
+*** Sample design and multiplier
+
++ Database Table 'ruralsurvey_sampledesign' contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.
+3
+*** Birdhana dhanis
+
++ For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for "Birdhana" and "Birdhana dhanis".
+
+** Emerging patterns
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 
 
 
-** Caste Composition
+*** Caste Composition
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -797,7 +799,7 @@ This section will provide a compilation of tables and graphs on different aspect
 | SC           | Od                 |       33 | nil          | nil   | 509              | nil      |
 | SC           | Rai Sikh           |      576 | nil          | nil   | nil              | nil      |
 
-** Occupations
+*** Occupations
 
 
 
@@ -921,18 +923,18 @@ This section will provide a compilation of tables and graphs on different aspect
 | Unable to work because of age or poor health |             1.6 |  2.6 | nil                    |  nil |                 3.9 |  4.2 |          0.4 |  5.4 |                     1.4 |  2.3 |             2.2 |  6.3 |
 | Other                                        |             nil |  0.8 | nil                    |  nil |                 nil |  0.2 |          nil |  0.7 |                     0.3 |  2.6 |             nil |  0.2 |
 
-**** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
+***** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
 
-** Land relations
-*** [[file:land-contracts.org][Analysis of land contracts]]
-** Food security
-** Cropping pattern, Production, Input use
-** Labour Deployment
-** Employment
-** Livestock
-** Housing and Sanitation
-** Health and Education
-** Assets and Indebtedness
+*** Land relations
+**** [[file:land-contracts.org][Analysis of land contracts]]
+*** Food security
+*** Cropping pattern, Production, Input use
+*** Labour Deployment
+*** Employment
+*** Livestock
+*** Housing and Sanitation
+*** Health and Education
+*** Assets and Indebtedness
 
 #+INCLUDE: assets.org
 

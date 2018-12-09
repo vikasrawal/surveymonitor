@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-12-09 Sun 08:48 -->
+<!-- 2018-12-09 Sun 09:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Monitoring Data Entry for Haryana Surveys</title>
+<title>Data Entry and Analysis of Data from the Haryana Surveys</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="SSER" />
 <style type="text/css">
@@ -236,51 +236,49 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Monitoring Data Entry for Haryana Surveys</h1>
+<h1 class="title">Data Entry and Analysis of Data from the Haryana Surveys</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org442605f">1. Overall Decisions</a></li>
-<li><a href="#org3377e0f">2. Information for Data Users</a>
+<li><a href="#orge2f74d3">1. Data Entry</a>
 <ul>
-<li><a href="#org60f7a46">2.1. Using this repo</a></li>
-<li><a href="#org43d8887">2.2. Sample design and multiplier</a></li>
-<li><a href="#org54d367c">2.3. Birdhana dhanis</a></li>
+<li><a href="#org74e5587">1.1. Overall Decisions Regarding Data Entry</a></li>
+<li><a href="#orgef233db">1.2. Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
+<li><a href="#org0ecc359">1.3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
+<ul>
+<li><a href="#org28d352f">1.3.1. Tests to be done</a></li>
+<li><a href="#org28b54a9">1.3.2. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
+<li><a href="#orga925721">1.3.3. Data categorisation issues</a></li>
+<li><a href="#org7e51d0b">1.3.4. Abnormal asset prices</a></li>
 </ul>
 </li>
-<li><a href="#orgef233db">3. Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
-<li><a href="#org0ecc359">4. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
-<ul>
-<li><a href="#org28d352f">4.1. Tests to be done</a>
-<ul>
-<li><a href="#orgd22e12d">4.1.1. Land, cropping pattern, production, input use</a></li>
-<li><a href="#orgde393aa">4.1.2. Animal resources</a></li>
-<li><a href="#org40f0c1d">4.1.3. </a></li>
 </ul>
 </li>
-<li><a href="#org28b54a9">4.2. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
-<li><a href="#orga925721">4.3. Data categorisation issues</a></li>
-<li><a href="#org7e51d0b">4.4. Abnormal asset prices</a></li>
+<li><a href="#org62b683a">2. Analysis of Data</a>
+<ul>
+<li><a href="#org3377e0f">2.1. Information for Data Users</a>
+<ul>
+<li><a href="#org60f7a46">2.1.1. Using this repo</a></li>
+<li><a href="#org43d8887">2.1.2. Sample design and multiplier</a></li>
+<li><a href="#org54d367c">2.1.3. Birdhana dhanis</a></li>
 </ul>
 </li>
-<li><a href="#orgc5fb981">5. Emerging patterns</a>
+<li><a href="#orgc5fb981">2.2. Emerging patterns</a>
 <ul>
-<li><a href="#org308589b">5.1. Caste Composition</a></li>
-<li><a href="#org0010293">5.2. Occupations</a></li>
-<li><a href="#org5d1b45a">5.3. Land relations</a>
-<ul>
-<li><a href="#orge7a077f">5.3.1. Analysis of land contracts</a></li>
+<li><a href="#org308589b">2.2.1. Caste Composition</a></li>
+<li><a href="#org0010293">2.2.2. Occupations</a></li>
+<li><a href="#org5d1b45a">2.2.3. Land relations</a></li>
+<li><a href="#org36d5880">2.2.4. Food security</a></li>
+<li><a href="#orgc1e093b">2.2.5. Cropping pattern, Production, Input use</a></li>
+<li><a href="#org038c057">2.2.6. Labour Deployment</a></li>
+<li><a href="#org512c6c7">2.2.7. Employment</a></li>
+<li><a href="#orgb6b9a07">2.2.8. Livestock</a></li>
+<li><a href="#org729d1d7">2.2.9. Housing and Sanitation</a></li>
+<li><a href="#org60cfa4e">2.2.10. Health and Education</a></li>
+<li><a href="#orgefa28e1">2.2.11. Assets and Indebtedness</a></li>
 </ul>
 </li>
-<li><a href="#org36d5880">5.4. Food security</a></li>
-<li><a href="#orgc1e093b">5.5. Cropping pattern, Production, Input use</a></li>
-<li><a href="#org038c057">5.6. Labour Deployment</a></li>
-<li><a href="#org512c6c7">5.7. Employment</a></li>
-<li><a href="#orgb6b9a07">5.8. Livestock</a></li>
-<li><a href="#org729d1d7">5.9. Housing and Sanitation</a></li>
-<li><a href="#org60cfa4e">5.10. Health and Education</a></li>
-<li><a href="#orgefa28e1">5.11. Assets and Indebtedness</a></li>
 </ul>
 </li>
 </ul>
@@ -289,9 +287,13 @@ for the JavaScript code in this tag.
 
 
 
-<div id="outline-container-org442605f" class="outline-2">
-<h2 id="org442605f"><span class="section-number-2">1</span> Overall Decisions</h2>
+<div id="outline-container-orge2f74d3" class="outline-2">
+<h2 id="orge2f74d3"><span class="section-number-2">1</span> Data Entry</h2>
 <div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org74e5587" class="outline-3">
+<h3 id="org74e5587"><span class="section-number-3">1.1</span> Overall Decisions Regarding Data Entry</h3>
+<div class="outline-text-3" id="text-1-1">
 <p>
 This section records any overall decisions that are taken.
 </p>
@@ -300,14 +302,14 @@ This section records any overall decisions that are taken.
 <ol class="org-ol">
 <li><a id="orgad705b2"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
 <li><a id="org29b0edf"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
-<div class="outline-text-5" id="text-1-0-0-2">
+<div class="outline-text-6" id="text-1-1-0-0-2">
 <ul class="org-ul">
 <li>Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.</li>
 </ul>
 </div>
 </li>
 <li><a id="orgc0d3601"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
-<div class="outline-text-5" id="text-1-0-0-3">
+<div class="outline-text-6" id="text-1-1-0-0-3">
 </div>
 <ol class="org-ol">
 <li><a id="org46e3d25"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
@@ -316,42 +318,9 @@ This section records any overall decisions that are taken.
 </ol>
 </div>
 
-<div id="outline-container-org3377e0f" class="outline-2">
-<h2 id="org3377e0f"><span class="section-number-2">2</span> Information for Data Users</h2>
-<div class="outline-text-2" id="text-2">
-</div>
-<div id="outline-container-org60f7a46" class="outline-3">
-<h3 id="org60f7a46"><span class="section-number-3">2.1</span> Using this repo</h3>
-<div class="outline-text-3" id="text-2-1">
-<ul class="org-ul">
-<li>Please make a git branch for your work, and push it upstream when you want something merged with the master branch.</li>
-<li>The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.</li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-org43d8887" class="outline-3">
-<h3 id="org43d8887"><span class="section-number-3">2.2</span> Sample design and multiplier</h3>
-<div class="outline-text-3" id="text-2-2">
-<ul class="org-ul">
-<li>Database Table &rsquo;ruralsurvey_sampledesign&rsquo; contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.</li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-org54d367c" class="outline-3">
-<h3 id="org54d367c"><span class="section-number-3">2.3</span> Birdhana dhanis</h3>
-<div class="outline-text-3" id="text-2-3">
-<ul class="org-ul">
-<li>For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for &ldquo;Birdhana&rdquo; and &ldquo;Birdhana dhanis&rdquo;.</li>
-</ul>
-</div>
-</div>
-</div>
-
-<div id="outline-container-orgef233db" class="outline-2">
-<h2 id="orgef233db"><span class="section-number-2">3</span> Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgef233db" class="outline-3">
+<h3 id="orgef233db"><span class="section-number-3">1.2</span> Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h3>
+<div class="outline-text-3" id="text-1-2">
 </div>
 <ol class="org-ol">
 <li><a id="orgc1d67ce"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
@@ -359,7 +328,7 @@ This section records any overall decisions that are taken.
 <li><a id="orge001e71"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
 <li><a id="org7b9a54e"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
 <li><a id="org96adcf0"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
-<div class="outline-text-6" id="text-3-0-0-0-5">
+<div class="outline-text-7" id="text-1-2-0-0-0-5">
 </div>
 </li>
 
@@ -367,34 +336,29 @@ This section records any overall decisions that are taken.
 </ol>
 </div>
 
-<div id="outline-container-org0ecc359" class="outline-2">
-<h2 id="org0ecc359"><span class="section-number-2">4</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org0ecc359" class="outline-3">
+<h3 id="org0ecc359"><span class="section-number-3">1.3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h3>
+<div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-org28d352f" class="outline-3">
-<h3 id="org28d352f"><span class="section-number-3">4.1</span> Tests to be done</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-org28d352f" class="outline-4">
+<h4 id="org28d352f"><span class="section-number-4">1.3.1</span> Tests to be done</h4>
+<div class="outline-text-4" id="text-1-3-1">
 </div>
-<div id="outline-container-orgd22e12d" class="outline-4">
-<h4 id="orgd22e12d"><span class="section-number-4">4.1.1</span> Land, cropping pattern, production, input use</h4>
-<div class="outline-text-4" id="text-4-1-1">
-</div>
+<ol class="org-ol">
+<li><a id="orgd22e12d"></a>Land, cropping pattern, production, input use<br />
 <ol class="org-ol">
 <li><a id="org59c53ca"></a>Match operational holding<br /></li>
 <li><a id="org6e94eae"></a>Boxplots of per acre yield for different crops<br /></li>
 <li><a id="orga48d4ca"></a>Boxplots of input use per acre for different crops<br /></li>
 </ol>
+</li>
+<li><a id="orgde393aa"></a>Animal resources<br /></li>
+<li><a id="org40f0c1d"></a><br /></li>
+</ol>
 </div>
-<div id="outline-container-orgde393aa" class="outline-4">
-<h4 id="orgde393aa"><span class="section-number-4">4.1.2</span> Animal resources</h4>
-</div>
-<div id="outline-container-org40f0c1d" class="outline-4">
-<h4 id="org40f0c1d"><span class="section-number-4">4.1.3</span> </h4>
-</div>
-</div>
-<div id="outline-container-org28b54a9" class="outline-3">
-<h3 id="org28b54a9"><span class="section-number-3">4.2</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h3>
-<div class="outline-text-3" id="text-4-2">
+<div id="outline-container-org28b54a9" class="outline-4">
+<h4 id="org28b54a9"><span class="section-number-4">1.3.2</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h4>
+<div class="outline-text-4" id="text-1-3-2">
 <p>
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 </p>
@@ -637,9 +601,9 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-orga925721" class="outline-3">
-<h3 id="orga925721"><span class="section-number-3">4.3</span> Data categorisation issues</h3>
-<div class="outline-text-3" id="text-4-3">
+<div id="outline-container-orga925721" class="outline-4">
+<h4 id="orga925721"><span class="section-number-4">1.3.3</span> Data categorisation issues</h4>
+<div class="outline-text-4" id="text-1-3-3">
 </div>
 <ol class="org-ol">
 <li><a id="org647ad9b"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
@@ -649,9 +613,9 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 <li><a id="org4cfb7e1"></a><span class="todo TODO">TODO</span> Change occupation category &ldquo;Deals in livestock&rdquo; to &ldquo;Livestock trader&rdquo; (if that is what is implied)<br /></li>
 </ol>
 </div>
-<div id="outline-container-org7e51d0b" class="outline-3">
-<h3 id="org7e51d0b"><span class="section-number-3">4.4</span> Abnormal asset prices</h3>
-<div class="outline-text-3" id="text-4-4">
+<div id="outline-container-org7e51d0b" class="outline-4">
+<h4 id="org7e51d0b"><span class="section-number-4">1.3.4</span> Abnormal asset prices</h4>
+<div class="outline-text-4" id="text-1-3-4">
 <table id="org0a63e22" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 3:</span> Abnormal values of asset prices</caption>
 
@@ -716,10 +680,50 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </ol>
 </div>
 </div>
+</div>
 
-<div id="outline-container-orgc5fb981" class="outline-2">
-<h2 id="orgc5fb981"><span class="section-number-2">5</span> Emerging patterns</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org62b683a" class="outline-2">
+<h2 id="org62b683a"><span class="section-number-2">2</span> Analysis of Data</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org3377e0f" class="outline-3">
+<h3 id="org3377e0f"><span class="section-number-3">2.1</span> Information for Data Users</h3>
+<div class="outline-text-3" id="text-2-1">
+</div>
+<div id="outline-container-org60f7a46" class="outline-4">
+<h4 id="org60f7a46"><span class="section-number-4">2.1.1</span> Using this repo</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<ul class="org-ul">
+<li>Please make a git branch for your work, and push it upstream when you want something merged with the master branch.</li>
+<li>The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org43d8887" class="outline-4">
+<h4 id="org43d8887"><span class="section-number-4">2.1.2</span> Sample design and multiplier</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<ul class="org-ul">
+<li>Database Table &rsquo;ruralsurvey_sampledesign&rsquo; contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.</li>
+</ul>
+<p>
+3
+</p>
+</div>
+</div>
+<div id="outline-container-org54d367c" class="outline-4">
+<h4 id="org54d367c"><span class="section-number-4">2.1.3</span> Birdhana dhanis</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<ul class="org-ul">
+<li>For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for &ldquo;Birdhana&rdquo; and &ldquo;Birdhana dhanis&rdquo;.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc5fb981" class="outline-3">
+<h3 id="orgc5fb981"><span class="section-number-3">2.2</span> Emerging patterns</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 </p>
@@ -727,9 +731,9 @@ This section will provide a compilation of tables and graphs on different aspect
 
 
 
-<div id="outline-container-org308589b" class="outline-3">
-<h3 id="org308589b"><span class="section-number-3">5.1</span> Caste Composition</h3>
-<div class="outline-text-3" id="text-5-1">
+<div id="outline-container-org308589b" class="outline-4">
+<h4 id="org308589b"><span class="section-number-4">2.2.1</span> Caste Composition</h4>
+<div class="outline-text-4" id="text-2-2-1">
 <table id="org7cabaf1" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 4:</span> Caste composition of households in the villages</caption>
 
@@ -1124,9 +1128,9 @@ This section will provide a compilation of tables and graphs on different aspect
 </div>
 </div>
 
-<div id="outline-container-org0010293" class="outline-3">
-<h3 id="org0010293"><span class="section-number-3">5.2</span> Occupations</h3>
-<div class="outline-text-3" id="text-5-2">
+<div id="outline-container-org0010293" class="outline-4">
+<h4 id="org0010293"><span class="section-number-4">2.2.2</span> Occupations</h4>
+<div class="outline-text-4" id="text-2-2-2">
 <ul class="org-ul">
 <li>More male workers are identified as peasants than women.</li>
 <li>More women participating in maintenance of animal resources than participating in farm operations on household operational holdings. More women participate in maintenance of animal resources than men, though participation of men is far from being negligible.</li>
@@ -1446,38 +1450,38 @@ This section will provide a compilation of tables and graphs on different aspect
 </ol>
 </div>
 
-<div id="outline-container-org5d1b45a" class="outline-3">
-<h3 id="org5d1b45a"><span class="section-number-3">5.3</span> Land relations</h3>
-<div class="outline-text-3" id="text-5-3">
+<div id="outline-container-org5d1b45a" class="outline-4">
+<h4 id="org5d1b45a"><span class="section-number-4">2.2.3</span> Land relations</h4>
+<div class="outline-text-4" id="text-2-2-3">
 </div>
-<div id="outline-container-orge7a077f" class="outline-4">
-<h4 id="orge7a077f"><span class="section-number-4">5.3.1</span> <a href="land-contracts.html">Analysis of land contracts</a></h4>
+<ol class="org-ol">
+<li><a id="orge7a077f"></a><a href="land-contracts.html">Analysis of land contracts</a><br /></li>
+</ol>
 </div>
+<div id="outline-container-org36d5880" class="outline-4">
+<h4 id="org36d5880"><span class="section-number-4">2.2.4</span> Food security</h4>
 </div>
-<div id="outline-container-org36d5880" class="outline-3">
-<h3 id="org36d5880"><span class="section-number-3">5.4</span> Food security</h3>
+<div id="outline-container-orgc1e093b" class="outline-4">
+<h4 id="orgc1e093b"><span class="section-number-4">2.2.5</span> Cropping pattern, Production, Input use</h4>
 </div>
-<div id="outline-container-orgc1e093b" class="outline-3">
-<h3 id="orgc1e093b"><span class="section-number-3">5.5</span> Cropping pattern, Production, Input use</h3>
+<div id="outline-container-org038c057" class="outline-4">
+<h4 id="org038c057"><span class="section-number-4">2.2.6</span> Labour Deployment</h4>
 </div>
-<div id="outline-container-org038c057" class="outline-3">
-<h3 id="org038c057"><span class="section-number-3">5.6</span> Labour Deployment</h3>
+<div id="outline-container-org512c6c7" class="outline-4">
+<h4 id="org512c6c7"><span class="section-number-4">2.2.7</span> Employment</h4>
 </div>
-<div id="outline-container-org512c6c7" class="outline-3">
-<h3 id="org512c6c7"><span class="section-number-3">5.7</span> Employment</h3>
+<div id="outline-container-orgb6b9a07" class="outline-4">
+<h4 id="orgb6b9a07"><span class="section-number-4">2.2.8</span> Livestock</h4>
 </div>
-<div id="outline-container-orgb6b9a07" class="outline-3">
-<h3 id="orgb6b9a07"><span class="section-number-3">5.8</span> Livestock</h3>
+<div id="outline-container-org729d1d7" class="outline-4">
+<h4 id="org729d1d7"><span class="section-number-4">2.2.9</span> Housing and Sanitation</h4>
 </div>
-<div id="outline-container-org729d1d7" class="outline-3">
-<h3 id="org729d1d7"><span class="section-number-3">5.9</span> Housing and Sanitation</h3>
+<div id="outline-container-org60cfa4e" class="outline-4">
+<h4 id="org60cfa4e"><span class="section-number-4">2.2.10</span> Health and Education</h4>
 </div>
-<div id="outline-container-org60cfa4e" class="outline-3">
-<h3 id="org60cfa4e"><span class="section-number-3">5.10</span> Health and Education</h3>
-</div>
-<div id="outline-container-orgefa28e1" class="outline-3">
-<h3 id="orgefa28e1"><span class="section-number-3">5.11</span> Assets and Indebtedness</h3>
-<div class="outline-text-3" id="text-5-11">
+<div id="outline-container-orgefa28e1" class="outline-4">
+<h4 id="orgefa28e1"><span class="section-number-4">2.2.11</span> Assets and Indebtedness</h4>
+<div class="outline-text-4" id="text-2-2-11">
 <p>
 Get unit prices
 </p>
@@ -2100,9 +2104,10 @@ Get unit prices
 </div>
 </div>
 </div>
+</div>
 <div id="postamble" class="status">
 <p class="author">Author: SSER</p>
-<p class="date">Created: 2018-12-09 Sun 08:48</p>
+<p class="date">Created: 2018-12-09 Sun 09:47</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
