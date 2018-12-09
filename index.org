@@ -214,8 +214,6 @@ This section records any overall decisions that are taken.
 **** TODO Decide on how to deal with ranges
 **** TODO Fix social group for each caste
 + Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.
-**** TODO Sample weights
-+ Vikas needs to check the sampling scripts and get the sampling weights.
 **** DONE Standard values of assets                                :Vikas:
 CLOSED: [2018-11-11 Sun 05:56]
 ***** Compute unit price from available data, and provide a table of summary statistics for each type of asset
