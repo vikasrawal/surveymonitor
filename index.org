@@ -314,9 +314,16 @@ CLOSED: [2018-11-11 Sun 06:59]
 **** Land, cropping pattern, production, input use
 ***** Match operational holding
 ***** Boxplots of per acre yield for different crops
-***** Boxplots of input use per acre for different crops
+***** Boxplots of seed use, fertiliser use and total expense on PPC per acre for different crops
+**** Labour Deployment
+***** Check total labour use by crops, and labour use at the primary level of disaggregation of crop operations.
 **** Animal resources
-**** 
+**** Employment
+***** For casual workers, look at the distribution of total days of employment
+**** Incomes
+**** Housing, sanitation, drinking water
+**** Health
+**** Education
 *** TODO Households for which data are missing for critical variables
 
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
