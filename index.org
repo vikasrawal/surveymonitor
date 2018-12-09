@@ -222,7 +222,7 @@ CLOSED: [2018-11-11 Sun 05:56]
 
 ** Sample design and multiplier
 
-+ A table ruralsurvey_sampledesign contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field.
++ Database Table 'ruralsurvey_sampledesign' contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.
 
 ** Birdhana dhanis
 
