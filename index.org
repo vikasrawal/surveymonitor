@@ -220,6 +220,11 @@ CLOSED: [2018-11-11 Sun 05:56]
 
 * Information for Data Users
 
+** Using this repo
+
++ Please make a git branch for your work, and push it upstream when you want something merged with the master branch.
++ The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.
+
 ** Sample design and multiplier
 
 + Database Table 'ruralsurvey_sampledesign' contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.
