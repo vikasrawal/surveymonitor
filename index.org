@@ -739,7 +739,7 @@ b| relname                                                         | n_live_tup 
 *** Sample design and multiplier
 
 + Database Table 'ruralsurvey_sampledesign' contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.
-3
+
 *** Birdhana dhanis
 
 + For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for "Birdhana" and "Birdhana dhanis".
@@ -809,7 +809,7 @@ This section will provide a compilation of tables and graphs on different aspect
 
 
 
-+ More peasants identified among men than among women.
++ More peasants identified among men than among women. Is it because women do not participate in farming operations? Tasks in which female labour was deployed have become mechanised/chemicalised? What are the main tasks in which women continue to work? Women routinely participate in guarding of fields and in delivering food for make workers on the farm. Delivering food on the farm is a major task that involves spending an hour or two every day. Is this accounted for anywhere? We perhaps need some case studies on this.
 + More women participating in maintenance of animal resources than participating in farm operations on household operational holdings. More women participate in maintenance of animal resources than men, though participation of men is far from being negligible.
 + A rather small proportion of workers are engaged in non-agricultural manual labour. In Cheher Kalan, a higher proportion of women did non-agricultural manual labour than men. What is it? CHECK.
 + Proportion of receivers of pensions, scholarships and remittances is higher in Cheher Kalan than in other villages. What is the explanation? Out-migration from Cheher Kalan? 
