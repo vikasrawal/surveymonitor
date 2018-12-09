@@ -812,7 +812,8 @@ This section will provide a compilation of tables and graphs on different aspect
 
 + More peasants identified among men than among women.
 + More women participating in maintenance of animal resources than participating in farm operations on household operational holdings. More women participate in maintenance of animal resources than men, though participation of men is far from being negligible.
-+ A rather small proportion of workers are engaged in non-agricultural manual labour.
++ A rather small proportion of workers are engaged in non-agricultural manual labour. In Cheher Kalan, a higher proportion of women did non-agricultural manual labour than men. What is it? CHECK.
++ Proportion of receivers of pensions, scholarships and remittances is higher in Cheher Kalan than in other villages. What is the explanation? Out-migration from Cheher Kalan? 
 
 
 #+NAME: occupation-preliminary-code
