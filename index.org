@@ -751,8 +751,10 @@ This section will provide a compilation of tables and graphs on different aspect
 
 *** Caste Composition
 
+Dhanak and Chamar are the main dalit castes in Khandrai.
 
 Cheher Kalan is a predominantly Jat village with very few households belonging to dalit and OBC castes. Jamalpur Shekhan is dominated by households belonging to dalit and OBC castes, with very few other caste Hindu households.
+
 
 #+NAME: social-group-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -832,6 +834,8 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 | SC           | Nayak              |       32 | nil          | nil   | nil              | nil      |
 | SC           | Od                 |       33 | nil          | nil   | 509              | nil      |
 | SC           | Rai Sikh           |      576 | nil          | nil   | nil              | nil      |
+
+**** TODO Social group composition to be checked with the Census numbers
 
 *** Occupations
 
@@ -969,8 +973,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 *** Health and Education
 *** Assets and Indebtedness
 
-#+INCLUDE:
- assets.org
+#+INCLUDE: assets.org
 
 * Kill Connections                                                 :noexport:
 
