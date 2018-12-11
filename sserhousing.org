@@ -1,0 +1,20 @@
+#+TITLE: Characteristics of Housing in Haryana
+#+property: header-args :session sser
+
+#+BEGIN_SRC R
+  source("sserconnect.R")
+
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC R :results value
+  dbListTables(surveypg)->t
+  library(data.table)
+  data.table(dbReadTable(surveypg,"ruralsurvey_housing"))->housing
+  table(housing$latrine)
+  table(housing$cooking_lpg)
+  table(housing$cooking_dung_cake)
+  data.table(dbReadTable(surveypg,"ruralsurvey_housing_assistance"))->assistance
+  table(assistance$got_constructed_latrine)
+#+END_SRC
