@@ -35,5 +35,34 @@
 * Errors in ownership holdings
 #+NAME: error-ownership
 #+BEGIN_SRC R :results value silent :exports none 
+  merge(ownershipholding,household,by.x="sno_id",by.y="id",all.y=TRUE)->l
+  subset(l,select=c("extent","land_inherited","land_purchased","land_govt_assigned","land_other","household_number","sno_id"))->l
+
+  ## l[is.na(l$extent)] <- 0
+  ## l[is.na(l$land_inherited)] <- 0
+  ## l[is.na(l$land_purchased)] <- 0
+  ## l[is.na(l$land_govt_assigned)] <- 0
+  ## l[is.na(l$land_other)] <- 0
+  subset(l,select=c("extent","land_inherited","land_purchased","land_govt_assigned","land_other","household_number","sno_id"))->l
+  l[extent!=land_inherited+land_purchased+land_govt_assigned+land_other,.(household_number,sno_id)]->p
+  p[!is.na(error)]
 #+END_SRC
 
+
+
+* Cheher Kalan
+
+** Schedule No: 12
+
+* Cheher Kalan
+
+| Schedule No | Caste of land owner | Caste of Lessor | Leased in/Leased out | Arrangement                                                 | Extent | Crop  |
+|-------------+---------------------+-----------------+----------------------+-------------------------------------------------------------+--------+-------|
+|          12 | Chamar              | Jat             | In                   | 50 per cent of the crop and costs are shared. All labour by |        | Wheat |
+|             |                     |                 |                      |                                                             |        |       |
+|             |                     |                 |                      |                                                             |        |       |
+|             |                     |                 |                      |                                                             |        |       |
+|             |                     |                 |                      |                                                             |        |       |
+|             |                     |                 |                      |                                                             |        |       |
+|             |                     |                 |                      |                                                             |        |       |
+|             |                     |                 |                      |                                                             |        |       |
