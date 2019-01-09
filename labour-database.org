@@ -1,0 +1,297 @@
+xfg#+TITLE:
+#+PROPERTY: header-args :eval never-export :session labour
+
+#+NAME: read-data
+#+BEGIN_SRC R :results value silent :exports none :session labour
+  require(RPostgreSQL)
+  source("sserconnect.R")
+#+END_SRC
+
+
+* Guidelines for data entry
+
++ If information on number of days men/women/children worked is given when contract was on piece rate basis- it should be entered in labour days column.
+
++ Check cropping pattern to verify if any fodder crop was grown. If it is grown the labour use should be entered for such crops.
+
++ Entry for loading, unloading and  transporting the produce to home (at least, if not market) should be made for each crop (not for fodder crop)
+
++ In case of fodder crops, harvesting days should be entered. Based on standard in the village.
+
++ If harvesting is done using combine, entry for threshing should not be there
++ If harvesting is done by hand, mandatory entry for threshing
++ If crop is destroyed, an entry should exist in the cropping pattern.
++ In case of Wheat crop, an entry for reaper should be made if the crop was cut by combine.
++ In case of threshing, an entry for threshing machine operator and an additional entry for manual labour which is hired plus family labour if they engage in agricultural work should be made for accounting the work of loading etc done during threshing.
++ NOTE that machine hours are total hours, not daily hours
++ If children have been reported to work in the field, necessary adjustment in labour use is to be made.
++ Add "999" in case the information is missing
++ All codes should be entered in ascending order.
++ NOTE: All inputs that are used for a particular crop should have an equivalent entry in labour use. For example an entry for applying manure must exist if manure is reported in input use. Check the same for spray, fertilisers, pesticides etc.
+
++ For entering data on machinery, one entry for the operator, one for the machine and one for any extra manual labour that was used should be made separately.
+
+* Programs for checking
+#+NAME: load-libraries
+#+BEGIN_SRC R :results silent :exports none
+  require(RPostgreSQL)
+  require(ggplot2)
+  require(data.table)
+    addhead<-function(d1,v1,v2) {
+          CJ(unique(v1),unique(v2))->tabhead
+           c(1:nrow(tabhead))->tabhead$rank
+           ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
+           ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
+           tabhead$V1[tabhead$rank!=1]<-""
+           ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
+           transpose(tabhead[,c(1:2)])->tabhead
+           as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
+           levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
+           names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
+           "{{{hlmacro}}}"->tabhead2[2,ncol(tabhead2)]
+           tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
+  #         tabhead2[2,1]<-""
+          tabhead2
+      }
+
+#+END_SRC
+
+#+NAME: read-data-code
+#+BEGIN_SRC R :results silent :exports none
+  dbListTables(surveypg)->t
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
+  data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
+  data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
+  data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
+  data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
+  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+  data.table(dbReadTable(surveypg,"ruralsurvey_current_ownership_holdings"))->land
+  data.table(dbReadTable(surveypg,"ruralsurvey_irrigation_ownership_holdings"))->irrigation
+  data.table(dbReadTable(surveypg,"ruralsurvey_cropping_pattern_schedule_production_and_sales"))->crop
+  sampledesign[,id:=NULL]
+  data.table(dbReadTable(surveypg,"ruralsurvey_input_use_for_crops_crop_number"))->input
+  data.table(dbReadTable(surveypg,"ruralsurvey_input_use_for_crops"))->cropinput
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeinputtype"))->input_type
+  data.table(dbReadTable(surveypg,"ruralsurvey_labour_days_employed_and_wage_rates_agri"))->labouruse
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeinputcategory"))->input_category
+  merge(household,sampledesign,by=c("village_id","stratum_number"),all.x=T)->household
+  household[is.na(multiplier),multiplier:=1]
+  #dbDisconnect(surveypg)
+
+#+END_SRC
+
+#+NAME: missing-data-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  t[,.(village_name,household_number,id)]->t
+
+  merge(crop,t,by.x="sno_id",by.y="id",all.y=TRUE)->t
+  t[!is.na(crop_number)]->t
+  merge(t,input,by.x="id",by.y="cropping_pattern_schedule_production_and_sales_id")->t
+
+  merge(t,cropinput,by.x="input_use_for_crops_id",by.y="id")->t
+  merge(t,input_type,by.x="input_type_id",by.y="id",all.x=TRUE)->t
+  merge(t,input_category,by.x="input_category_id",by.y="id",all.x=TRUE)->t
+  t[is.na(source),.(village_name,household_number,serial_number,balnkfield="source",input_category,input_type)]->t1
+  t[input_category=="Chemical fertiliser" & is.na(input_type),.(village_name,household_number,serial_number,balnkfield="input_type",input_category,input_type)]->t2
+  rbind(t1,t2)->t3
+  t3[order(village_name,household_number)]->t3
+  t3
+#+END_SRC
+
+#+RESULTS: missing-data-code
+| village_name     | household_number | serial_number | balnkfield | input_category            | input_type         |
+|------------------+------------------+---------------+------------+---------------------------+--------------------|
+| Birdhana         |                4 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |                4 |             3 | source     | Plant protection chemical | nil                |
+| Birdhana         |                4 |             4 | source     | Plant protection chemical | nil                |
+| Birdhana         |                4 |             2 | source     | Water                     | nil                |
+| Birdhana         |                4 |             2 | source     | Seed/Planting material    | nil                |
+| Birdhana         |                5 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |                5 |             4 | source     | Plant protection chemical | nil                |
+| Birdhana         |                5 |             5 | source     | Plant protection chemical | nil                |
+| Birdhana         |                5 |             2 | source     | Water                     | nil                |
+| Birdhana         |                9 |             5 | source     | Chemical fertiliser       | Urea               |
+| Birdhana         |                9 |             5 | source     | Chemical fertiliser       | DAP                |
+| Birdhana         |                9 |             3 | source     | Plant protection chemical | nil                |
+| Birdhana         |                9 |             5 | source     | Plant protection chemical | nil                |
+| Birdhana         |                9 |             5 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               12 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               12 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               12 |             1 | source     | Plant protection chemical | Herbicide          |
+| Birdhana         |               12 |             1 | source     | Water                     | nil                |
+| Birdhana         |               14 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               16 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               16 |             1 | source     | Water                     | nil                |
+| Birdhana         |               16 |             2 | source     | Water                     | nil                |
+| Birdhana         |               16 |             1 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               20 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               20 |             1 | source     | Water                     | nil                |
+| Birdhana         |               20 |             1 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               26 |             1 | input_type | Chemical fertiliser       | nil                |
+| Birdhana         |               26 |             2 | input_type | Chemical fertiliser       | nil                |
+| Birdhana         |               27 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               27 |             3 | source     | Plant protection chemical | nil                |
+| Birdhana         |               27 |             5 | source     | Plant protection chemical | nil                |
+| Birdhana         |               27 |             6 | source     | Plant protection chemical | nil                |
+| Birdhana         |               55 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               55 |             3 | source     | Plant protection chemical | nil                |
+| Birdhana         |               55 |             2 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               56 |             2 | source     | Water                     | nil                |
+| Birdhana         |               58 |             4 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               63 |           nil | source     | Chemical fertiliser       | Urea               |
+| Birdhana         |               63 |             4 | source     | Chemical fertiliser       | DAP                |
+| Birdhana         |               63 |             5 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               67 |             2 | source     | Farm yard manure          | nil                |
+| Birdhana         |               67 |             1 | source     | Chemical fertiliser       | nil                |
+| Birdhana         |               67 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               67 |             2 | source     | Water                     | nil                |
+| Birdhana         |               67 |             1 | input_type | Chemical fertiliser       | nil                |
+| Birdhana         |               68 |             5 | source     | Plant protection chemical | nil                |
+| Birdhana         |               68 |             6 | source     | Water                     | nil                |
+| Birdhana         |               68 |             4 | input_type | Chemical fertiliser       | nil                |
+| Birdhana         |               75 |             4 | source     | Plant protection chemical | nil                |
+| Birdhana         |               75 |             5 | source     | Water                     | nil                |
+| Birdhana         |               77 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               78 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               78 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               78 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               78 |             2 | source     | Water                     | nil                |
+| Birdhana         |               78 |             2 | source     | Seed/Planting material    | nil                |
+| Birdhana         |               81 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               81 |             3 | source     | Plant protection chemical | nil                |
+| Birdhana         |               81 |             1 | input_type | Chemical fertiliser       | nil                |
+| Birdhana         |               84 |             1 | source     | Farm yard manure          | Cow dung manure    |
+| Birdhana         |               87 |             1 | input_type | Chemical fertiliser       | nil                |
+| Birdhana         |               89 |           nil | source     | nil                       | nil                |
+| Birdhana         |               89 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               92 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               93 |             1 | source     | Plant protection chemical | Pesticide          |
+| Birdhana         |               93 |             2 | source     | Plant protection chemical | Pesticide          |
+| Birdhana         |               95 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               95 |             2 | source     | Plant protection chemical | nil                |
+| Birdhana         |               96 |             1 | source     | Plant protection chemical | nil                |
+| Birdhana         |               96 |             1 | input_type | Chemical fertiliser       | nil                |
+| Cheher Kalan     |                4 |             1 | source     | Water                     | nil                |
+| Cheher Kalan     |                4 |             3 | source     | Water                     | nil                |
+| Cheher Kalan     |                4 |             4 | source     | Water                     | nil                |
+| Cheher Kalan     |                8 |             4 | source     | Farm yard manure          | Cow dung manure    |
+| Cheher Kalan     |                8 |             1 | source     | Water                     | nil                |
+| Cheher Kalan     |                9 |             1 | source     | Water                     | nil                |
+| Cheher Kalan     |               12 |             1 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               12 |             2 | source     | Plant protection chemical | Herbicide          |
+| Cheher Kalan     |               12 |             2 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               20 |             1 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               20 |             1 | source     | Plant protection chemical | Herbicide          |
+| Cheher Kalan     |               21 |             2 | source     | nil                       | nil                |
+| Cheher Kalan     |               21 |             2 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               23 |             1 | source     | Farm yard manure          | Cow dung manure    |
+| Cheher Kalan     |               23 |             1 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               23 |             3 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               24 |             1 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               27 |             2 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               31 |             2 | input_type | Chemical fertiliser       | nil                |
+| Cheher Kalan     |               35 |           nil | source     | nil                       | nil                |
+| Cheher Kalan     |               35 |             2 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               35 |             1 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               35 |           nil | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               40 |             2 | source     | nil                       | nil                |
+| Cheher Kalan     |               40 |             3 | source     | nil                       | nil                |
+| Cheher Kalan     |               40 |             4 | source     | nil                       | nil                |
+| Cheher Kalan     |               42 |             1 | source     | Plant protection chemical | Pesticide          |
+| Cheher Kalan     |               42 |             1 | source     | Plant protection chemical | Herbicide          |
+| Cheher Kalan     |               42 |             1 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               43 |             1 | source     | Chemical fertiliser       | nil                |
+| Cheher Kalan     |               43 |             1 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               43 |             1 | input_type | Chemical fertiliser       | nil                |
+| Cheher Kalan     |               44 |             3 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               46 |             1 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               48 |             1 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               48 |             2 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               48 |             4 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               48 |             2 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               48 |             3 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               48 |             4 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               48 |             5 | source     | Seed/Planting material    | nil                |
+| Cheher Kalan     |               52 |             2 | source     | Plant protection chemical | nil                |
+| Cheher Kalan     |               52 |             1 | source     | Seed/Planting material    | nil                |
+| Gijji            |                1 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                2 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                2 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                2 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                2 |             4 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                4 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                4 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |                4 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               22 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               22 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               22 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               24 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               24 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               24 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               24 |             4 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               25 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               25 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               25 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               25 |             4 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               38 |             5 | source     | Plant protection chemical | nil                |
+| Gijji            |               38 |             4 | source     | Water                     | nil                |
+| Gijji            |               38 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               38 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               38 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               38 |             5 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               38 |             6 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               40 |             1 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               40 |             2 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               40 |             3 | source     | Water                     | Diesel/Electricity |
+| Gijji            |               40 |             4 | source     | Water                     | Diesel/Electricity |
+| Jamalpur Shekhan |                9 |             1 | source     | Water                     | nil                |
+| Jamalpur Shekhan |                9 |             2 | source     | Water                     | nil                |
+| Jamalpur Shekhan |                9 |             3 | source     | Water                     | nil                |
+| Jamalpur Shekhan |                9 |             4 | source     | Water                     | nil                |
+| Jamalpur Shekhan |                9 |             5 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               10 |             1 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               10 |             2 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               23 |             1 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               23 |             2 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               31 |             1 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               31 |             2 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               31 |             3 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               31 |             4 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               36 |             2 | source     | Chemical fertiliser       | nil                |
+| Jamalpur Shekhan |               36 |             1 | source     | Water                     | nil                |
+| Jamalpur Shekhan |               36 |             2 | input_type | Chemical fertiliser       | nil                |
+| Jamalpur Shekhan |               51 |             1 | source     | Seed/Planting material    | nil                |
+| Jamalpur Shekhan |               51 |             2 | source     | Seed/Planting material    | nil                |
+| Jamalpur Shekhan |               51 |             3 | source     | Seed/Planting material    | nil                |
+| Khandrai         |                2 |             1 | source     | Plant protection chemical | nil                |
+| Khandrai         |                7 |             1 | source     | Plant protection chemical | nil                |
+| Khandrai         |               24 |             1 | source     | Water                     | nil                |
+| Khandrai         |               24 |             2 | source     | Water                     | nil                |
+| Khandrai         |               24 |             3 | source     | Water                     | nil                |
+| Khandrai         |               24 |             4 | source     | Water                     | nil                |
+| Khandrai         |               24 |             5 | source     | Water                     | nil                |
+| Khandrai         |               25 |             1 | source     | Water                     | nil                |
+| Khandrai         |               25 |             2 | source     | Water                     | nil                |
+| Khandrai         |               33 |             2 | source     | nil                       | nil                |
+| Khandrai         |               34 |             1 | source     | Water                     | nil                |
+| Khandrai         |               34 |             2 | source     | Water                     | nil                |
+| Khandrai         |               34 |             3 | source     | Water                     | nil                |
+| Khandrai         |               36 |             1 | source     | Water                     | nil                |
+| Khandrai         |               36 |             2 | source     | Water                     | nil                |
+| Khandrai         |               36 |             3 | source     | Water                     | nil                |
+| Khandrai         |               36 |             4 | source     | Water                     | nil                |
+| Khandrai         |               36 |             5 | source     | Water                     | nil                |
+| Khandrai         |               37 |             1 | source     | Water                     | nil                |
+| Khandrai         |               37 |             2 | source     | Water                     | nil                |
+| Khandrai         |               37 |             3 | source     | Water                     | nil                |
+| Khandrai         |               38 |             1 | source     | Water                     | nil                |
+| Khandrai         |               38 |             2 | source     | Water                     | nil                |
+| Khandrai         |               39 |             3 | source     | Plant protection chemical | nil                |
+| Khandrai         |               39 |             2 | source     | Seed/Planting material    | nil                |
+| Khandrai         |               39 |             3 | source     | Seed/Planting material    | nil                |
+| Khandrai         |               48 |             1 | source     | Water                     | nil                |
+| Khandrai         |               50 |             2 | source     | Plant protection chemical | nil                |
