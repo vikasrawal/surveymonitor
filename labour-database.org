@@ -1,5 +1,8 @@
-xfg#+TITLE:
-#+PROPERTY: header-args :eval never-export :session labour
+#+TITLE: Prachi's Corrections for Input Use and Labour
+#+PROPERTY: header-args:R :eval never-export :session labour
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+#+HTML_HEAD: <style>#content{max-width:1200px;} </style>
+#+MACRO: hlmacro (eval (org-table-insert-hline))
 
 #+NAME: read-data
 #+BEGIN_SRC R :results value silent :exports none :session labour

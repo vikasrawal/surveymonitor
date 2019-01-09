@@ -229,6 +229,8 @@ CLOSED: [2018-11-11 Sun 06:59]
 
 ****** Type of contract in labouring out should be foreign key
 
+****** Labour and Input Use
+
 *** Corrections in design of land tables                         :noexport:
 
 #+NAME: separate-irrigation
@@ -312,9 +314,13 @@ CLOSED: [2018-11-11 Sun 06:59]
 *** Tests to be done
 
 **** Land, cropping pattern, production, input use
+
+[[file:labour-database.org][Prachi's Corrections for Input Use and Labour]]
+
 ***** Match operational holding
 ***** Boxplots of per acre yield for different crops
 ***** Boxplots of seed use, fertiliser use and total expense on PPC per acre for different crops
+
 **** Labour Deployment
 ***** Check total labour use by crops, and labour use at the primary level of disaggregation of crop operations.
 **** Animal resources

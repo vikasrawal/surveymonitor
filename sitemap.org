@@ -1,5 +1,7 @@
 #+TITLE: Sitemap for vikasrawal.github.io/surveymonitor
 
-- [[file:index.org][Monitoring Data Entry for Haryana Surveys]]
-- [[file:land-contracts.org][land-contracts]]
+- [[file:labour-database.org][Prachi's Corrections for Input Use and Labour]]
+- [[file:index.org][Data Entry and Analysis of Data from the Haryana Surveys]]
+- [[file:land-contracts.org][Analysis of Land Contracts]]
 - [[file:assets.org][assets]]
+- [[file:sserhousing.org][Characteristics of Housing in Haryana]]
