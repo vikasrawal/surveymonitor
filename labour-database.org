@@ -67,6 +67,8 @@
     data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
     data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
     data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
+    data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->code_crop
+
     data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
     data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
     data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
@@ -109,11 +111,6 @@
 #+RESULTS: missing-data-code
 | village_name | household_number | serial_number | balnkfield | input_category            | input_type |
 |--------------+------------------+---------------+------------+---------------------------+------------|
-| Gijji        |               43 |             4 | source     | Water                     | nil        |
-| Gijji        |               43 |             7 | source     | Water                     | nil        |
-| Gijji        |               45 |             5 | source     | Water                     | nil        |
-| Gijji        |               45 |             7 | source     | Water                     | nil        |
-| Gijji        |               45 |            10 | source     | Water                     | nil        |
 | Gijji        |               47 |             5 | source     | Water                     | nil        |
 | Gijji        |               47 |             7 | source     | Water                     | nil        |
 | Gijji        |               47 |            10 | source     | Water                     | nil        |
@@ -203,52 +200,199 @@
 
 #+CAPTION: The table has piece rate contract but measurement unit is days. 
 #+RESULTS: missing-data-code-3
-| village_name     | household_number | crop_no |
-|------------------+------------------+---------|
-| Jamalpur Shekhan |                5 |       1 |
-| Jamalpur Shekhan |                9 |       2 |
-| Jamalpur Shekhan |                9 |       1 |
-| Jamalpur Shekhan |               10 |       2 |
-| Jamalpur Shekhan |               10 |       1 |
-| Jamalpur Shekhan |               10 |       1 |
-| Jamalpur Shekhan |               16 |       4 |
-| Jamalpur Shekhan |               19 |       5 |
-| Jamalpur Shekhan |               19 |       2 |
-| Jamalpur Shekhan |               25 |       1 |
-| Jamalpur Shekhan |               25 |       1 |
-| Jamalpur Shekhan |               31 |       2 |
-| Jamalpur Shekhan |               33 |       6 |
-| Jamalpur Shekhan |               33 |       6 |
-| Jamalpur Shekhan |               33 |       2 |
-| Jamalpur Shekhan |               33 |       2 |
-| Jamalpur Shekhan |               33 |       2 |
-| Jamalpur Shekhan |               34 |       3 |
-| Jamalpur Shekhan |               34 |       3 |
-| Jamalpur Shekhan |               34 |       4 |
-| Jamalpur Shekhan |               34 |       4 |
-| Jamalpur Shekhan |               34 |       2 |
-| Jamalpur Shekhan |               40 |       2 |
-| Jamalpur Shekhan |               41 |       2 |
-| Jamalpur Shekhan |               48 |       4 |
-| Jamalpur Shekhan |               48 |       1 |
-| Jamalpur Shekhan |               48 |       1 |
-| Jamalpur Shekhan |               48 |       1 |
+| village_name | household_number | crop_no |
+|--------------+------------------+---------|
 
 
 
-#+NAME: missing-data-code-4
+#+NAME: missing-data-code-5
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  t[,.(village_name,household_number,id)]->t
+
+  merge(crop,t,by.x="sno_id",by.y="id",all.y=TRUE)->t1
+  t1[!is.na(crop_number)]->t1
+  t1[village_name=="Jamalpur Shekhan",.(household_number,crop_id)]->a
+
+  merge(t,labouruse,by.x=c("id"),by.y=c("sno_id"))->p
+  p[village_name=="Jamalpur Shekhan",.(household_number,crop_id)]->a1
+  unique(a1)->a1
+  merge(a1,code_crop,by.x="crop_id",by.y="id")->k
+  merge(a,code_crop,by.x="crop_id",by.y="id")->k1
+  library(dplyr)
+  anti_join(k1,k)->l
+  data.table(l)->l
+  l[,.(crop),by=household_number]->l
+  l
+
+  #anti_join(k,k1)->l1 #check hhd 12 and 48 plus crops
+#+END_SRC
+
+#+CAPTION: Entry is missing in labour use column
+#+RESULTS: missing-data-code-5
+| household_number | crop                |
+|------------------+---------------------|
+|               71 | Cotton - Badi/Kapas |
+|               71 | Wheat               |
+|               71 | Paddy               |
+|               77 | Cotton - Badi/Kapas |
+|               77 | Wheat               |
+|               77 | Jowar               |
+|               77 | Barseem             |
+|               11 | Mustard             |
+|               11 | Wheat               |
+|               11 | Jowar               |
+|               11 | Barseem             |
+|               51 | Wheat               |
+|               51 | Paddy               |
+|               51 | Paddy               |
+|               16 | Barseem             |
+|               16 | Vegetables          |
+|               30 | Fallow              |
+|               30 | Fallow              |
+|               49 | Fallow              |
+
+#+NAME: missing-data-code-6
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  t[,.(village_name,household_number,id)]->t
+
+  merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t1
+  t1[is.na(months_of_sowing),.(village_name,household_number,crop_number,blankfield="months_of_sowing")]->s
+  s
+#+END_SRC
+
+#+CAPTION: Missing month of sowing
+#+RESULTS: missing-data-code-6
+| village_name     | household_number | crop_number | blankfield       |
+|------------------+------------------+-------------+------------------|
+| Cheher Kalan     |                3 |           2 | months_of_sowing |
+| Cheher Kalan     |                8 |           6 | months_of_sowing |
+| Cheher Kalan     |               12 |           3 | months_of_sowing |
+| Cheher Kalan     |               13 |           2 | months_of_sowing |
+| Cheher Kalan     |               13 |           3 | months_of_sowing |
+| Cheher Kalan     |               13 |           4 | months_of_sowing |
+| Cheher Kalan     |               13 |           1 | months_of_sowing |
+| Cheher Kalan     |               13 |           5 | months_of_sowing |
+| Cheher Kalan     |               13 |           6 | months_of_sowing |
+| Cheher Kalan     |               13 |           7 | months_of_sowing |
+| Cheher Kalan     |               23 |         1.1 | months_of_sowing |
+| Khandrai         |               10 |           6 | months_of_sowing |
+| Khandrai         |               10 |           7 | months_of_sowing |
+| Khandrai         |               11 |           4 | months_of_sowing |
+| Khandrai         |               24 |           6 | months_of_sowing |
+| Khandrai         |               25 |           5 | months_of_sowing |
+| Khandrai         |               28 |           6 | months_of_sowing |
+| Khandrai         |               28 |           7 | months_of_sowing |
+| Khandrai         |               29 |           5 | months_of_sowing |
+| Khandrai         |               32 |           4 | months_of_sowing |
+| Khandrai         |               32 |           5 | months_of_sowing |
+| Khandrai         |               35 |           4 | months_of_sowing |
+| Cheher Kalan     |               29 |           3 | months_of_sowing |
+| Cheher Kalan     |               39 |           5 | months_of_sowing |
+| Cheher Kalan     |               42 |           2 | months_of_sowing |
+| Birdhana         |                1 |           7 | months_of_sowing |
+| Cheher Kalan     |               50 |           1 | months_of_sowing |
+| Birdhana         |               13 |           6 | months_of_sowing |
+| Birdhana         |               13 |           7 | months_of_sowing |
+| Jamalpur Shekhan |               16 |           5 | months_of_sowing |
+| Birdhana         |               33 |           4 | months_of_sowing |
+| Birdhana         |               36 |           4 | months_of_sowing |
+| Birdhana         |               36 |           3 | months_of_sowing |
+| Birdhana         |               35 |           2 | months_of_sowing |
+| Birdhana         |               35 |           4 | months_of_sowing |
+| Jamalpur Shekhan |               30 |           5 | months_of_sowing |
+| Jamalpur Shekhan |               30 |           6 | months_of_sowing |
+| Jamalpur Shekhan |               30 |           2 | months_of_sowing |
+| Jamalpur Shekhan |               30 |           3 | months_of_sowing |
+| Jamalpur Shekhan |               31 |           3 | months_of_sowing |
+| Jamalpur Shekhan |               31 |           2 | months_of_sowing |
+| Jamalpur Shekhan |               31 |           5 | months_of_sowing |
+| Jamalpur Shekhan |               36 |           1 | months_of_sowing |
+| Jamalpur Shekhan |               36 |           2 | months_of_sowing |
+| Jamalpur Shekhan |               36 |           3 | months_of_sowing |
+| Jamalpur Shekhan |               36 |           4 | months_of_sowing |
+| Birdhana         |               63 |           2 | months_of_sowing |
+| Birdhana         |               63 |           4 | months_of_sowing |
+| Birdhana         |               67 |           5 | months_of_sowing |
+| Birdhana         |               67 |           3 | months_of_sowing |
+| Birdhana         |               67 |           4 | months_of_sowing |
+| Birdhana         |               57 |           6 | months_of_sowing |
+| Jamalpur Shekhan |               51 |           1 | months_of_sowing |
+| Jamalpur Shekhan |               51 |           2 | months_of_sowing |
+| Jamalpur Shekhan |               51 |           3 | months_of_sowing |
+| Birdhana         |               58 |           3 | months_of_sowing |
+| Birdhana         |               58 |           4 | months_of_sowing |
+| Birdhana         |               58 |           5 | months_of_sowing |
+| Birdhana         |               58 |           1 | months_of_sowing |
+| Birdhana         |               70 |           1 | months_of_sowing |
+| Birdhana         |               70 |           2 | months_of_sowing |
+| Birdhana         |               77 |           6 | months_of_sowing |
+| Birdhana         |               77 |           3 | months_of_sowing |
+| Birdhana         |               78 |           3 | months_of_sowing |
+| Birdhana         |               78 |           4 | months_of_sowing |
+| Birdhana         |               81 |           4 | months_of_sowing |
+| Birdhana         |               81 |           7 | months_of_sowing |
+| Birdhana         |               83 |           6 | months_of_sowing |
+| Birdhana         |               86 |           6 | months_of_sowing |
+| Birdhana         |               87 |           8 | months_of_sowing |
+| Birdhana         |               88 |           2 | months_of_sowing |
+| Birdhana         |               90 |           6 | months_of_sowing |
+| Birdhana         |               91 |           2 | months_of_sowing |
+| Birdhana         |               91 |         4.1 | months_of_sowing |
+| Birdhana         |               92 |           3 | months_of_sowing |
+| Birdhana         |               92 |           4 | months_of_sowing |
+| Birdhana         |               93 |           2 | months_of_sowing |
+| Birdhana         |               96 |           8 | months_of_sowing |
+| Birdhana         |               97 |           3 | months_of_sowing |
+| Birdhana         |               97 |           6 | months_of_sowing |
+| Birdhana         |               97 |           7 | months_of_sowing |
+| Gijji            |               85 |           2 | months_of_sowing |
+| Gijji            |               86 |           3 | months_of_sowing |
+| Gijji            |               87 |           5 | months_of_sowing |
+| Gijji            |               88 |         1.2 | months_of_sowing |
+| Gijji            |               90 |           5 | months_of_sowing |
+| Gijji            |               94 |           3 | months_of_sowing |
+| Gijji            |               94 |           7 | months_of_sowing |
+| Gijji            |               97 |           3 | months_of_sowing |
+| Gijji            |               97 |           7 | months_of_sowing |
+| Gijji            |               99 |           4 | months_of_sowing |
+| Gijji            |              102 |           7 | months_of_sowing |
+| Gijji            |              108 |           2 | months_of_sowing |
+| Gijji            |              126 |           4 | months_of_sowing |
+| Gijji            |              126 |           7 | months_of_sowing |
+| Gijji            |              139 |           2 | months_of_sowing |
+| Gijji            |              149 |           7 | months_of_sowing |
+| Gijji            |              149 |           8 | months_of_sowing |
+| Gijji            |              150 |           7 | months_of_sowing |
+| Gijji            |              153 |           5 | months_of_sowing |
+| Gijji            |              154 |           4 | months_of_sowing |
+
+
+
+
+#+NAME: misc-data-4
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
   merge(household,villages,by.x="village_id",by.y="id")->t
   t[,.(village_name,household_number,id)]->t
 
   merge(crop,t,by.x="sno_id",by.y="id",all.y=TRUE)->t
   t[!is.na(crop_number)]->t
-  merge(t,input,by.x="id",by.y="cropping_pattern_schedule_production_and_sales_id")->t
+  merge(t,code_crop,by.x="crop_id",by.y="id")->k
+  k[crop=="Cotton - Badi/Kapas" & village_name=="Gijji"]->k1
 
-  merge(t,cropinput,by.x="input_use_for_crops_id",by.y="id")->t
-  merge(t,input_type,by.x="input_type_id",by.y="id",all.x=TRUE)->t
-  merge(t,input_category,by.x="input_category_id",by.y="id",all.x=TRUE)->t
-  merge(t,labouruse,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_id"))->p
+  k[crop=="Barseem" & crop_number!=1&crop_number!=2& crop_number!=3&crop_number!=4 &crop_number!=5&crop_number!=6]->k1
+
+  k1[,.(village_name,household_number)]->k1
+  k[!is.na(k$Cost)]->k
+  merge(k,code_crop,by.x="crop_id",by.y="id")->k
+  ggplot(k,aes(x=crop,y=Cost))->k1
+  k1+geom_boxplot()
+
+
+
+
+
 
   p[is.na(crop_operation_code),.(village_name,household_number,crop_no,blankfield="crop_operation_code",crop_operation_stage)]->t1
   p[is.na(crop_operation_stage),.(village_name,household_number,crop_no,blankfield="crop_operation_stage",crop_operation_code)]->t2
@@ -275,3 +419,22 @@
 
 
 
+
+#+NAME: misc-data-4
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(household,villages,by.x="village_id",by.y="id")->t
+  t[,.(village_name,household_number,id)]->t
+
+  merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+  merge(t,code_crop,by.x="crop_id",by.y="id")->k
+
+
+  k1[,.(village_name,household_number)]->k1
+  k[!is.na(k$Cost)]->k
+  merge(k,code_crop,by.x="crop_id",by.y="id")->k
+  ggplot(k,aes(x=crop,y=Cost))->k1
+  k1+geom_boxplot()
+
+
+
+#+END_SRC
