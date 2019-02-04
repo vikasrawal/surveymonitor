@@ -218,10 +218,6 @@
 | Khandrai         |               36 | Jowar               |
 | Khandrai         |               36 | Bajra               |
 | Khandrai         |               36 | Barseem             |
-| Khandrai         |               37 | Mustard             |
-| Khandrai         |               37 | Wheat               |
-| Khandrai         |               37 | Jowar               |
-| Khandrai         |               37 | Barseem             |
 | Khandrai         |                6 | Wheat               |
 | Khandrai         |                6 | Paddy               |
 | Khandrai         |                6 | Jowar               |
@@ -273,12 +269,6 @@
 | Khandrai         |               35 | Jowar               |
 | Khandrai         |               35 | Sugarcane (planted) |
 | Khandrai         |               35 | Barseem             |
-| Khandrai         |               38 | Wheat               |
-| Khandrai         |               38 | Paddy               |
-| Khandrai         |               39 | Wheat               |
-| Khandrai         |               39 | Paddy               |
-| Khandrai         |               39 | Jowar               |
-| Khandrai         |               39 | Barseem             |
 | Khandrai         |               48 | Wheat               |
 | Khandrai         |               48 | Paddy               |
 | Khandrai         |               50 | Wheat               |
@@ -291,6 +281,8 @@
 | Khandrai         |               32 | Barseem             |
 | Khandrai         |               32 | Fallow              |
 | Khandrai         |               32 | Fallow              |
+| Khandrai         |               39 | Jowar               |
+| Khandrai         |               39 | Barseem             |
 | Khandrai         |               11 | Fallow              |
 | Khandrai         |               25 | Fallow              |
 | Jamalpur Shekhan |               30 | Fallow              |
@@ -421,6 +413,27 @@
 | Bhadas           |               12 |           2 | months_of_sowing |
 | Bhadas           |               23 |           3 | months_of_sowing |
 | Bhadas           |               23 |           4 | months_of_sowing |
+| Bhadas           |               32 |           2 | months_of_sowing |
+| Bhadas           |               34 |           2 | months_of_sowing |
+| Bhadas           |               40 |           2 | months_of_sowing |
+| Bhadas           |               56 |           3 | months_of_sowing |
+| Bhadas           |               56 |           5 | months_of_sowing |
+| Bhadas           |               68 |           3 | months_of_sowing |
+| Bhadas           |               70 |           2 | months_of_sowing |
+| Bhadas           |               73 |           2 | months_of_sowing |
+| Bhadas           |               74 |           2 | months_of_sowing |
+| Bhadas           |               76 |           3 | months_of_sowing |
+| Bhadas           |               77 |           3 | months_of_sowing |
+| Bhadas           |               77 |           5 | months_of_sowing |
+| Bhadas           |               78 |           2 | months_of_sowing |
+| Bhadas           |               79 |           2 | months_of_sowing |
+| Bhadas           |               80 |           2 | months_of_sowing |
+| Bhadas           |               80 |           5 | months_of_sowing |
+| Bhadas           |               83 |           2 | months_of_sowing |
+| Bhadas           |               86 |           4 | months_of_sowing |
+| Bhadas           |               87 |           3 | months_of_sowing |
+| Bhadas           |               87 |           4 | months_of_sowing |
+| Bhadas           |              147 |           2 | months_of_sowing |
 
 
 
@@ -531,9 +544,11 @@
 | Jamalpur Shekhan |               57 |       4 |                6150 | Family labour  | Acre            |
 | Jamalpur Shekhan |               57 |       4 |                6150 | Family labour  | Acre            |
 | Jamalpur Shekhan |               64 |       3 |                6550 | Family labour  | Acre            |
+| Khandrai         |               38 |       4 |                5200 | Daily labour   | kg              |
 | Jamalpur Shekhan |               30 |       3 |                5200 | Family labour  | kg              |
 | Jamalpur Shekhan |               64 |       1 |                6610 | Family labour  | kg              |
 | Jamalpur Shekhan |               71 |       4 |                2120 | Family labour  | kg              |
+| Khandrai         |               39 |       4 |                5100 | Daily labour   | Tank            |
 | Jamalpur Shekhan |               53 |       4 |                5100 | Daily labour   | Tank            |
 | Jamalpur Shekhan |               30 |       3 |                6610 | Family labour  | Quintal         |
 | Jamalpur Shekhan |               30 |       4 |                6550 | Family labour  | Quintal         |
@@ -584,37 +599,37 @@
 | Cotton - Badi/Kapas      | Other intercultural operations      |                 16.47 |
 | Cotton - Badi/Kapas      | Weeding                             |                 39.76 |
 | Cotton - Badi/Kapas      | Harvest and post-harvest operations |                125.76 |
-| Mustard                  | Planting                            |                  9.85 |
+| Mustard                  | Planting                            |                   9.1 |
 | Mustard                  | Harvest and post-harvest operations |                 28.12 |
 | Mustard                  | Land preparation                    |                     4 |
 | Mustard                  | Other intercultural operations      |                     4 |
 | Mustard                  | Intercultural water management      |                    10 |
-| Wheat                    | Land preparation                    |                  4.07 |
+| Wheat                    | Land preparation                    |                   4.1 |
 | Wheat                    | Intercultural water management      |                  6.88 |
-| Wheat                    | Other intercultural operations      |                  8.52 |
-| Wheat                    | Harvest and post-harvest operations |                  5.92 |
+| Wheat                    | Other intercultural operations      |                  8.45 |
+| Wheat                    | Harvest and post-harvest operations |                  5.98 |
 | Wheat                    | Planting                            |                  0.95 |
-| Paddy                    | Land preparation                    |                 14.03 |
-| Paddy                    | Other intercultural operations      |                 21.27 |
-| Paddy                    | Weeding                             |                 22.97 |
-| Paddy                    | Intercultural water management      |                195.98 |
+| Paddy                    | Land preparation                    |                  13.9 |
+| Paddy                    | Other intercultural operations      |                 21.06 |
+| Paddy                    | Weeding                             |                 27.07 |
+| Paddy                    | Intercultural water management      |                194.26 |
 | Paddy                    | Harvest and post-harvest operations |                  6.68 |
 | Paddy                    | Planting                            |                  4.91 |
-| Jowar                    | Land preparation                    |                 17.43 |
-| Jowar                    | Planting                            |                  1.04 |
+| Jowar                    | Land preparation                    |                 16.78 |
+| Jowar                    | Planting                            |                  1.02 |
 | Jowar                    | Intercultural water management      |                 19.96 |
-| Jowar                    | Other intercultural operations      |                  5.99 |
-| Jowar                    | Harvest and post-harvest operations |                269.07 |
+| Jowar                    | Other intercultural operations      |                  5.79 |
+| Jowar                    | Harvest and post-harvest operations |                260.39 |
 | Sugarcane (planted)      | Land preparation                    |                    10 |
 | Sugarcane (planted)      | Planting                            |                    40 |
 | Sugarcane (planted)      | Intercultural water management      |                   320 |
 | Sugarcane (planted)      | Weeding                             |                     2 |
 | Sugarcane (planted)      | Other intercultural operations      |                    78 |
-| Barseem                  | Other intercultural operations      |                  7.79 |
-| Barseem                  | Land preparation                    |                  5.26 |
-| Barseem                  | Planting                            |                  2.29 |
-| Barseem                  | Harvest and post-harvest operations |                389.16 |
-| Barseem                  | Intercultural water management      |                 45.87 |
+| Barseem                  | Other intercultural operations      |                  7.63 |
+| Barseem                  | Land preparation                    |                  5.23 |
+| Barseem                  | Planting                            |                  2.25 |
+| Barseem                  | Harvest and post-harvest operations |                383.15 |
+| Barseem                  | Intercultural water management      |                 45.32 |
 | Vegetables               | Land preparation                    |                   1.6 |
 | Vegetables               | Other intercultural operations      |                  7.36 |
 | Vegetables               | Intercultural water management      |                   6.4 |
@@ -708,10 +723,10 @@
 | Khandrai         |               27 |           4 |
 | Khandrai         |               27 |           7 |
 | Khandrai         |               35 |           2 |
-| Khandrai         |               37 |           3 |
+| Khandrai         |               37 |           2 |
 | Khandrai         |               29 |           4 |
 | Khandrai         |               29 |           2 |
-| Khandrai         |               37 |           2 |
+| Khandrai         |               37 |           3 |
 | Khandrai         |               35 |           5 |
 | Khandrai         |               39 |           4 |
 | Jamalpur Shekhan |               19 |           5 |
@@ -721,6 +736,7 @@
 | Jamalpur Shekhan |               63 |           3 |
 | Jamalpur Shekhan |               49 |           2 |
 | Jamalpur Shekhan |               64 |           6 |
+| Bhadas           |              147 |           2 |
 | Jamalpur Shekhan |               34 |           1 |
 | Birdhana         |               76 |           1 |
 | Jamalpur Shekhan |               31 |           3 |
@@ -769,7 +785,6 @@
 | Birdhana         |               17 |           4 |
 | Birdhana         |               58 |           4 |
 | Birdhana         |               58 |           5 |
-| Cheher Kalan     |               50 |           1 |
 | Birdhana         |               27 |           7 |
 | Birdhana         |               14 |           3 |
 | Birdhana         |               14 |           5 |
@@ -791,6 +806,7 @@
 | Birdhana         |               35 |           4 |
 | Birdhana         |               68 |           4 |
 | Birdhana         |               68 |           6 |
+| Cheher Kalan     |               50 |           1 |
 | Cheher Kalan     |               45 |         2.2 |
 | Cheher Kalan     |               40 |           2 |
 | Cheher Kalan     |               39 |           5 |
@@ -907,6 +923,81 @@
 | Bhadas           |               87 |           1 |
 | Bhadas           |               87 |           2 |
 | Bhadas           |               88 |           1 |
+| Bhadas           |               91 |           1 |
+| Bhadas           |               96 |           1 |
+| Bhadas           |               97 |           1 |
+| Bhadas           |              101 |           1 |
+| Bhadas           |              102 |           1 |
+| Bhadas           |              107 |           1 |
+| Bhadas           |              113 |           1 |
+| Bhadas           |              114 |           1 |
+| Bhadas           |              110 |           1 |
+| Bhadas           |              147 |           1 |
+| Bhadas           |              167 |           3 |
+| Bhadas           |              167 |           4 |
+
+#+NAME: na-measurement-id
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  t[labouruse,on=c(id="sno_id")][is.na(measurement_unit_id),.(village_name,household_number,crop_id)]->t1
+#+END_SRC
+
+#+CAPTION: Measurement id is NA
+#+RESULTS: na-measurement-id
+| village_name     | household_number | crop_id |
+|------------------+------------------+---------|
+| Jamalpur Shekhan |               16 |       4 |
+| Jamalpur Shekhan |               12 |      24 |
+| Jamalpur Shekhan |                5 |       4 |
+| Jamalpur Shekhan |                9 |       5 |
+| Jamalpur Shekhan |               14 |       4 |
+| Jamalpur Shekhan |                9 |       4 |
+| Jamalpur Shekhan |               16 |       4 |
+| Jamalpur Shekhan |               19 |       3 |
+| Jamalpur Shekhan |               19 |       3 |
+| Jamalpur Shekhan |               36 |       3 |
+| Jamalpur Shekhan |               36 |       3 |
+| Jamalpur Shekhan |               36 |       3 |
+| Jamalpur Shekhan |               36 |       3 |
+| Jamalpur Shekhan |               51 |       4 |
+| Jamalpur Shekhan |               51 |       4 |
+| Jamalpur Shekhan |               51 |       3 |
+| Khandrai         |                7 |       3 |
+| Khandrai         |               32 |       3 |
+| Khandrai         |               38 |       3 |
+| Khandrai         |               38 |       3 |
+| Khandrai         |               39 |       4 |
+
+
+#+NAME: na-crop-operation-stage
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  t[labouruse,on=c(id="sno_id")][is.na(crop_operation_stage),.(village_name,household_number,crop_id)]->t1
+#+END_SRC
+
+#+CAPTION: Crop operation stage is NA
+#+RESULTS: na-crop-operation-stage
+| village_name | household_number | crop_id |
+|--------------+------------------+---------|
+| Khandrai     |                7 |       3 |
+
+
+#+NAME: na-crop-operation-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  t[labouruse,on=c(id="sno_id")][is.na(crop_operation_code),.(village_name,household_number,crop_id)]->t1
+#+END_SRC
+
+#+CAPTION: Crop operation code is NA
+#+RESULTS: na-crop-operation-code
+| village_name     | household_number | crop_id |
+|------------------+------------------+---------|
+| Jamalpur Shekhan |               12 |      24 |
+| Jamalpur Shekhan |               12 |      24 |
+| Khandrai         |                7 |       3 |
+| Khandrai         |               32 |       3 |
+| Khandrai         |               38 |       3 |
+| Khandrai         |               39 |       4 |
 
 * Basic Tables                                                     :noexport:
 #+NAME: number_of_households
