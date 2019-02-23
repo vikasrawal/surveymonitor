@@ -6,4 +6,77 @@
 
 
 * Outline
-** Cropping pattern in Haryana
+** Cropping pattern
+
+| Village      | Major crops at the time of first survey | Major crops according to present data |
+|--------------+-----------------------------------------+---------------------------------------|
+| Khandrai     | Area    \      Yields                   | Area   \ Yields                       |
+| Chehar Kalan |                                         |                                       |
+| Bhirdana     |                                         |                                       |
+| Jamlpur      |                                         |                                       |
+
+Such tables for area under production for each crop, yield of each crop per acre according to present data
+
+| Crop Category | Crop        | Khandrai | Chehar Kalan | Bhirdhana | Jamalpur | Haryana |
+|---------------+-------------+----------+--------------+-----------+----------+---------|
+| Grain         | Wheat       |          |              |           |          |         |
+| Grain         | Paddy       |          |              |           |          |         |
+| Cash Crops    | Cotton      |          |              |           |          |         |
+| Cash Crops    | Sugarcane   |          |              |           |          |         |
+| Oilseed       | Mustard     |          |              |           |          |         |
+| Feed          | Wheat Straw |          |              |           |          |         |
+|               | Paddy Straw |          |              |           |          |         |
+|               | Barseem     |          |              |           |          |         |
+|               | Jowar       |          |              |           |          |         |
+|               | Bajra       |          |              |           |          |         |
+|               |             |          |              |           |          |         |
+
+
+
+** Irrigation
+
+(Area?)
+
+| Village | Tubewell | Canal | Rainfed | xx |
+|---------+----------+-------+---------+----|
+|         |          |       |         |    |
+
+
+
+
+
+** Input use by crop
+
+(say wheat)
+
+
+
+| Variable                                 | Khandrai | Cheher Kalan | Bhirdana | Jamalpur |
+|------------------------------------------+----------+--------------+----------+----------|
+| Average size of land holding             |          |              |          |          |
+| Average yields                           |          |              |          |          |
+| seed rate   (kg/acre)                    |          |              |          |          |
+| Fertiliser use (kg/acre)                 |          |              |          |          |
+| Manure (Trolley/acre or kg/acre)         |          |              |          |          |
+| Man-days by operation (days/acre)        |          |              |          |          |
+| - Spraying Pesticides                    |          |              |          |          |
+| - Weeding                                |          |              |          |          |
+| - Application of fertilisers             |          |              |          |          |
+| - Irrigation                             |          |              |          |          |
+| - Harvesting by hand                     |          |              |          |          |
+| - Other post harvest operations          |          |              |          |          |
+| TOTAL LABOUR DAYS PER ACRE               |          |              |          |          |
+| Labour cost per acre                     |          |              |          |          |
+| - for different operations on piece rate |          |              |          |          |
+| Machine Cost by operation                |          |              |          |          |
+| - Land Preparation                       |          |              |          |          |
+| -  Weeding                               |          |              |          |          |
+| - Spraying Pesticides                    |          |              |          |          |
+| - Harvesting                             |          |              |          |          |
+| - Threshing                              |          |              |          |          |
+| - Straw Reaper                           |          |              |          |          |
+|Purchase of water ( Rs/acre)              |          |              |          |          |
+|                                          |          |              |          |          |
+| Pesticide use (Rs/acre)                  |          |              |          |          |
+|                                          |          |              |          |          |
+|                                          |          |              |          |          |
