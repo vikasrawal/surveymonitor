@@ -1,0 +1,9 @@
+#+TITLE: Agriculture in Haryana: Analysis based on Primary Survey Data
+#+PROPERTY: header-args:R :eval never-export :session labour
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+#+HTML_HEAD: <style>#content{max-width:1200px;} </style>
+#+MCRO: hlmacro (eval (org-table-insert-hline))
+
+
+* Outline
+** Cropping pattern in Haryana
