@@ -1218,256 +1218,136 @@ unique(y1)
 * Unit correction
 #+NAME: number_of_households_table1
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
- 
- household[villages,on=c(village_id="id")][crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,.(main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,crop)][,total:=main+by]->p
-  p[is.na(unit_main)]
+
+  household[villages,on=c(village_id="id")][crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,.(main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,crop)][,total:=main+by]->p
+   p[is.na(unit_main)&crop!="Fallow"]->p
+p[order(village_name,household_number)]
 
 #+END_SRC
 
 #+RESULTS: number_of_households_table1
 | village_name     | household_number | crop                     | main | by  | unit_main | unit_by | total |
 |------------------+------------------+--------------------------+------+-----+-----------+---------+-------|
-| Jamalpur Shekhan |               71 | Cotton - Badi/Kapas      | 20   | nil | nil       | nil     | nil   |
-| Birdhana         |               84 | Cotton - Badi/Kapas      | 24   | nil | nil       | nil     | nil   |
-| Birdhana         |               91 | Cotton - Badi/Kapas      | 7    | 20  | nil       | nil     | 27    |
-| Birdhana         |               27 | Mustard                  | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               29 | Mustard                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               27 | Wheat                    | 45   | 30  | nil       | nil     | 75    |
-| Jamalpur Shekhan |               50 | Wheat                    | 16   | 18  | nil       | nil     | 34    |
-| Jamalpur Shekhan |               41 | Wheat                    | 40   | 20  | nil       | nil     | 60    |
-| Birdhana         |               91 | Wheat                    | 40   | 60  | nil       | nil     | 100   |
-| Birdhana         |               96 | Wheat                    | 344  | 216 | nil       | nil     | 560   |
-| Birdhana         |               88 | Wheat                    | 210  | 250 | nil       | nil     | 460   |
-| Birdhana         |               84 | Wheat                    | 420  | 252 | nil       | nil     | 672   |
-| Birdhana         |               58 | Wheat                    | 260  | nil | nil       | nil     | nil   |
-| Birdhana         |                1 | Wheat                    | 130  | nil | nil       | nil     | nil   |
-| Birdhana         |               14 | Wheat                    | 130  | 130 | nil       | nil     | 260   |
-| Birdhana         |               16 | Wheat                    | 36   | 36  | nil       | nil     | 72    |
-| Cheher Kalan     |               29 | Wheat                    | 30   | 30  | nil       | nil     | 60    |
-| Cheher Kalan     |               21 | Wheat                    | 28   | 28  | nil       | nil     | 56    |
-| Cheher Kalan     |               23 | Wheat                    | 32   | 32  | nil       | nil     | 64    |
-| Gijji            |              106 | Wheat                    | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               76 | Wheat                    | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               33 | Paddy                    | 60   | 16  | nil       | nil     | 76    |
-| Jamalpur Shekhan |               41 | Paddy                    | 16   | 6   | nil       | nil     | 22    |
-| Birdhana         |                1 | Paddy                    | 255  | nil | nil       | nil     | nil   |
-| Khandrai         |                9 | Bajra                    | 3.2  | nil | nil       | nil     | nil   |
-| Khandrai         |               24 | Bajra                    | 8    | nil | nil       | nil     | nil   |
-| Khandrai         |               29 | Bajra                    | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               50 | Bajra                    | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |               56 | Bajra                    | 0    | 0   | nil       | nil     | 0     |
-| Gijji            |               87 | Bajra                    | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               47 | Bajra                    | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               99 | Bajra                    | 0    | 0   | nil       | nil     | 0     |
-| Bhadas           |              215 | Bajra                    | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               29 | Maize                    | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               34 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               33 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               35 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               27 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |                5 | Barseem                  | 25   | nil | nil       | nil     | nil   |
-| Birdhana         |               86 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |                1 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               78 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               85 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               77 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               84 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               88 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               89 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               80 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               97 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               17 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               58 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               14 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               34 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               16 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               35 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               68 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               30 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               63 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               96 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               95 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               25 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               10 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               44 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               47 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              154 | Barseem                  | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |                1 | Vegetables               | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               21 | Vegetables               | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               24 | Vegetables               | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               92 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               92 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              152 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |                3 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              153 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               49 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               10 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               30 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               30 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               77 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              147 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               55 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               57 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               33 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               86 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               74 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               68 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               56 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               56 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               29 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               29 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               10 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               10 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               11 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               25 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |                8 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               12 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               28 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               28 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               32 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               32 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               59 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               24 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               24 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               83 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               74 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              154 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               94 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               94 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               99 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              108 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              126 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              126 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              139 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              150 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               80 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               80 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               71 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               71 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               85 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              128 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              128 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              129 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              145 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               12 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               23 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               23 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               32 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               34 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               40 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               68 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               70 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               73 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               77 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               77 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               78 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               86 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               91 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               91 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               93 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               94 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              101 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              101 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              103 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              112 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              113 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              114 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              114 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              110 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              167 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              179 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              185 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              186 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              189 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              192 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              193 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              197 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              198 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              199 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              200 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              201 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              201 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              207 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              207 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              208 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              208 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              210 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              219 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              224 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Bhadas           |              225 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               45 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              102 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              144 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              149 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              149 | Fallow                   | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               81 | Moong                    | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               87 | Chana                    | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               67 | Eucalyptus               | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               45 | Jayee                    | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               21 | Jayee                    | nil  | nil | nil       | nil     | nil   |
-| nil              |              nil | Wheat+Mustard            | nil  | nil | nil       | nil     | nil   |
-| nil              |              nil | Barseem+Vegetables       | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              149 | Jantar                   | 0    | 0   | nil       | nil     | 0     |
-| Khandrai         |               35 | Sugarcane (planted)      | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               44 | Sugarcane (first ratoon) | 1200 | nil | nil       | nil     | nil   |
-| Khandrai         |               34 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               33 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               27 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               35 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               29 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               12 | Jowar fodder             | 21   | nil | nil       | nil     | nil   |
-| Jamalpur Shekhan |               50 | Jowar fodder             | 36   | nil | nil       | nil     | nil   |
-| Birdhana         |                1 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |                5 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               78 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               85 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               84 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               88 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               89 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               96 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               80 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               97 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               95 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               17 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               58 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               34 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               16 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               35 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               40 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               39 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               43 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Birdhana         |               63 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |                8 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               30 | Jowar fodder             | nil  | 200 | nil       | 10      | nil   |
-| Khandrai         |               25 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Cheher Kalan     |               48 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               10 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               44 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Khandrai         |               47 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              101 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              126 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Gijji            |              154 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
-| Gijji            |               85 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               76 | Wheat                    | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |              194 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |              198 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |              199 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |              201 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |              207 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              215 | Bajra                    | nil  | nil | nil       | nil     | nil   |
 | Bhadas           |              215 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Wheat                    | 130  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Paddy                    | 255  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Vegetables               | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                5 | Barseem                  | 25   | nil | nil       | nil     | nil   |
+| Birdhana         |                5 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               14 | Wheat                    | 130  | 130 | nil       | nil     | 260   |
+| Birdhana         |               14 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               16 | Wheat                    | 36   | 36  | nil       | nil     | 72    |
+| Birdhana         |               16 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               16 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               17 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               17 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               27 | Mustard                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               34 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               34 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               35 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               35 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               58 | Wheat                    | 260  | nil | nil       | nil     | nil   |
+| Birdhana         |               58 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               58 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               63 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               63 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               67 | Eucalyptus               | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               68 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               77 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               78 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               78 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               81 | Moong                    | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               84 | Cotton - Badi/Kapas      | 24   | nil | nil       | nil     | nil   |
+| Birdhana         |               84 | Wheat                    | 420  | 252 | nil       | nil     | 672   |
+| Birdhana         |               84 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               84 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               85 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               85 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               86 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               87 | Chana                    | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               88 | Wheat                    | 210  | 250 | nil       | nil     | 460   |
+| Birdhana         |               88 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               88 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               89 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               89 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               91 | Cotton - Badi/Kapas      | 7    | 20  | nil       | nil     | 27    |
+| Birdhana         |               91 | Wheat                    | 40   | 60  | nil       | nil     | 100   |
+| Birdhana         |               95 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               95 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               96 | Wheat                    | 344  | 216 | nil       | nil     | 560   |
+| Birdhana         |               96 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               96 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               97 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               97 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               21 | Wheat                    | 28   | 28  | nil       | nil     | 56    |
+| Cheher Kalan     |               21 | Jayee                    | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               23 | Wheat                    | 32   | 32  | nil       | nil     | 64    |
+| Cheher Kalan     |               29 | Mustard                  | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               29 | Wheat                    | 30   | 30  | nil       | nil     | 60    |
+| Cheher Kalan     |               39 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               40 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               43 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               45 | Jayee                    | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               48 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               50 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               80 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               80 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               85 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               87 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               99 | Bajra                    | 0    | 0   | nil       | nil     | 0     |
+| Gijji            |              101 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              106 | Wheat                    | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              126 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              149 | Jantar                   | 0    | 0   | nil       | nil     | 0     |
+| Gijji            |              154 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              154 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               12 | Jowar fodder             | 21   | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               41 | Wheat                    | 40   | 20  | nil       | nil     | 60    |
+| Jamalpur Shekhan |               41 | Paddy                    | 16   | 6   | nil       | nil     | 22    |
+| Jamalpur Shekhan |               50 | Wheat                    | 16   | 18  | nil       | nil     | 34    |
+| Jamalpur Shekhan |               50 | Jowar fodder             | 36   | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               71 | Cotton - Badi/Kapas      | 20   | nil | nil       | nil     | nil   |
+| Khandrai         |                8 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |                9 | Bajra                    | 3.2  | nil | nil       | nil     | nil   |
+| Khandrai         |               10 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               10 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               21 | Vegetables               | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               24 | Bajra                    | 8    | nil | nil       | nil     | nil   |
+| Khandrai         |               24 | Vegetables               | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               25 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               25 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               27 | Wheat                    | 45   | 30  | nil       | nil     | 75    |
+| Khandrai         |               27 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               27 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Maize                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               30 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               30 | Jowar fodder             | nil  | 200 | nil       | 10      | nil   |
+| Khandrai         |               33 | Paddy                    | 60   | 16  | nil       | nil     | 76    |
+| Khandrai         |               33 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               33 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               34 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               34 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               35 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               35 | Sugarcane (planted)      | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               35 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               44 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               44 | Sugarcane (first ratoon) | 1200 | nil | nil       | nil     | nil   |
+| Khandrai         |               44 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               47 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               47 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               47 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| nil              |              nil | Wheat+Mustard            | nil  | nil | nil       | nil     | nil   |
+| nil              |              nil | Barseem+Vegetables       | nil  | nil | nil       | nil     | nil   |
 | nil              |              nil | Ber                      | nil  | nil | nil       | nil     | nil   |
