@@ -2,7 +2,7 @@
 #+PROPERTY: header-args:R :eval never-export :session labour
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+HTML_HEAD: <style>#content{max-width:1200px;} </style>
-#+MACRO: hlmacro (eval (org-table-insert-hline))
+#+MCRO: hlmacro (eval (org-table-insert-hline))
 
 #+NAME: read-data
 #+BEGIN_SRC R :results value silent :exports none :session labour
@@ -26,7 +26,8 @@
 + If crop is destroyed, an entry should exist in the cropping pattern.
 + In case of Wheat crop, an entry for reaper should be made if the crop was cut by combine.
 + In case of threshing, an entry for threshing machine operator and an additional entry for manual labour which is hired plus family labour if they engage in agricultural work should be made for accounting the work of loading etc done during threshing.
-+ NOTE that machine hours are total hours, not daily hours
++ NOTE that machine hours are total hours,
+ not daily hours
 + If children have been reported to work in the field, necessary adjustment in labour use is to be made.
 + Add "999" in case the information is missing
 + All codes should be entered in ascending order.
@@ -34,7 +35,7 @@
 
 + For entering data on machinery, one entry for the operator, one for the machine and one for any extra manual labour that was used should be made separately.
 
-* Programs for checking
+* Read data
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
   require(RPostgreSQL)
@@ -43,7 +44,7 @@
     addhead<-function(d1,v1,v2) {
           CJ(unique(v1),unique(v2))->tabhead
            c(1:nrow(tabhead))->tabhead$rank
-           ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
+           ave(tabhead$rank,tbhead$V1,FUN=rank)->tabhead$rank
            ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
            tabhead$V1[tabhead$rank!=1]<-""
            ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
@@ -68,7 +69,8 @@
     data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
     data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
     data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->code_crop
-
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecropcommodity"))->sale_item
+  data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->unit
     data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
     data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
     data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
@@ -114,8 +116,14 @@
 #+END_SRC
 
 #+RESULTS: missing-data-code
-| village_name | household_number | serial_number | balnkfield | input_category | input_type |
-|--------------+------------------+---------------+------------+----------------+------------|
+| village_name | household_number | serial_number | balnkfield | input_category         | input_type         |
+|--------------+------------------+---------------+------------+------------------------+--------------------|
+| Bhadas       |              207 |             1 | source     | Seed/Planting material | nil                |
+| Khandrai     |               33 |             1 | source     | Water                  | Diesel/Electricity |
+| Khandrai     |               33 |             3 | source     | Seed/Planting material | nil                |
+| Khandrai     |               33 |             4 | source     | Seed/Planting material | nil                |
+| Khandrai     |               33 |             5 | source     | Seed/Planting material | nil                |
+| Khandrai     |               44 |             1 | input_type | Chemical fertiliser    | nil                |
 
 #+NAME: missing-data-code-2
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -173,6 +181,8 @@
 #+RESULTS: missing-data-code-3
 | village_name | household_number | crop_no |
 |--------------+------------------+---------|
+| Cheher Kalan |               13 |       2 |
+| Khandrai     |               10 |       2 |
 
 
 
@@ -204,36 +214,18 @@
 #+RESULTS: missing-data-code-5
 | village_name     | household_number | crop                |
 |------------------+------------------+---------------------|
-| Khandrai         |               34 | Cotton - Badi/Kapas |
-| Khandrai         |               34 | Wheat               |
-| Khandrai         |               34 | Paddy               |
-| Khandrai         |               34 | Paddy               |
-| Khandrai         |               34 | Jowar               |
-| Khandrai         |               34 | Bajra               |
-| Khandrai         |               34 | Barseem             |
 | Khandrai         |               36 | Cotton - Badi/Kapas |
 | Khandrai         |               36 | Wheat               |
 | Khandrai         |               36 | Paddy               |
 | Khandrai         |               36 | Paddy               |
-| Khandrai         |               36 | Jowar               |
+| Khandrai         |               36 | Jowar fodder        |
 | Khandrai         |               36 | Bajra               |
 | Khandrai         |               36 | Barseem             |
 | Khandrai         |                6 | Wheat               |
 | Khandrai         |                6 | Paddy               |
-| Khandrai         |                6 | Jowar               |
+| Khandrai         |                6 | Jowar fodder        |
 | Khandrai         |                6 | Sugarcane (planted) |
 | Khandrai         |                6 | Barseem             |
-| Khandrai         |                9 | Wheat               |
-| Khandrai         |                9 | Paddy               |
-| Khandrai         |                9 | Jowar               |
-| Khandrai         |                9 | Bajra               |
-| Khandrai         |               10 | Wheat               |
-| Khandrai         |               10 | Paddy               |
-| Khandrai         |               10 | Jowar               |
-| Khandrai         |               10 | Sugarcane (planted) |
-| Khandrai         |               10 | Barseem             |
-| Khandrai         |               10 | Fallow              |
-| Khandrai         |               10 | Fallow              |
 | Khandrai         |               18 | Wheat               |
 | Khandrai         |               18 | Paddy               |
 | Khandrai         |               19 | Wheat               |
@@ -243,48 +235,32 @@
 | Khandrai         |               21 | Sugarcane (planted) |
 | Khandrai         |               21 | Vegetables          |
 | Khandrai         |               24 | Wheat               |
-| Khandrai         |               24 | Jowar               |
+| Khandrai         |               24 | Jowar fodder        |
 | Khandrai         |               24 | Bajra               |
 | Khandrai         |               24 | Sugarcane (planted) |
 | Khandrai         |               24 | Barseem             |
 | Khandrai         |               24 | Vegetables          |
 | Khandrai         |               27 | Wheat               |
-| Khandrai         |               28 | Wheat               |
-| Khandrai         |               28 | Paddy               |
-| Khandrai         |               28 | Jowar               |
-| Khandrai         |               28 | Bajra               |
-| Khandrai         |               28 | Fallow              |
-| Khandrai         |               28 | Fallow              |
 | Khandrai         |               30 | Wheat               |
 | Khandrai         |               30 | Paddy               |
-| Khandrai         |               30 | Jowar               |
+| Khandrai         |               30 | Jowar fodder        |
 | Khandrai         |               30 | Barseem             |
 | Khandrai         |               33 | Wheat               |
 | Khandrai         |               33 | Paddy               |
-| Khandrai         |               33 | Jowar               |
+| Khandrai         |               33 | Jowar fodder        |
 | Khandrai         |               33 | Sugarcane (planted) |
 | Khandrai         |               33 | Barseem             |
-| Khandrai         |               35 | Wheat               |
-| Khandrai         |               35 | Paddy               |
-| Khandrai         |               35 | Jowar               |
-| Khandrai         |               35 | Sugarcane (planted) |
-| Khandrai         |               35 | Barseem             |
-| Khandrai         |               48 | Wheat               |
-| Khandrai         |               48 | Paddy               |
 | Khandrai         |               50 | Wheat               |
 | Khandrai         |               50 | Paddy               |
-| Khandrai         |               29 | Jowar               |
-| Khandrai         |               29 | Bajra               |
-| Khandrai         |               29 | Maize               |
-| Khandrai         |               29 | Fallow              |
-| Khandrai         |               32 | Jowar               |
-| Khandrai         |               32 | Barseem             |
-| Khandrai         |               32 | Fallow              |
-| Khandrai         |               32 | Fallow              |
-| Khandrai         |               39 | Jowar               |
-| Khandrai         |               39 | Barseem             |
+| Khandrai         |               10 | Fallow              |
+| Khandrai         |               10 | Fallow              |
 | Khandrai         |               11 | Fallow              |
 | Khandrai         |               25 | Fallow              |
+| Khandrai         |               28 | Fallow              |
+| Khandrai         |               28 | Fallow              |
+| Khandrai         |               29 | Fallow              |
+| Khandrai         |               32 | Fallow              |
+| Khandrai         |               32 | Fallow              |
 | Jamalpur Shekhan |               30 | Fallow              |
 | Jamalpur Shekhan |               30 | Fallow              |
 | Jamalpur Shekhan |               49 | Fallow              |
@@ -303,137 +279,76 @@
 
 #+CAPTION: Missing month of sowing
 #+RESULTS: missing-data-code-6
-| village_name     | household_number | crop_number | blankfield       |
-|------------------+------------------+-------------+------------------|
-| Cheher Kalan     |                3 |           2 | months_of_sowing |
-| Cheher Kalan     |                8 |           6 | months_of_sowing |
-| Cheher Kalan     |               12 |           3 | months_of_sowing |
-| Cheher Kalan     |               13 |           2 | months_of_sowing |
-| Cheher Kalan     |               13 |           3 | months_of_sowing |
-| Cheher Kalan     |               13 |           4 | months_of_sowing |
-| Cheher Kalan     |               13 |           1 | months_of_sowing |
-| Cheher Kalan     |               13 |           5 | months_of_sowing |
-| Cheher Kalan     |               13 |           6 | months_of_sowing |
-| Cheher Kalan     |               13 |           7 | months_of_sowing |
-| Cheher Kalan     |               23 |         1.1 | months_of_sowing |
-| Khandrai         |               10 |           6 | months_of_sowing |
-| Khandrai         |               10 |           7 | months_of_sowing |
-| Khandrai         |               11 |           4 | months_of_sowing |
-| Khandrai         |               24 |           6 | months_of_sowing |
-| Khandrai         |               25 |           5 | months_of_sowing |
-| Khandrai         |               28 |           6 | months_of_sowing |
-| Khandrai         |               28 |           7 | months_of_sowing |
-| Khandrai         |               29 |           5 | months_of_sowing |
-| Khandrai         |               32 |           4 | months_of_sowing |
-| Khandrai         |               32 |           5 | months_of_sowing |
-| Khandrai         |               35 |           4 | months_of_sowing |
-| Cheher Kalan     |               29 |           3 | months_of_sowing |
-| Cheher Kalan     |               39 |           5 | months_of_sowing |
-| Cheher Kalan     |               42 |           2 | months_of_sowing |
-| Birdhana         |                1 |           7 | months_of_sowing |
-| Cheher Kalan     |               50 |           1 | months_of_sowing |
-| Birdhana         |               13 |           6 | months_of_sowing |
-| Birdhana         |               13 |           7 | months_of_sowing |
-| Birdhana         |               33 |           4 | months_of_sowing |
-| Birdhana         |               36 |           3 | months_of_sowing |
-| Birdhana         |               36 |           4 | months_of_sowing |
-| Birdhana         |               35 |           2 | months_of_sowing |
-| Birdhana         |               35 |           4 | months_of_sowing |
-| Jamalpur Shekhan |               30 |           5 | months_of_sowing |
-| Jamalpur Shekhan |               30 |           6 | months_of_sowing |
-| Jamalpur Shekhan |               30 |           2 | months_of_sowing |
-| Jamalpur Shekhan |               30 |           3 | months_of_sowing |
-| Jamalpur Shekhan |               31 |           3 | months_of_sowing |
-| Jamalpur Shekhan |               31 |           2 | months_of_sowing |
-| Jamalpur Shekhan |               31 |           5 | months_of_sowing |
-| Jamalpur Shekhan |               36 |           1 | months_of_sowing |
-| Jamalpur Shekhan |               36 |           2 | months_of_sowing |
-| Jamalpur Shekhan |               36 |           3 | months_of_sowing |
-| Jamalpur Shekhan |               36 |           4 | months_of_sowing |
-| Birdhana         |               63 |           2 | months_of_sowing |
-| Birdhana         |               63 |           4 | months_of_sowing |
-| Birdhana         |               67 |           5 | months_of_sowing |
-| Birdhana         |               67 |           3 | months_of_sowing |
-| Birdhana         |               67 |           4 | months_of_sowing |
-| Birdhana         |               57 |           6 | months_of_sowing |
-| Jamalpur Shekhan |               51 |           1 | months_of_sowing |
-| Jamalpur Shekhan |               51 |           2 | months_of_sowing |
-| Jamalpur Shekhan |               51 |           3 | months_of_sowing |
-| Birdhana         |               58 |           3 | months_of_sowing |
-| Birdhana         |               58 |           4 | months_of_sowing |
-| Birdhana         |               58 |           5 | months_of_sowing |
-| Birdhana         |               58 |           1 | months_of_sowing |
-| Birdhana         |               70 |           1 | months_of_sowing |
-| Birdhana         |               70 |           2 | months_of_sowing |
-| Birdhana         |               77 |           6 | months_of_sowing |
-| Birdhana         |               77 |           3 | months_of_sowing |
-| Birdhana         |               78 |           3 | months_of_sowing |
-| Birdhana         |               78 |           4 | months_of_sowing |
-| Birdhana         |               81 |           4 | months_of_sowing |
-| Birdhana         |               81 |           7 | months_of_sowing |
-| Birdhana         |               83 |           6 | months_of_sowing |
-| Birdhana         |               86 |           6 | months_of_sowing |
-| Birdhana         |               87 |           8 | months_of_sowing |
-| Birdhana         |               88 |           2 | months_of_sowing |
-| Birdhana         |               90 |           6 | months_of_sowing |
-| Birdhana         |               91 |           2 | months_of_sowing |
-| Birdhana         |               91 |         4.1 | months_of_sowing |
-| Birdhana         |               92 |           3 | months_of_sowing |
-| Birdhana         |               92 |           4 | months_of_sowing |
-| Birdhana         |               93 |           2 | months_of_sowing |
-| Birdhana         |               96 |           8 | months_of_sowing |
-| Birdhana         |               97 |           3 | months_of_sowing |
-| Birdhana         |               97 |           6 | months_of_sowing |
-| Birdhana         |               97 |           7 | months_of_sowing |
-| Gijji            |               85 |           3 | months_of_sowing |
-| Gijji            |               86 |           3 | months_of_sowing |
-| Gijji            |               87 |           5 | months_of_sowing |
-| Gijji            |               90 |           5 | months_of_sowing |
-| Gijji            |               94 |           3 | months_of_sowing |
-| Gijji            |               94 |           7 | months_of_sowing |
-| Gijji            |               97 |           3 | months_of_sowing |
-| Gijji            |               97 |           7 | months_of_sowing |
-| Gijji            |               99 |           4 | months_of_sowing |
-| Gijji            |              102 |           7 | months_of_sowing |
-| Gijji            |              108 |           2 | months_of_sowing |
-| Gijji            |              126 |           4 | months_of_sowing |
-| Gijji            |              126 |           7 | months_of_sowing |
-| Gijji            |              128 |           2 | months_of_sowing |
-| Gijji            |              128 |           4 | months_of_sowing |
-| Gijji            |              129 |           5 | months_of_sowing |
-| Gijji            |              139 |           2 | months_of_sowing |
-| Gijji            |              144 |           6 | months_of_sowing |
-| Gijji            |              145 |           4 | months_of_sowing |
-| Gijji            |              149 |           7 | months_of_sowing |
-| Gijji            |              149 |           8 | months_of_sowing |
-| Gijji            |              150 |           7 | months_of_sowing |
-| Gijji            |              153 |           5 | months_of_sowing |
-| Gijji            |              154 |           4 | months_of_sowing |
-| Bhadas           |               10 |           4 | months_of_sowing |
-| Bhadas           |               12 |           2 | months_of_sowing |
-| Bhadas           |               23 |           3 | months_of_sowing |
-| Bhadas           |               23 |           4 | months_of_sowing |
-| Bhadas           |               32 |           2 | months_of_sowing |
-| Bhadas           |               34 |           2 | months_of_sowing |
-| Bhadas           |               40 |           2 | months_of_sowing |
-| Bhadas           |               56 |           3 | months_of_sowing |
-| Bhadas           |               56 |           5 | months_of_sowing |
-| Bhadas           |               68 |           3 | months_of_sowing |
-| Bhadas           |               70 |           2 | months_of_sowing |
-| Bhadas           |               73 |           2 | months_of_sowing |
-| Bhadas           |               74 |           2 | months_of_sowing |
-| Bhadas           |               76 |           3 | months_of_sowing |
-| Bhadas           |               77 |           3 | months_of_sowing |
-| Bhadas           |               77 |           5 | months_of_sowing |
-| Bhadas           |               78 |           2 | months_of_sowing |
-| Bhadas           |               79 |           2 | months_of_sowing |
-| Bhadas           |               80 |           2 | months_of_sowing |
-| Bhadas           |               80 |           5 | months_of_sowing |
-| Bhadas           |               83 |           2 | months_of_sowing |
-| Bhadas           |               86 |           4 | months_of_sowing |
-| Bhadas           |               87 |           3 | months_of_sowing |
-| Bhadas           |               87 |           4 | months_of_sowing |
-| Bhadas           |              147 |           2 | months_of_sowing |
+| village_name | household_number | crop_number | blankfield       |
+|--------------+------------------+-------------+------------------|
+| Cheher Kalan |                3 |           2 | months_of_sowing |
+| Cheher Kalan |                8 |           6 | months_of_sowing |
+| Cheher Kalan |               12 |           3 | months_of_sowing |
+| Cheher Kalan |               13 |           2 | months_of_sowing |
+| Cheher Kalan |               13 |           3 | months_of_sowing |
+| Cheher Kalan |               13 |           4 | months_of_sowing |
+| Cheher Kalan |               13 |           1 | months_of_sowing |
+| Cheher Kalan |               13 |           5 | months_of_sowing |
+| Cheher Kalan |               13 |           6 | months_of_sowing |
+| Cheher Kalan |               13 |           7 | months_of_sowing |
+| Cheher Kalan |               23 |         1.1 | months_of_sowing |
+| Khandrai     |               10 |           6 | months_of_sowing |
+| Khandrai     |               10 |           7 | months_of_sowing |
+| Khandrai     |               11 |           4 | months_of_sowing |
+| Khandrai     |               24 |           6 | months_of_sowing |
+| Khandrai     |               25 |           5 | months_of_sowing |
+| Khandrai     |               28 |           6 | months_of_sowing |
+| Khandrai     |               28 |           7 | months_of_sowing |
+| Khandrai     |               29 |           5 | months_of_sowing |
+| Khandrai     |               32 |           4 | months_of_sowing |
+| Khandrai     |               32 |           5 | months_of_sowing |
+| Khandrai     |               35 |           4 | months_of_sowing |
+| Cheher Kalan |               29 |           3 | months_of_sowing |
+| Cheher Kalan |               39 |           5 | months_of_sowing |
+| Cheher Kalan |               42 |           2 | months_of_sowing |
+| Birdhana     |                1 |           7 | months_of_sowing |
+| Cheher Kalan |               50 |           1 | months_of_sowing |
+| Birdhana     |               13 |           6 | months_of_sowing |
+| Birdhana     |               13 |           7 | months_of_sowing |
+| Birdhana     |               33 |           4 | months_of_sowing |
+| Birdhana     |               36 |           3 | months_of_sowing |
+| Birdhana     |               36 |           4 | months_of_sowing |
+| Birdhana     |               35 |           2 | months_of_sowing |
+| Birdhana     |               35 |           4 | months_of_sowing |
+| Birdhana     |               63 |           2 | months_of_sowing |
+| Birdhana     |               63 |           4 | months_of_sowing |
+| Birdhana     |               67 |           5 | months_of_sowing |
+| Birdhana     |               67 |           3 | months_of_sowing |
+| Birdhana     |               67 |           4 | months_of_sowing |
+| Birdhana     |               57 |           6 | months_of_sowing |
+| Birdhana     |               58 |           3 | months_of_sowing |
+| Birdhana     |               58 |           4 | months_of_sowing |
+| Birdhana     |               58 |           5 | months_of_sowing |
+| Birdhana     |               58 |           1 | months_of_sowing |
+| Birdhana     |               70 |           1 | months_of_sowing |
+| Birdhana     |               70 |           2 | months_of_sowing |
+| Birdhana     |               77 |           6 | months_of_sowing |
+| Birdhana     |               77 |           3 | months_of_sowing |
+| Birdhana     |               78 |           3 | months_of_sowing |
+| Birdhana     |               78 |           4 | months_of_sowing |
+| Birdhana     |               81 |           4 | months_of_sowing |
+| Birdhana     |               81 |           7 | months_of_sowing |
+| Birdhana     |               83 |           6 | months_of_sowing |
+| Birdhana     |               86 |           6 | months_of_sowing |
+| Birdhana     |               87 |           8 | months_of_sowing |
+| Birdhana     |               88 |           2 | months_of_sowing |
+| Birdhana     |               90 |           6 | months_of_sowing |
+| Birdhana     |               91 |           2 | months_of_sowing |
+| Birdhana     |               91 |         4.1 | months_of_sowing |
+| Birdhana     |               92 |           3 | months_of_sowing |
+| Birdhana     |               92 |           4 | months_of_sowing |
+| Birdhana     |               93 |           2 | months_of_sowing |
+| Birdhana     |               96 |           8 | months_of_sowing |
+| Birdhana     |               97 |           3 | months_of_sowing |
+| Birdhana     |               97 |           6 | months_of_sowing |
+| Birdhana     |               97 |           7 | months_of_sowing |
+| Gijji        |              154 |           4 | months_of_sowing |
+| Bhadas       |               79 |           2 | months_of_sowing |
 
 
 
@@ -518,48 +433,23 @@
   p[type_of_worker!="Machine labour" & type_of_worker!="Piece-rated workers"]->p1
   p1[,.(sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash)]->p2
   merge(p2,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
-  p2[labourunit!="Days",.(village_name,household_number,crop_id,crop_operation_code,type_of_worker,labourunit)]
+  p2[labourunit!="Days",.(village_name,crop_id,crop_operation_code,type_of_worker,labourunit),by=household_number]
 #+END_SRC
 
 #+RESULTS: missing-data-8
-| village_name     | household_number | crop_id | crop_operation_code | type_of_worker | labourunit      |
-|------------------+------------------+---------+---------------------+----------------+-----------------|
-| Khandrai         |                7 |       4 |                6120 | Daily labour   | Acre            |
-| Jamalpur Shekhan |                9 |       3 |                6150 | Family labour  | Acre            |
-| Jamalpur Shekhan |               14 |       4 |                1120 | Family labour  | Acre            |
-| Jamalpur Shekhan |               14 |       4 |                1120 | Family labour  | Acre            |
-| Jamalpur Shekhan |               14 |       4 |                1320 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       1 |                4400 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       1 |                2350 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       1 |                6610 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       3 |                6550 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       3 |                2350 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       3 |                1120 | Family labour  | Acre            |
-| Jamalpur Shekhan |               30 |       4 |                1120 | Family labour  | Acre            |
-| Jamalpur Shekhan |               49 |       4 |                6510 | Daily labour   | Acre            |
-| Jamalpur Shekhan |               50 |       1 |                1120 | Family labour  | Acre            |
-| Jamalpur Shekhan |               50 |       3 |                1620 | Family labour  | Acre            |
-| Jamalpur Shekhan |               57 |       3 |                6150 | Family labour  | Acre            |
-| Jamalpur Shekhan |               57 |       4 |                6150 | Family labour  | Acre            |
-| Jamalpur Shekhan |               57 |       4 |                6150 | Family labour  | Acre            |
-| Jamalpur Shekhan |               57 |       4 |                6150 | Family labour  | Acre            |
-| Jamalpur Shekhan |               64 |       3 |                6550 | Family labour  | Acre            |
-| Khandrai         |               38 |       4 |                5200 | Daily labour   | kg              |
-| Jamalpur Shekhan |               30 |       3 |                5200 | Family labour  | kg              |
-| Jamalpur Shekhan |               64 |       1 |                6610 | Family labour  | kg              |
-| Jamalpur Shekhan |               71 |       4 |                2120 | Family labour  | kg              |
-| Khandrai         |               39 |       4 |                5100 | Daily labour   | Tank            |
-| Jamalpur Shekhan |               53 |       4 |                5100 | Daily labour   | Tank            |
-| Jamalpur Shekhan |               30 |       3 |                6610 | Family labour  | Quintal         |
-| Jamalpur Shekhan |               30 |       4 |                6550 | Family labour  | Quintal         |
-| Jamalpur Shekhan |               64 |       3 |                6610 | Family labour  | Quintal         |
-| Jamalpur Shekhan |               64 |       3 |                6620 | Family labour  | Quintal         |
-| Jamalpur Shekhan |               64 |       4 |                6610 | Family labour  | Quintal         |
-| Khandrai         |               27 |       4 |                6610 | Family labour  | Tractor-trolley |
-| Jamalpur Shekhan |               30 |       3 |                6620 | Family labour  | Tractor-trolley |
-| Jamalpur Shekhan |               57 |       3 |                6620 | Family labour  | Tractor-trolley |
-| Jamalpur Shekhan |               57 |       3 |                6610 | Family labour  | Tractor-trolley |
-| Jamalpur Shekhan |               64 |       1 |                6620 | Family labour  | Tractor-trolley |
+| household_number | village_name | crop_id | crop_operation_code | type_of_worker   | labourunit      |
+|------------------+--------------+---------+---------------------+------------------+-----------------|
+|                7 | Khandrai     |       4 |                6120 | Daily labour     | Acre            |
+|                9 | Khandrai     |       5 |                2320 | Daily labour     | Acre            |
+|                9 | Khandrai     |       6 |                2320 | Daily labour     | Acre            |
+|                9 | Khandrai     |       3 |                5200 | Daily labour     | kg              |
+|               10 | Khandrai     |       7 |                6610 | Long-term labour | Acre            |
+|               19 | Khandrai     |       3 |                6430 | Family labour    | Acre            |
+|               19 | Khandrai     |       3 |                6610 | Family labour    | Tractor-trolley |
+|               36 | Khandrai     |       3 |                6150 | Family labour    | Acre            |
+|               31 | Khandrai     |       7 |                6610 | Family labour    | Tractor-trolley |
+|               31 | Khandrai     |       7 |                6610 | Family labour    | Tractor-trolley |
+|               31 | Khandrai     |      27 |                6610 | Family labour    | Tractor-trolley |
 
 
 #+NAME: missing-data-9
@@ -593,43 +483,44 @@
 #+RESULTS: missing-data-9
 | Crop                     | Operation                           | labour hours per acre |
 |--------------------------+-------------------------------------+-----------------------|
-| Cotton - Badi/Kapas      | Land preparation                    |                  6.65 |
-| Cotton - Badi/Kapas      | Planting                            |                  5.52 |
-| Cotton - Badi/Kapas      | Intercultural water management      |                 13.37 |
-| Cotton - Badi/Kapas      | Other intercultural operations      |                 16.47 |
-| Cotton - Badi/Kapas      | Weeding                             |                 39.76 |
-| Cotton - Badi/Kapas      | Harvest and post-harvest operations |                125.76 |
+| Cotton - Badi/Kapas      | Land preparation                    |                  6.04 |
+| Cotton - Badi/Kapas      | Planting                            |                  4.07 |
+| Cotton - Badi/Kapas      | Intercultural water management      |                 11.95 |
+| Cotton - Badi/Kapas      | Other intercultural operations      |                 18.25 |
+| Cotton - Badi/Kapas      | Weeding                             |                 59.57 |
+| Coantialias tton - Badi/Kapas      | Harvest and post-harvest operations |                108.67 |
 | Mustard                  | Planting                            |                   9.1 |
 | Mustard                  | Harvest and post-harvest operations |                 28.12 |
 | Mustard                  | Land preparation                    |                     4 |
 | Mustard                  | Other intercultural operations      |                     4 |
 | Mustard                  | Intercultural water management      |                    10 |
-| Wheat                    | Land preparation                    |                   4.1 |
-| Wheat                    | Intercultural water management      |                  6.88 |
-| Wheat                    | Other intercultural operations      |                  8.45 |
-| Wheat                    | Harvest and post-harvest operations |                  5.98 |
-| Wheat                    | Planting                            |                  0.95 |
-| Paddy                    | Land preparation                    |                  13.9 |
-| Paddy                    | Other intercultural operations      |                 21.06 |
-| Paddy                    | Weeding                             |                 27.07 |
-| Paddy                    | Intercultural water management      |                194.26 |
-| Paddy                    | Harvest and post-harvest operations |                  6.68 |
-| Paddy                    | Planting                            |                  4.91 |
-| Jowar                    | Land preparation                    |                 16.78 |
-| Jowar                    | Planting                            |                  1.02 |
-| Jowar                    | Intercultural water management      |                 19.96 |
-| Jowar                    | Other intercultural operations      |                  5.79 |
-| Jowar                    | Harvest and post-harvest operations |                260.39 |
-| Sugarcane (planted)      | Land preparation                    |                    10 |
+| Wheat                    | Land preparation                    |                  4.04 |
+| Wheat                    | Intercultural water management      |                  7.73 |
+| Wheat                    | Other intercultural operations      |                  8.94 |
+| Wheat                    | Harvest and post-harvest operations |                   5.8 |
+| Wheat                    | Planting                            |                  1.85 |
+| Wheat                    | Weeding                             |                 61.54 |
+| Paddy                    | Land preparation                    |                 15.28 |
+| Paddy                    | Other intercultural operations      |                 20.58 |
+| Paddy                    | Weeding                             |                  24.9 |
+| Paddy                    | Intercultural water management      |                 182.2 |
+| Paddy                    | Harvest and post-harvest operations |                  7.51 |
+| Paddy                    | Planting                            |                 18.22 |
+| Jowar fodder             | Land preparation                    |                 23.72 |
+| Jowar fodder             | Planting                            |                  0.92 |
+| Jowar fodder             | Intercultural water management      |                 19.22 |
+| Jowar fodder             | Other intercultural operations      |                  5.16 |
+| Jowar fodder             | Harvest and post-harvest operations |                261.59 |
+| Sugarcane (planted)      | Land preparation                    |                  6.12 |
+| Sugarcane (planted)      | Other intercultural operations      |                 27.38 |
+| Sugarcane (planted)      | Intercultural water management      |                160.62 |
 | Sugarcane (planted)      | Planting                            |                    40 |
-| Sugarcane (planted)      | Intercultural water management      |                   320 |
 | Sugarcane (planted)      | Weeding                             |                     2 |
-| Sugarcane (planted)      | Other intercultural operations      |                    78 |
-| Barseem                  | Other intercultural operations      |                  7.63 |
-| Barseem                  | Land preparation                    |                  5.23 |
-| Barseem                  | Planting                            |                  2.25 |
-| Barseem                  | Harvest and post-harvest operations |                383.15 |
-| Barseem                  | Intercultural water management      |                 45.32 |
+| Barseem                  | Other intercultural operations      |                 11.24 |
+| Barseem                  | Land preparation                    |                  4.76 |
+| Barseem                  | Planting                            |                  2.19 |
+| Barseem                  | Harvest and post-harvest operations |                392.17 |
+| Barseem                  | Intercultural water management      |                 41.33 |
 | Vegetables               | Land preparation                    |                   1.6 |
 | Vegetables               | Other intercultural operations      |                  7.36 |
 | Vegetables               | Intercultural water management      |                   6.4 |
@@ -711,230 +602,125 @@
 
 #+CAPTION: The Production is not reported for all these crops. Khandrai, Bhirdana, Cheher Kalan to be fixed by Amit and rest 3 villages to be fixed by Pawan. 
 #+RESULTS: na-production
-| village_name     | household_number | crop_number |
-|------------------+------------------+-------------|
-| Khandrai         |               34 |           3 |
-| Khandrai         |               34 |           6 |
-| Khandrai         |               36 |           7 |
-| Khandrai         |               39 |           2 |
-| Khandrai         |               33 |           3 |
-| Khandrai         |               33 |           5 |
-| Khandrai         |               35 |           4 |
-| Khandrai         |               27 |           4 |
-| Khandrai         |               27 |           7 |
-| Khandrai         |               35 |           2 |
-| Khandrai         |               37 |           2 |
-| Khandrai         |               29 |           4 |
-| Khandrai         |               29 |           2 |
-| Khandrai         |               37 |           3 |
-| Khandrai         |               35 |           5 |
-| Khandrai         |               39 |           4 |
-| Jamalpur Shekhan |               19 |           5 |
-| Jamalpur Shekhan |               53 |           3 |
-| Jamalpur Shekhan |               53 |           5 |
-| Jamalpur Shekhan |               77 |           4 |
-| Jamalpur Shekhan |               63 |           3 |
-| Jamalpur Shekhan |               49 |           2 |
-| Jamalpur Shekhan |               64 |           6 |
-| Bhadas           |              147 |           2 |
-| Jamalpur Shekhan |               34 |           1 |
-| Birdhana         |               76 |           1 |
-| Jamalpur Shekhan |               31 |           3 |
-| Birdhana         |               86 |           6 |
-| Birdhana         |                4 |           2 |
-| Birdhana         |                4 |           4 |
-| Birdhana         |                1 |           4 |
-| Birdhana         |                1 |           6 |
-| Birdhana         |                1 |           7 |
-| Birdhana         |                5 |           2 |
-| Birdhana         |                5 |           4 |
-| Birdhana         |               83 |           4 |
-| Birdhana         |               83 |           5 |
-| Birdhana         |               78 |           3 |
-| Birdhana         |               78 |           4 |
-| Birdhana         |               81 |           5 |
-| Jamalpur Shekhan |               34 |           5 |
-| Jamalpur Shekhan |               31 |           5 |
-| Jamalpur Shekhan |               36 |           4 |
-| Gijji            |               77 |           5 |
-| Gijji            |               87 |           3 |
-| Birdhana         |               85 |           3 |
-| Birdhana         |               85 |           5 |
-| Birdhana         |               77 |           5 |
-| Birdhana         |               84 |           3 |
-| Birdhana         |               84 |           6 |
-| Birdhana         |               88 |           2 |
-| Birdhana         |               88 |           4 |
-| Birdhana         |               76 |           4 |
-| Birdhana         |               89 |           2 |
-| Birdhana         |               90 |           3 |
-| Birdhana         |               90 |           5 |
-| Birdhana         |               89 |           4 |
-| Gijji            |               80 |           2 |
-| Birdhana         |               87 |           2 |
-| Birdhana         |               87 |           7 |
-| Birdhana         |               87 |           5 |
-| Birdhana         |               96 |           4 |
-| Gijji            |               80 |           4 |
-| Birdhana         |               97 |           3 |
-| Birdhana         |               97 |           6 |
-| Birdhana         |               95 |           3 |
-| Birdhana         |                9 |           3 |
-| Birdhana         |                9 |           5 |
-| Birdhana         |               17 |           2 |
-| Birdhana         |               17 |           4 |
-| Birdhana         |               58 |           4 |
-| Birdhana         |               58 |           5 |
-| Birdhana         |               27 |           7 |
-| Birdhana         |               14 |           3 |
-| Birdhana         |               14 |           5 |
-| Birdhana         |               34 |           3 |
-| Birdhana         |               34 |           5 |
-| Gijji            |               96 |           2 |
-| Gijji            |               96 |           4 |
-| Gijji            |               74 |           2 |
-| Gijji            |               86 |           2 |
-| Gijji            |               87 |           2 |
-| Birdhana         |               24 |         3.1 |
-| Birdhana         |               24 |           4 |
-| Birdhana         |               24 |         3.2 |
-| Birdhana         |               36 |           3 |
-| Birdhana         |               36 |           4 |
-| Birdhana         |               16 |           2 |
-| Birdhana         |               16 |           4 |
-| Birdhana         |               35 |           2 |
-| Birdhana         |               35 |           4 |
-| Birdhana         |               68 |           4 |
-| Birdhana         |               68 |           6 |
-| Cheher Kalan     |               50 |           1 |
-| Cheher Kalan     |               45 |         2.2 |
-| Cheher Kalan     |               40 |           2 |
-| Cheher Kalan     |               39 |           5 |
-| Cheher Kalan     |               43 |           3 |
-| Birdhana         |               67 |           3 |
-| Gijji            |               45 |           2 |
-| Gijji            |               45 |           3 |
-| Gijji            |               77 |           2 |
-| Cheher Kalan     |               29 |           5 |
-| Cheher Kalan     |               21 |         2.2 |
-| Cheher Kalan     |               13 |           3 |
-| Khandrai         |               21 |           4 |
-| Khandrai         |               30 |           4 |
-| Khandrai         |               29 |           3 |
-| Birdhana         |               63 |           2 |
-| Birdhana         |               63 |           4 |
-| Birdhana         |               63 |           5 |
-| Birdhana         |               96 |           7 |
-| Birdhana         |               95 |           4 |
-| Khandrai         |                8 |           2 |
-| Khandrai         |               30 |           2 |
-| Khandrai         |               24 |           6 |
-| Khandrai         |               25 |           3 |
-| Khandrai         |               25 |           4 |
-| Cheher Kalan     |               39 |           4 |
-| Cheher Kalan     |               32 |           4 |
-| Cheher Kalan     |               48 |           5 |
-| Khandrai         |                6 |           4 |
-| Khandrai         |                6 |           5 |
-| Khandrai         |               10 |           3 |
-| Khandrai         |               10 |           5 |
-| Gijji            |               24 |           3 |
-| Jamalpur Shekhan |               77 |           2 |
-| Gijji            |               87 |           4 |
-| Gijji            |               88 |           3 |
-| Gijji            |               90 |           2 |
-| Gijji            |               90 |           4 |
-| Gijji            |               91 |           3 |
-| Gijji            |               92 |           2 |
-| Gijji            |               92 |           3 |
-| Gijji            |               94 |           2 |
-| Gijji            |               94 |           4 |
-| Gijji            |               97 |           2 |
-| Gijji            |               97 |           5 |
-| Gijji            |               99 |           3 |
-| Gijji            |              101 |           2 |
-| Gijji            |              102 |           2 |
-| Gijji            |              102 |           5 |
-| Gijji            |              106 |           1 |
-| Gijji            |              118 |           2 |
-| Gijji            |              120 |           2 |
-| Gijji            |              126 |           2 |
-| Gijji            |              126 |           5 |
-| Gijji            |              127 |           2 |
-| Gijji            |              127 |           3 |
-| Gijji            |              154 |           2 |
-| Gijji            |              154 |           3 |
-| Gijji            |              153 |           2 |
-| Gijji            |              153 |           4 |
-| Gijji            |              101 |           5 |
-| Gijji            |              152 |           1 |
-| Gijji            |              150 |           2 |
-| Gijji            |              150 |           5 |
-| Gijji            |              149 |           2 |
-| Gijji            |              149 |           3 |
-| Gijji            |              149 |           6 |
-| Gijji            |              148 |           2 |
-| Gijji            |              148 |           4 |
-| Gijji            |              148 |           6 |
-| Gijji            |              146 |           2 |
-| Gijji            |              146 |           3 |
-| Gijji            |              145 |           2 |
-| Gijji            |              145 |           3 |
-| Gijji            |              144 |           2 |
-| Gijji            |              144 |           4 |
-| Gijji            |              140 |           2 |
-| Gijji            |              140 |           6 |
-| Gijji            |              129 |           2 |
-| Gijji            |              129 |           3 |
-| Gijji            |              128 |           3 |
-| Gijji            |              135 |           2 |
-| Gijji            |              135 |           3 |
-| Gijji            |              125 |           2 |
-| Gijji            |              125 |           3 |
-| Gijji            |               47 |           3 |
-| Gijji            |               47 |           2 |
-| Gijji            |               72 |           2 |
-| Gijji            |               72 |           4 |
-| Gijji            |               85 |           2 |
-| Gijji            |               85 |           4 |
-| Gijji            |               88 |           1 |
-| Bhadas           |               10 |           3 |
-| Bhadas           |               41 |           2 |
-| Bhadas           |               47 |           2 |
-| Bhadas           |               55 |           1 |
-| Bhadas           |               56 |           1 |
-| Bhadas           |               56 |           2 |
-| Bhadas           |               59 |           1 |
-| Bhadas           |               61 |           1 |
-| Bhadas           |               62 |           2 |
-| Bhadas           |               68 |           2 |
-| Bhadas           |               70 |           1 |
-| Bhadas           |               72 |           2 |
-| Bhadas           |               74 |           1 |
-| Bhadas           |               76 |           1 |
-| Bhadas           |               76 |           2 |
-| Bhadas           |               77 |           4 |
-| Bhadas           |               79 |           1 |
-| Bhadas           |               80 |           3 |
-| Bhadas           |               80 |           4 |
-| Bhadas           |               82 |           2 |
-| Bhadas           |               84 |           1 |
-| Bhadas           |               86 |           1 |
-| Bhadas           |               87 |           1 |
-| Bhadas           |               87 |           2 |
-| Bhadas           |               88 |           1 |
-| Bhadas           |               91 |           1 |
-| Bhadas           |               96 |           1 |
-| Bhadas           |               97 |           1 |
-| Bhadas           |              101 |           1 |
-| Bhadas           |              102 |           1 |
-| Bhadas           |              107 |           1 |
-| Bhadas           |              113 |           1 |
-| Bhadas           |              114 |           1 |
-| Bhadas           |              110 |           1 |
-| Bhadas           |              147 |           1 |
-| Bhadas           |              167 |           3 |
-| Bhadas           |              167 |           4 |
+| village_name | household_number | crop_number |
+|--------------+------------------+-------------|
+| Khandrai     |               34 |           3 |
+| Khandrai     |               34 |           6 |
+| Khandrai     |               36 |           7 |
+| Khandrai     |               39 |           2 |
+| Khandrai     |               33 |           3 |
+| Khandrai     |               33 |           5 |
+| Khandrai     |               35 |           4 |
+| Khandrai     |               27 |           4 |
+| Khandrai     |               27 |           7 |
+| Khandrai     |               35 |           2 |
+| Khandrai     |               37 |           2 |
+| Khandrai     |               29 |           4 |
+| Khandrai     |               29 |           2 |
+| Khandrai     |               37 |           3 |
+| Khandrai     |               35 |           5 |
+| Khandrai     |               39 |           4 |
+| Birdhana     |               76 |           1 |
+| Birdhana     |               86 |           6 |
+| Birdhana     |                4 |           2 |
+| Birdhana     |                4 |           4 |
+| Birdhana     |                1 |           4 |
+| Birdhana     |                1 |           6 |
+| Birdhana     |                1 |           7 |
+| Birdhana     |                5 |           2 |
+| Birdhana     |                5 |           4 |
+| Birdhana     |               83 |           4 |
+| Birdhana     |               83 |           5 |
+| Birdhana     |               78 |           3 |
+| Birdhana     |               78 |           4 |
+| Birdhana     |               81 |           5 |
+| Birdhana     |               85 |           3 |
+| Birdhana     |               85 |           5 |
+| Birdhana     |               77 |           5 |
+| Birdhana     |               84 |           3 |
+| Birdhana     |               84 |           6 |
+| Birdhana     |               88 |           2 |
+| Birdhana     |               88 |           4 |
+| Birdhana     |               76 |           4 |
+| Birdhana     |               89 |           2 |
+| Birdhana     |               90 |           3 |
+| Birdhana     |               90 |           5 |
+| Birdhana     |               89 |           4 |
+| Gijji        |               80 |           2 |
+| Birdhana     |               87 |           2 |
+| Birdhana     |               87 |           7 |
+| Birdhana     |               87 |           5 |
+| Birdhana     |               96 |           4 |
+| Gijji        |               80 |           4 |
+| Birdhana     |               97 |           3 |
+| Birdhana     |               97 |           6 |
+| Birdhana     |               95 |           3 |
+| Birdhana     |                9 |           3 |
+| Birdhana     |                9 |           5 |
+| Birdhana     |               17 |           2 |
+| Birdhana     |               17 |           4 |
+| Birdhana     |               58 |           4 |
+| Birdhana     |               58 |           5 |
+| Birdhana     |               27 |           7 |
+| Birdhana     |               14 |           3 |
+| Birdhana     |               14 |           5 |
+| Birdhana     |               34 |           3 |
+| Birdhana     |               34 |           5 |
+| Birdhana     |               24 |         3.1 |
+| Birdhana     |               24 |           4 |
+| Birdhana     |               24 |         3.2 |
+| Birdhana     |               36 |           3 |
+| Birdhana     |               36 |           4 |
+| Birdhana     |               16 |           2 |
+| Birdhana     |               16 |           4 |
+| Birdhana     |               35 |           2 |
+| Birdhana     |               35 |           4 |
+| Birdhana     |               68 |           4 |
+| Birdhana     |               68 |           6 |
+| Cheher Kalan |               50 |           1 |
+| Cheher Kalan |               45 |         2.2 |
+| Cheher Kalan |               40 |           2 |
+| Cheher Kalan |               39 |           5 |
+| Cheher Kalan |               43 |           3 |
+| Birdhana     |               67 |           3 |
+| Cheher Kalan |               29 |           5 |
+| Cheher Kalan |               21 |         2.2 |
+| Cheher Kalan |               13 |           3 |
+| Khandrai     |               21 |           4 |
+| Khandrai     |               30 |           4 |
+| Khandrai     |               29 |           3 |
+| Birdhana     |               63 |           2 |
+| Birdhana     |               63 |           4 |
+| Birdhana     |               63 |           5 |
+| Birdhana     |               96 |           7 |
+| Birdhana     |               95 |           4 |
+| Khandrai     |                8 |           2 |
+| Khandrai     |               30 |           2 |
+| Khandrai     |               24 |           6 |
+| Khandrai     |               25 |           3 |
+| Khandrai     |               25 |           4 |
+| Cheher Kalan |               39 |           4 |
+| Cheher Kalan |               32 |           4 |
+| Cheher Kalan |               48 |           5 |
+| Khandrai     |                6 |           4 |
+| Khandrai     |                6 |           5 |
+| Khandrai     |               10 |           3 |
+| Khandrai     |               10 |           5 |
+| Gijji        |               87 |           4 |
+| Gijji        |              101 |           2 |
+| Gijji        |              106 |           1 |
+| Gijji        |              126 |           5 |
+| Gijji        |              154 |           2 |
+| Gijji        |              154 |           3 |
+| Gijji        |               85 |           4 |
+| Bhadas       |               76 |           2 |
+| Bhadas       |              194 |           1 |
+| Bhadas       |              198 |           1 |
+| Bhadas       |              199 |           1 |
+| Bhadas       |              201 |           1 |
+| Bhadas       |              207 |           1 |
+| Bhadas       |              215 |           1 |
+| Bhadas       |              215 |           2 |
 
 #+NAME: na-measurement-id
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -962,11 +748,20 @@
 | Jamalpur Shekhan |               51 |       4 |
 | Jamalpur Shekhan |               51 |       4 |
 | Jamalpur Shekhan |               51 |       3 |
-| Khandrai         |                7 |       3 |
-| Khandrai         |               32 |       3 |
+| Khandrai         |               31 |       1 |
 | Khandrai         |               38 |       3 |
-| Khandrai         |               38 |       3 |
-| Khandrai         |               39 |       4 |
+| Birdhana         |                5 |       3 |
+| Birdhana         |               12 |       3 |
+| Khandrai         |               33 |       3 |
+| Khandrai         |               36 |       1 |
+| Khandrai         |               36 |       3 |
+| Khandrai         |               36 |       3 |
+| Khandrai         |               44 |       7 |
+| Birdhana         |               16 |       1 |
+| Birdhana         |               24 |       4 |
+| Birdhana         |               24 |       4 |
+| Birdhana         |               24 |       4 |
+| Birdhana         |               24 |       4 |
 
 
 #+NAME: na-crop-operation-stage
@@ -979,7 +774,6 @@
 #+RESULTS: na-crop-operation-stage
 | village_name | household_number | crop_id |
 |--------------+------------------+---------|
-| Khandrai     |                7 |       3 |
 
 
 #+NAME: na-crop-operation-code
@@ -994,29 +788,686 @@
 |------------------+------------------+---------|
 | Jamalpur Shekhan |               12 |      24 |
 | Jamalpur Shekhan |               12 |      24 |
-| Khandrai         |                7 |       3 |
-| Khandrai         |               32 |       3 |
+| Khandrai         |               10 |       3 |
 | Khandrai         |               38 |       3 |
 | Khandrai         |               39 |       4 |
+| Birdhana         |                5 |       3 |
+| Birdhana         |               12 |       3 |
+
+
+#+NAME: na-extent-in-acres
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  t[crop,on=c(id="sno_id"),.(village_name,household_number,crop_number,Extent.in.acres)][is.na(Extent.in.acres)]
+#+END_SRC
+
+#+NAME: na-extent-in-acres-out
+#+CAPTION: Pawan to fix these cases where land is reported as NA
+#+RESULTS: na-extent-in-acres
+| village_name | household_number | crop_number | Extent.in.acres |
+|--------------+------------------+-------------+-----------------|
+| Cheher Kalan |                3 |           2 | nil             |
+| Birdhana     |               96 |           8 | nil             |
+| Birdhana     |               67 |           5 | nil             |
+| Cheher Kalan |               43 |           3 | nil             |
+| Birdhana     |               67 |           4 | nil             |
+| Cheher Kalan |               23 |         1.1 | nil             |
+| Khandrai     |               24 |           6 | nil             |
+| Cheher Kalan |               39 |           4 | nil             |
+
+* Boxplot
+
+#+NAME: boxplot-labour
+#+BEGIN_SRC R :results output graphics :file boxplot.png :width 1200 :height 800 
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+  merge(t,labouruse,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_id"))->p
+  p[,.(sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash,manual_machine_or_operator)]->p2
+  merge(p2,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
+  p2[labourunit=="Days",.(village_name,household_number,crop_id,crop_operation_stage,crop_operation_code,type_of_worker,labourunit,daily_hours,work_units,Extent.in.acres,manual_machine_or_operator,sno_id)]->p2
+  #p2[,.(diff1=length(manual_machine_or_operator=="Operator"),diff2=length(manual_machine_or_operator=="Machine"))]
+  p2[work_units!=999 & daily_hours!=999 & manual_machine_or_operator!="Machine",.(labour_time=sum(work_units*daily_hours)),by=,.(village_name,Extent.in.acres,crop_id,crop_operation_code,crop_operation_stage,type_of_worker,manual_machine_or_operator,sno_id)]->k
+  k[,.(labour_time=sum(labour_time)),by=,.(village_name,sno_id,crop_id,crop_operation_stage)]->k2
+  k[,.(acreage=(Extent.in.acres)),by=,.(village_name,sno_id,crop_id)]->k3
+  unique(k3)->k3
+  merge(k2,k3,by=c("village_name","sno_id","crop_id"))->a
+  a[,.(labour_use=sum(labour_time)/sum(acreage)),by=,.(village_name,sno_id,crop_id,crop_operation_stage)]->a
+  merge(a,code_crop,by.x="crop_id",by.y="id")->a
+  a[crop=="Paddy"|crop=="Wheat"|crop=="Barseem"]->a1
+  ggplot(a1,aes(x=crop_operation_stage,y=labour_use))->a1
+  a1+geom_boxplot()+scale_y_continuous(limits=c(0,1000))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+  labour.graph <- function(df, na.rm = TRUE, ...){
+
+    for (i in 1:27) {plot1 <- 
+                         ggplot(subset(a,as.numeric(crop_id)==1),
+                                aes(x=crop_operation_stage,y=labour_use)) +geom_boxplot()+scale_y_continuous(limits=c(0,500))
+                         plot1
+    }
+
+
+  ## }
+
+  ## labour.graph(a)
+
+#+END_SRC
+
+#+RESULTS: boxplot-labour
+[[file:boxplot.png]]
+
+#+NAME: Piece-rated
+#+BEGIN_SRC R :results output graphics :file boxplot.png :width 1200 :height 800 
+   household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+   merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+   merge(t,labouruse,by=c("sno_id","crop_id"))->p
+  merge(p,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
+  merge(p2,code_crop,by.x="crop_id",by.y="id")->a
+  a[village_name!="Khandrai"]->a
+  a[labourunit=="Days" & work_units==999,.(entries_blank=length(unique(sno_id))),by=.(crop,crop_operation_stage,crop_operation_code)]->m
+  a[labourunit=="Days" & work_units!=999,.(entries_filled=length(unique(sno_id))),by=.(crop,crop_operation_stage,crop_operation_code)]->m1
+  merge(m,m1,by=c("crop","crop_operation_stage","crop_operation_code"),all.x=TRUE)->j
+  j[entries_filled>9]->j1
+  p2[labourunit=="Days",.(village_name,household_number,crop_id,crop_operation_stage,crop_operation_code,type_of_worker,labourunit,daily_hours,work_units,Extent.in.acres,manual_machine_or_operator,sno_id)]->p2
+    p2[work_units!=999 & daily_hours!=999 & manual_machine_or_operator!="Machine",.(labour_time=sum(work_units*daily_hours)),by=,.(village_name,Extent.in.acres,crop_id,crop_operation_code,crop_operation_stage,type_of_worker,manual_machine_or_operator,sno_id)]->k
+    k[,.(labour_time=sum(labour_time)),by=,.(village_name,sno_id,crop_id,crop_operation_stage,crop_operation_code)]->k2
+    k[,.(acreage=(Extent.in.acres)),by=,.(village_name,sno_id,crop_id)]->k3
+    unique(k3)->k3
+    merge(k2,k3,by=c("village_name","sno_id","crop_id"))->a
+  a[,.(labour_use=sum(labour_time)/sum(acreage)),by=,.(village_name,sno_id,crop_id,crop_operation_stage,crop_operation_code)]->a
+  subset(a,village_name!="Khandrai")->a
+  merge(a,code_crop,by.x="crop_id",by.y="id")->a
+  merge(j1,a,by=c("crop","crop_operation_stage","crop_operation_code"),all.x=TRUE)->l
+
+
+  l[crop=="Cotton - Badi/Kapas"|crop=="Jowar"]->a1
+  ggplot(a1,aes(x=factor(crop_operation_code),y=labour_use,group=crop_operation_code))->a1
+  a1+geom_boxplot()+scale_y_continuous(limits=c(0,100))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   p2[type_of_worker=="Piece-rated workers"&labourunit=="Acre",.(per_acre_cost=total_payment_in_cash/work_units,sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash,manual_machine_or_operator)]->p2
+
+
+   merge(p2,code_crop,by.x="crop_id",by.y="id")->a
+   a[crop=="Paddy"|crop=="Wheat"|crop=="Barseem"]->a1
+   a1[,.(entries=length(unique(sno_id))),by=.(crop,crop_operation_stage)]->k
+   ggplot(a1,aes(x=crop_operation_stage,y=per_acre_cost))->a1
+   a1+geom_boxplot()+scale_y_continuous(limits=c(0,5000))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+   merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+   merge(t,labouruse,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_id"))->p
+   p[,.(sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash,manual_machine_or_operator,machine_hours)]->p2
+   merge(p2,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
+   p2[type_of_worker=="Machine labour",.(village_name,household_number,crop_id,crop_operation_stage,crop_operation_code,type_of_worker,labourunit,daily_hours,work_units,Extent.in.acres,manual_machine_or_operator,sno_id,machine_hours,total_payment_in_cash)]->p2
+   #p2[,.(diff1=length(manual_machine_or_operator=="Operator"),diff2=length(manual_machine_or_operator=="Machine"))]
+  p2[work_units!=999 & machine_hours!=999 & manual_machine_or_operator=="Machine" ,.(labour_time=sum(work_units*machine_hours)),by=,.(village_name,Extent.in.acres,crop_id,crop_operation_code,crop_operation_stage,type_of_worker,manual_machine_or_operator,sno_id)]->k
+   k[,.(labour_time=sum(labour_time)),by=,.(village_name,sno_id,crop_id,crop_operation_stage)]->k2
+   k[,.(acreage=(Extent.in.acres)),by=,.(village_name,sno_id,crop_id)]->k3
+   unique(k3)->k3
+   merge(k2,k3,by=c("village_name","sno_id","crop_id"))->a
+   a[,.(machine_labour_use=sum(labour_time)/sum(acreage)),by=,.(village_name,sno_id,crop_id,crop_operation_stage)]->a
+   merge(a,code_crop,by.x="crop_id",by.y="id")->a
+   a[crop=="Paddy"|crop=="Wheat"|crop=="Barseem"]->a1
+   ggplot(a1,aes(x=crop_operation_stage,y=machine_labour_use))->a1
+   a1+geom_boxplot()+scale_y_continuous(limits=c(0,300))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+
+
+
+#+END_SRC
+
+#+RESULTS: na-crop-operation-sta
+[[file:boxplot.png]]
+
+
+
+* Other entries
+
+#+NAME: na-sale-unit-id
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)][crop,on=c(id="sno_id")][crop_sale,on=c(id="crop_number_id")]->a
+
+
+
+  merge(t,crop_sale,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_number_id"),all.y=TRUE)->t
+  t[crop_sale,on=c(sno_id="id",crop_number_id="crop_id")]->a
+  t[crop_sale,on=c("sno_id"=id,"crop_number_id"=crop_id)]->a
+  t[crop_sale,on=c(id="sno_id",crop_id="crop_number_id")]->a
+
+
+
+
+  t[is.na(sale_unit_id),.(village_name,household_number,crop_id,sale_number)]->a
+#+END_SRC
+
+#+NAME: na-sale-unit-id
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+  merge(t,crop_sale,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_number_id"),all.x=TRUE)->t
+
+  t[is.na(sale_unit_id),.(village_name,household_number,crop_id,sale_number)]->a
+#+END_SRC
+#+NAME: Piece-rated
+#+BEGIN_SRC R :results output graphics :file boxplot.png :width 1200 :height 800 
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+  merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+  merge(t,crop_sale,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_number_id"),all.x=TRUE)->t
+  crop_sale[,.(crop_number_id,sale_number,Price_main_product,Sale_main_product,sale_commodity_id,sale_unit_id,sno_id)]->m
+
+
+
+
+  m[,.(sum(Sale_main_product)),by=.(sno_id,crop_number_id,sale_unit_id)]->m1
+
+
+
+
+  merge(t,labouruse,by=c("sno_id","crop_id"))->p
+  merge(p,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
+  merge(p2,code_crop,by.x="crop_id",by.y="id")->a
+  a[village_name!="Khandrai"]->a
+  a[labourunit=="Days" & work_units==999,.(entries_blank=length(unique(sno_id))),by=.(crop,crop_operation_stage,crop_operation_code)]->m
+  a[labourunit=="Days" & work_units!=999,.(entries_filled=length(unique(sno_id))),by=.(crop,crop_operation_stage,crop_operation_code)]->m1
+  merge(m,m1,by=c("crop","crop_operation_stage","crop_operation_code"),all.x=TRUE)->j
+  j[entries_filled>9]->j1
+  p2[labourunit=="Days",.(village_name,household_number,crop_id,crop_operation_stage,crop_operation_code,type_of_worker,labourunit,daily_hours,work_units,Extent.in.acres,manual_machine_or_operator,sno_id)]->p2
+    p2[work_units!=999 & daily_hours!=999 & manual_machine_or_operator!="Machine",.(labour_time=sum(work_units*daily_hours)),by=,.(village_name,Extent.in.acres,crop_id,crop_operation_code,crop_operation_stage,type_of_worker,manual_machine_or_operator,sno_id)]->k
+    k[,.(labour_time=sum(labour_time)),by=,.(village_name,sno_id,crop_id,crop_operation_stage,crop_operation_code)]->k2
+    k[,.(acreage=(Extent.in.acres)),by=,.(village_name,sno_id,crop_id)]->k3
+    unique(k3)->k3
+    merge(k2,k3,by=c("village_name","sno_id","crop_id"))->a
+  a[,.(labour_use=sum(labour_time)/sum(acreage)),by=,.(village_name,sno_id,crop_id,crop_operation_stage,crop_operation_code)]->a
+  subset(a,village_name!="Khandrai")->a
+  merge(a,code_crop,by.x="crop_id",by.y="id")->a
+  merge(j1,a,by=c("crop","crop_operation_stage","crop_operation_code"),all.x=TRUE)->l
+
+
+  l[crop=="Cotton - Badi/Kapas"|crop=="Jowar"]->a1
+  ggplot(a1,aes(x=factor(crop_operation_code),y=labour_use,group=crop_operation_code))->a1
+  a1+geom_boxplot()+scale_y_continuous(limits=c(0,100))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   p2[type_of_worker=="Piece-rated workers"&labourunit=="Acre",.(per_acre_cost=total_payment_in_cash/work_units,sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash,manual_machine_or_operator)]->p2
+
+
+   merge(p2,code_crop,by.x="crop_id",by.y="id")->a
+   a[crop=="Paddy"|crop=="Wheat"|crop=="Barseem"]->a1
+   a1[,.(entries=length(unique(sno_id))),by=.(crop,crop_operation_stage)]->k
+   ggplot(a1,aes(x=crop_operation_stage,y=per_acre_cost))->a1
+   a1+geom_boxplot()+scale_y_continuous(limits=c(0,5000))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+  household[villages,on=c(village_id="id")][,.(village_name,household_number,id)]->t
+   merge(crop,t,by.x="sno_id",by.y="id",all.x=TRUE)->t
+   merge(t,labouruse,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_id"))->p
+   p[,.(sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash,manual_machine_or_operator,machine_hours)]->p2
+   merge(p2,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
+   p2[type_of_worker=="Machine labour",.(village_name,household_number,crop_id,crop_operation_stage,crop_operation_code,type_of_worker,labourunit,daily_hours,work_units,Extent.in.acres,manual_machine_or_operator,sno_id,machine_hours,total_payment_in_cash)]->p2
+   #p2[,.(diff1=length(manual_machine_or_operator=="Operator"),diff2=length(manual_machine_or_operator=="Machine"))]
+  p2[work_units!=999 & machine_hours!=999 & manual_machine_or_operator=="Machine" ,.(labour_time=sum(work_units*machine_hours)),by=,.(village_name,Extent.in.acres,crop_id,crop_operation_code,crop_operation_stage,type_of_worker,manual_machine_or_operator,sno_id)]->k
+   k[,.(labour_time=sum(labour_time)),by=,.(village_name,sno_id,crop_id,crop_operation_stage)]->k2
+   k[,.(acreage=(Extent.in.acres)),by=,.(village_name,sno_id,crop_id)]->k3
+   unique(k3)->k3
+   merge(k2,k3,by=c("village_name","sno_id","crop_id"))->a
+   a[,.(machine_labour_use=sum(labour_time)/sum(acreage)),by=,.(village_name,sno_id,crop_id,crop_operation_stage)]->a
+   merge(a,code_crop,by.x="crop_id",by.y="id")->a
+   a[crop=="Paddy"|crop=="Wheat"|crop=="Barseem"]->a1
+   ggplot(a1,aes(x=crop_operation_stage,y=machine_labour_use))->a1
+   a1+geom_boxplot()+scale_y_continuous(limits=c(0,300))+facet_grid(~crop)+theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+
+
+
+#+END_SRC
+
+
+
 
 * Basic Tables                                                     :noexport:
 #+NAME: number_of_households
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-  household[villages,.(Village=village_name,"Number of households"=length(household_number)),by=.EACHI,on=c(village_id="id")][,village_id :=NULL]
+  household[villages, .(Village=village_name,"Number of households"=length(household_number)),by=.EACHI,on=c(village_id="id")][,village_id :=NULL]
+#+END_SRC
+
+#+NAME: number_of_households
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][castes,on=c(caste_tribe_id="id")]->household
+
+
 #+END_SRC
 
 #+NAME: hhd_no_out
 #+CAPTION: Number of households, survey data, 2018-19
 #+RESULTS: number_of_households
-| Village          | Number of households |
-|------------------+----------------------|
-| Khandrai         |                   72 |
-| Cheher Kalan     |                   54 |
-| Jamalpur Shekhan |                   78 |
-| Birdhana         |                  103 |
-| Gijji            |                  154 |
-| Bhadas           |                  225 |
 
 
 
 
+* Householdwise table
+
+#+NAME: number_of_households_table
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[villages,on=c(village_id="id")][crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,.(area=Extent.in.acres,main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,crop_number,crop)][prices_main,on=c(village_name="village_name",crop="crop")][,total:=main+by]->p
+  p[is.na(unit_main)]
+
+  ## #+ Prices adjustment
+   crop_sale[crop,on=c(crop_number_id="id")][code_crop,on=c(crop_id="id")][household,on=c(sno_id="id")][villages,on=c(village_id="id")][!is.na(Price_main_product)&!is.na(sale_unit_id),.(Price_main_product,sale_unit_id),by=.(village_name,crop)]->k
+  k[sale_unit_id==10,.(median_price=median(Price_main_product)),by=.(village_name,crop,sale_unit_id)]->prices_main
+
+
+  ifelse(crop$main_unit_id==1,Production_main_product/100,)
+
+
+
+
+
+
+   ## crop_sale[crop,on=c(crop_number_id="id")][code_crop,on=c(crop_id="id")][sale_item,on=c(sale_commodity_id="id")][household,on=c(sno_id="id")][villages,on=c(village_id="id")][!is.na(Price_main_product)&!is.na(sale_unit_id)&crop_commodity=="Hay/Straw",.(Price_main_product,sale_unit_id),by=.(village_name,crop)]
+  ## ## crop_sale[crop,on=c(crop_number_id="id"),mult="all"]->b
+
+
+
+
+  ## merge(household,villages,by.x="village_id",by.y="id")->t
+  ## t[,.(village_name,household_number,id,caste_tribe_id)]->t
+  ## merge(crop,t,by.x="sno_id",by.y="id",all.y=TRUE)->t
+  ## merge(t,input,by.x="id",by.y="cropping_pattern_schedule_production_and_sales_id")->t
+
+  ## merge(t,cropinput,by.x="input_use_for_crops_id",by.y="id")->t
+  ## merge(t,input_type,by.x="input_type_id",by.y="id",all.x=TRUE)->t
+  ## merge(t,input_category,by.x="input_category_id",by.y="id",all.x=TRUE)->t
+#+END_SRC
+
+
+
+* Amit's tables
+#+NAME: number_of_schedules_labour
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  merge(villages,household,by.x="id",by.y="village_id",all.y=TRUE)->t
+  t[,.(village_name,household_number,id.y)]->t
+  merge(t,occupations,by.x="id.y",by.y="sno_id",all.y=TRUE)->t
+  t[occupation_category_id==5|occupation_category_id==6|occupation_category_id==7|occupation_category_id==44|occupation_category_id==45,.(village_name,household_number)]->y
+  y[village_name=="Bhadas"]->y1
+unique(y1)
+
+#+END_SRC
+
+#+RESULTS: number_of_schedules_labour
+| village_name | household_number |
+|--------------+------------------|
+| Bhadas       |                1 |
+| Bhadas       |                4 |
+| Bhadas       |               24 |
+| Bhadas       |               25 |
+| Bhadas       |               35 |
+| Bhadas       |               37 |
+| Bhadas       |               41 |
+| Bhadas       |               42 |
+| Bhadas       |               44 |
+| Bhadas       |               54 |
+| Bhadas       |               60 |
+| Bhadas       |               63 |
+| Bhadas       |               64 |
+| Bhadas       |               65 |
+| Bhadas       |               66 |
+| Bhadas       |               67 |
+| Bhadas       |               75 |
+| Bhadas       |               81 |
+| Bhadas       |               95 |
+| Bhadas       |               96 |
+| Bhadas       |               98 |
+| Bhadas       |               99 |
+| Bhadas       |              100 |
+| Bhadas       |              103 |
+| Bhadas       |              105 |
+| Bhadas       |              106 |
+| Bhadas       |              107 |
+| Bhadas       |              109 |
+| Bhadas       |              112 |
+| Bhadas       |              115 |
+| Bhadas       |              116 |
+| Bhadas       |              118 |
+| Bhadas       |              119 |
+| Bhadas       |              124 |
+| Bhadas       |              126 |
+| Bhadas       |              132 |
+| Bhadas       |              134 |
+| Bhadas       |              140 |
+| Bhadas       |              142 |
+| Bhadas       |              143 |
+| Bhadas       |              145 |
+| Bhadas       |              149 |
+| Bhadas       |              150 |
+| Bhadas       |              151 |
+| Bhadas       |              153 |
+| Bhadas       |              155 |
+| Bhadas       |              156 |
+| Bhadas       |              158 |
+| Bhadas       |              161 |
+| Bhadas       |              163 |
+| Bhadas       |              164 |
+| Bhadas       |              165 |
+| Bhadas       |              166 |
+| Bhadas       |              174 |
+| Bhadas       |              176 |
+| Bhadas       |              177 |
+| Bhadas       |              178 |
+| Bhadas       |              181 |
+| Bhadas       |              182 |
+| Bhadas       |              183 |
+| Bhadas       |              190 |
+| Bhadas       |              196 |
+| Bhadas       |              202 |
+| Bhadas       |              203 |
+| Bhadas       |              204 |
+| Bhadas       |              215 |
+| Bhadas       |              220 |
+| Bhadas       |              222 |
+| Bhadas       |              225 |
+* Unit correction
+#+NAME: number_of_households_table1
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+ 
+ household[villages,on=c(village_id="id")][crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,.(main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,crop)][,total:=main+by]->p
+  p[is.na(unit_main)]
+
+#+END_SRC
+
+#+RESULTS: number_of_households_table1
+| village_name     | household_number | crop                     | main | by  | unit_main | unit_by | total |
+|------------------+------------------+--------------------------+------+-----+-----------+---------+-------|
+| Jamalpur Shekhan |               71 | Cotton - Badi/Kapas      | 20   | nil | nil       | nil     | nil   |
+| Birdhana         |               84 | Cotton - Badi/Kapas      | 24   | nil | nil       | nil     | nil   |
+| Birdhana         |               91 | Cotton - Badi/Kapas      | 7    | 20  | nil       | nil     | 27    |
+| Birdhana         |               27 | Mustard                  | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               29 | Mustard                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               27 | Wheat                    | 45   | 30  | nil       | nil     | 75    |
+| Jamalpur Shekhan |               50 | Wheat                    | 16   | 18  | nil       | nil     | 34    |
+| Jamalpur Shekhan |               41 | Wheat                    | 40   | 20  | nil       | nil     | 60    |
+| Birdhana         |               91 | Wheat                    | 40   | 60  | nil       | nil     | 100   |
+| Birdhana         |               96 | Wheat                    | 344  | 216 | nil       | nil     | 560   |
+| Birdhana         |               88 | Wheat                    | 210  | 250 | nil       | nil     | 460   |
+| Birdhana         |               84 | Wheat                    | 420  | 252 | nil       | nil     | 672   |
+| Birdhana         |               58 | Wheat                    | 260  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Wheat                    | 130  | nil | nil       | nil     | nil   |
+| Birdhana         |               14 | Wheat                    | 130  | 130 | nil       | nil     | 260   |
+| Birdhana         |               16 | Wheat                    | 36   | 36  | nil       | nil     | 72    |
+| Cheher Kalan     |               29 | Wheat                    | 30   | 30  | nil       | nil     | 60    |
+| Cheher Kalan     |               21 | Wheat                    | 28   | 28  | nil       | nil     | 56    |
+| Cheher Kalan     |               23 | Wheat                    | 32   | 32  | nil       | nil     | 64    |
+| Gijji            |              106 | Wheat                    | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               76 | Wheat                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               33 | Paddy                    | 60   | 16  | nil       | nil     | 76    |
+| Jamalpur Shekhan |               41 | Paddy                    | 16   | 6   | nil       | nil     | 22    |
+| Birdhana         |                1 | Paddy                    | 255  | nil | nil       | nil     | nil   |
+| Khandrai         |                9 | Bajra                    | 3.2  | nil | nil       | nil     | nil   |
+| Khandrai         |               24 | Bajra                    | 8    | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               50 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               56 | Bajra                    | 0    | 0   | nil       | nil     | 0     |
+| Gijji            |               87 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               47 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               99 | Bajra                    | 0    | 0   | nil       | nil     | 0     |
+| Bhadas           |              215 | Bajra                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Maize                    | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               34 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               33 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               35 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               27 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                5 | Barseem                  | 25   | nil | nil       | nil     | nil   |
+| Birdhana         |               86 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               78 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               85 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               77 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               84 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               88 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               89 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               80 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               97 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               17 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               58 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               14 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               34 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               16 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               35 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               68 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               30 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               63 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               96 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               95 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               25 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               10 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               44 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               47 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              154 | Barseem                  | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Vegetables               | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               21 | Vegetables               | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               24 | Vegetables               | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               92 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               92 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              152 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |                3 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              153 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               49 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               10 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               30 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               30 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               77 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              147 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               55 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               57 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               33 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               86 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               74 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               68 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               56 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               56 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               29 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               13 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               10 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               10 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               11 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               25 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |                8 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               12 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               28 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               28 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               32 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               32 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               59 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               24 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               24 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               83 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               87 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               74 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              154 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               94 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               94 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               99 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              108 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              126 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              126 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              139 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              150 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               80 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               80 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               71 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               71 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               85 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              128 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              128 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              129 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              145 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               12 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               23 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               23 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               32 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               34 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               40 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               68 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               70 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               73 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               77 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               77 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               78 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               86 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               91 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               91 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               93 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               94 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |               97 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              101 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              101 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              103 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              112 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              113 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              114 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              114 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              110 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              167 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              179 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              185 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              186 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              189 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              192 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              193 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              197 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              198 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              199 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              200 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              201 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              201 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              207 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              207 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              208 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              208 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              210 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              219 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              224 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              225 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               45 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               90 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              102 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              144 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              149 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              149 | Fallow                   | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               81 | Moong                    | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               87 | Chana                    | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               67 | Eucalyptus               | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               45 | Jayee                    | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               21 | Jayee                    | nil  | nil | nil       | nil     | nil   |
+| nil              |              nil | Wheat+Mustard            | nil  | nil | nil       | nil     | nil   |
+| nil              |              nil | Barseem+Vegetables       | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              149 | Jantar                   | 0    | 0   | nil       | nil     | 0     |
+| Khandrai         |               35 | Sugarcane (planted)      | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               44 | Sugarcane (first ratoon) | 1200 | nil | nil       | nil     | nil   |
+| Khandrai         |               34 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               33 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               27 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               35 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               29 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               12 | Jowar fodder             | 21   | nil | nil       | nil     | nil   |
+| Jamalpur Shekhan |               50 | Jowar fodder             | 36   | nil | nil       | nil     | nil   |
+| Birdhana         |                1 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |                5 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               78 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               85 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               84 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               88 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               89 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               96 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               80 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               97 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               95 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               17 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               58 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               34 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               16 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               35 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               40 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               39 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               43 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Birdhana         |               63 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |                8 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               30 | Jowar fodder             | nil  | 200 | nil       | 10      | nil   |
+| Khandrai         |               25 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Cheher Kalan     |               48 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               10 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               44 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Khandrai         |               47 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              101 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              126 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |              154 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Gijji            |               85 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              194 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              198 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              199 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              201 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              207 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| Bhadas           |              215 | Jowar fodder             | nil  | nil | nil       | nil     | nil   |
+| nil              |              nil | Ber                      | nil  | nil | nil       | nil     | nil   |
