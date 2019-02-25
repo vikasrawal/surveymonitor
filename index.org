@@ -60,8 +60,10 @@ source("sserconnect.R")
   data.table(dbReadTable(surveypg,"ruralsurvey_current_ownership_holdings"))->ownershipholding
   data.table(dbReadTable(surveypg,"ruralsurvey_irrigation_ownership_holdings"))->irrigation
   sampledesign[,id:=NULL]
+  household[sampledesign,on=c(village_id="village_id",stratum_number="stratum"]->household
   merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum"),all.x=T)->household
   household[is.na(multiplier),multiplier:=1]
+  dbReadTable(surveypg,"ruralsurvey_access_to_food_in_school_or_anganwadi")->anganwadi
   #dbDisconnect(surveypg)
 
 #+END_SRC
