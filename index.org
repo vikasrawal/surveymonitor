@@ -28,7 +28,7 @@
     tabhead$V1[tabhead$rank!=1]<-""
     ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
     transpose(tabhead[,c(1:2)])->tabhead
-    names(tabhead)->names(d1)[c(ncol(d1)-ncol(tabhead)+1:ncol(tabhead))]
+    names(tabhead)->names(d1)[c((ncol(t1)-ncol(tabhead)+1):ncol(d1))]
     as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
     levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
     names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
