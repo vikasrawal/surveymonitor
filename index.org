@@ -16,26 +16,27 @@
 
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
-    options(width=170)
-    require(RPostgreSQL)
-    require(ggplot2)
-    require(data.table)
-    addhead<-function(d1,v1,v2) {
-      CJ(levels(v1),levels(v2))->tabhead
-      c(1:nrow(tabhead))->tabhead$rank
-      ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
-      ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
-      tabhead$V1[tabhead$rank!=1]<-""
-      ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
-      transpose(tabhead[,c(1:2)])->tabhead
-      as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
-      levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
-      names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
-      "{{{hlmacro}}}"->tabhead2[2,ncol(tabhead2)]
-       tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
-      ## tabhead2[2,1]<-""
-      tabhead2
-    }
+  options(width=170)
+  require(RPostgreSQL)
+  require(ggplot2)
+  require(data.table)
+  addhead<-function(d1,v1,v2) {
+    CJ(levels(v1),levels(v2))->tabhead
+    c(1:nrow(tabhead))->tabhead$rank
+    ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
+    ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
+    tabhead$V1[tabhead$rank!=1]<-""
+    ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
+    transpose(tabhead[,c(1:2)])->tabhead
+    names(tabhead)->names(d1)[c(ncol(d1)-ncol(tabhead)+1:ncol(tabhead))]
+    as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
+    levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
+    names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
+    "{{{hlmacro}}}"->tabhead2[2,ncol(tabhead2)]
+     tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
+    ## tabhead2[2,1]<-""
+    tabhead2
+  }
 
 #+END_SRC
 
@@ -683,24 +684,24 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+NAME: occupation
 #+CAPTION: Proportion of population engaged in different occupations, persons aged 7 years and above, by sex and village (per cent)
 #+RESULTS: occupation-table1-code
-| भिरढाणा ढाणियाँ_M | <2colc>खंदरई |     | <2colc>गिज्जी |     | <2colc>चहर कलां |     | <2colc>जमालपुर शेखां |     | <2colc>भादस |     | <2colc>भिरढाणा |     | <2colc>भिरढाणा ढाणियाँ |     | nil                                          |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |
-|    {{{hlmacro}}} | F           | M   | F            | M   | F              | M   | F                 | M   | F           | M   | F              | M   | F                     | M   | nil                                          |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |  nil |
-|                0 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Landlord                                     |    0 |  0.1 |    0 |  3.7 |    0 |  0.4 |    0 |  0.1 |    0 |    0 |  0.2 |    0 |    0 |
-|             59.6 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Peasant                                      | 13.6 | 28.4 | 23.7 | 47.5 | 12.5 | 32.6 |  8.9 | 16.2 | 18.6 | 26.4 | 30.7 | 34.8 | 33.3 |
-|             40.4 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Tending animals                              | 35.8 | 26.8 | 50.3 | 33.3 | 48.1 | 22.7 | 31.5 | 16.9 | 44.5 | 28.8 | 53.5 | 47.1 |   60 |
-|               17 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Agricultural labour                          | 15.4 | 12.9 |   13 | 23.3 | 22.6 |   16 | 25.8 | 18.2 | 12.8 |  7.8 | 25.4 | 12.6 | 13.3 |
-|             14.9 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Non-agricultural manual labour               |  6.2 | 27.3 | 11.5 |  7.4 |  9.6 | 23.2 |   16 | 26.1 |  7.3 | 16.2 |  1.7 | 19.3 |  4.4 |
-|              2.1 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Salaried government employee                 |  3.7 |  4.6 |  1.1 |  8.1 |  0.9 |  2.2 |  1.3 |  1.8 |  1.5 |  7.2 |  2.4 |    2 |    0 |
-|              8.5 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Salaried private employee                    |  0.3 |  8.7 |    0 |  2.9 |    1 |   13 |    0 | 10.4 |  1.1 |   24 |  2.4 | 26.7 |    0 |
-|              2.1 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Self-employed, business owner                |  4.9 |   16 |  0.5 |  5.6 |  0.9 |   23 |    6 | 21.7 |  1.5 | 11.7 |  0.5 | 14.6 |    0 |
-|                0 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Caste occupations/artisans                   |  2.2 |  1.1 |    1 |  7.7 |  5.1 |  3.3 |  4.3 |  7.5 |  1.1 |  3.6 |    0 |  3.4 |    0 |
-|             14.9 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Recipient of pension/remittance              | 15.5 | 11.4 |   19 | 28.7 | 16.6 |  8.6 | 14.5 |  9.1 | 20.1 | 15.3 |  9.8 |  4.9 |  4.4 |
-|                0 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Unemployed                                   |  1.4 |  0.6 |    0 |  8.2 |    0 |  0.1 |    0 |  0.3 |  0.4 |  3.6 |  0.2 |  3.6 |    0 |
-|             21.3 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Student                                      | 21.5 | 16.9 | 18.4 |    8 | 12.6 | 16.9 | 12.7 | 17.8 | 14.6 | 18.3 |  7.4 | 15.5 | 15.6 |
-|              2.1 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Housework                                    | 77.1 |  0.7 | 51.3 |  0.6 | 74.7 |  1.8 | 54.4 |  1.2 | 87.6 |  2.7 | 90.4 |    2 | 77.8 |
-|                0 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Unable to work because of age or poor health |  2.5 |  7.8 |  4.4 |  5.8 |  0.4 |    3 |  1.6 |  3.3 |  0.4 |  5.1 |  0.7 |  2.9 |    0 |
-|                0 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | Other                                        |    0 |    0 |    0 |    0 |    0 |    0 |    0 |    0 |    0 |    0 |    0 |    0 |    0 |
-|                0 | nil         | nil | nil          | nil | nil            | nil | nil               | nil | nil         | nil | nil            | nil | nil                   | nil | nil                                          |  1.5 |  3.4 |    4 |  1.1 |  0.5 |  1.8 |  0.3 |  2.4 |  0.7 |  0.3 |    0 |  0.9 |    0 |
+| विभिन्न प्रकार का काम                          | <2colc>खंदरई |      | <2colc>गिज्जी |      | <2colc>चहर कलां |      | <2colc>जमालपुर शेखां |      | <2colc>भादस |      | <2colc>भिरढाणा |      | <2colc>भिरढाणा ढाणियाँ |      |
+| {{{hlmacro}}}                                |           F |    M |            F |    M |              F |    M |                 F |    M |           F |    M |              F |    M |                     F |    M |
+| Landlord                                     |           0 |  0.1 |            0 |  3.7 |              0 |  0.4 |                 0 |  0.1 |           0 |    0 |            0.2 |    0 |                     0 |    0 |
+| Peasant                                      |        13.6 | 28.4 |         23.7 | 47.5 |           12.5 | 32.6 |               8.9 | 16.2 |        18.6 | 26.4 |           30.7 | 34.8 |                  33.3 | 59.6 |
+| Tending animals                              |        35.8 | 26.8 |         50.3 | 33.3 |           48.1 | 22.7 |              31.5 | 16.9 |        44.5 | 28.8 |           53.5 | 47.1 |                    60 | 40.4 |
+| Agricultural labour                          |        15.4 | 12.9 |           13 | 23.3 |           22.6 |   16 |              25.8 | 18.2 |        12.8 |  7.8 |           25.4 | 12.6 |                  13.3 |   17 |
+| Non-agricultural manual labour               |         6.2 | 27.3 |         11.5 |  7.4 |            9.6 | 23.2 |                16 | 26.1 |         7.3 | 16.2 |            1.7 | 19.3 |                   4.4 | 14.9 |
+| Salaried government employee                 |         3.7 |  4.6 |          1.1 |  8.1 |            0.9 |  2.2 |               1.3 |  1.8 |         1.5 |  7.2 |            2.4 |    2 |                     0 |  2.1 |
+| Salaried private employee                    |         0.3 |  8.7 |            0 |  2.9 |              1 |   13 |                 0 | 10.4 |         1.1 |   24 |            2.4 | 26.7 |                     0 |  8.5 |
+| Self-employed, business owner                |         4.9 |   16 |          0.5 |  5.6 |            0.9 |   23 |                 6 | 21.7 |         1.5 | 11.7 |            0.5 | 14.6 |                     0 |  2.1 |
+| Caste occupations/artisans                   |         2.2 |  1.1 |            1 |  7.7 |            5.1 |  3.3 |               4.3 |  7.5 |         1.1 |  3.6 |              0 |  3.4 |                     0 |    0 |
+| Recipient of pension/remittance              |        15.5 | 11.4 |           19 | 28.7 |           16.6 |  8.6 |              14.5 |  9.1 |        20.1 | 15.3 |            9.8 |  4.9 |                   4.4 | 14.9 |
+| Unemployed                                   |         1.4 |  0.6 |            0 |  8.2 |              0 |  0.1 |                 0 |  0.3 |         0.4 |  3.6 |            0.2 |  3.6 |                     0 |    0 |
+| Student                                      |        21.5 | 16.9 |         18.4 |    8 |           12.6 | 16.9 |              12.7 | 17.8 |        14.6 | 18.3 |            7.4 | 15.5 |                  15.6 | 21.3 |
+| Housework                                    |        77.1 |  0.7 |         51.3 |  0.6 |           74.7 |  1.8 |              54.4 |  1.2 |        87.6 |  2.7 |           90.4 |    2 |                  77.8 |  2.1 |
+| Unable to work because of age or poor health |         2.5 |  7.8 |          4.4 |  5.8 |            0.4 |    3 |               1.6 |  3.3 |         0.4 |  5.1 |            0.7 |  2.9 |                     0 |    0 |
+| Other                                        |           0 |    0 |            0 |    0 |              0 |    0 |                 0 |    0 |           0 |    0 |              0 |    0 |                     0 |    0 |
+| nil                                          |         1.5 |  3.4 |            4 |  1.1 |            0.5 |  1.8 |               0.3 |  2.4 |         0.7 |  0.3 |              0 |  0.9 |                     0 |    0 |
 
 ***** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
 
