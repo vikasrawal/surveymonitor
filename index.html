@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-01-09 Wed 14:07 -->
+<!-- 2019-02-26 Tue 05:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Data Entry and Analysis of Data from the Haryana Surveys</title>
@@ -161,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -192,7 +205,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2018 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -241,42 +254,42 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge2ba8aa">1. Data Entry</a>
+<li><a href="#orgd7a1c9b">1. Data Entry</a>
 <ul>
-<li><a href="#org94a73cf">1.1. Overall Decisions Regarding Data Entry</a></li>
-<li><a href="#orgc96573a">1.2. Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
-<li><a href="#org871b3c6">1.3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
+<li><a href="#org5f070fe">1.1. Overall Decisions Regarding Data Entry</a></li>
+<li><a href="#org1b93fec">1.2. Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></a></li>
+<li><a href="#orgd01ef25">1.3. Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></a>
 <ul>
-<li><a href="#org34703b0">1.3.1. Tests to be done</a></li>
-<li><a href="#orgdf2ece8">1.3.2. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
-<li><a href="#org156846e">1.3.3. Data categorisation issues</a></li>
-<li><a href="#org77cd8da">1.3.4. Abnormal asset prices</a></li>
+<li><a href="#org46c7113">1.3.1. Tests to be done</a></li>
+<li><a href="#org1f6dbcb">1.3.2. <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</a></li>
+<li><a href="#orgda624f9">1.3.3. Data categorisation issues</a></li>
+<li><a href="#org10ba0d1">1.3.4. Abnormal asset prices</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org990458b">2. Analysis of Data</a>
+<li><a href="#orge37584d">2. Analysis of Data</a>
 <ul>
-<li><a href="#org31a0b80">2.1. Information for Data Users</a>
+<li><a href="#orgadbd142">2.1. Information for Data Users</a>
 <ul>
-<li><a href="#orgc1ef3fa">2.1.1. Using this repo</a></li>
-<li><a href="#orge23ebe9">2.1.2. Sample design and multiplier</a></li>
-<li><a href="#org477a014">2.1.3. Birdhana dhanis</a></li>
+<li><a href="#org3866094">2.1.1. Using this repo</a></li>
+<li><a href="#org8886fdd">2.1.2. Sample design and multiplier</a></li>
+<li><a href="#org97655cd">2.1.3. Birdhana dhanis</a></li>
 </ul>
 </li>
-<li><a href="#org02dd3c7">2.2. Emerging patterns</a>
+<li><a href="#org9b21b78">2.2. Emerging patterns</a>
 <ul>
-<li><a href="#orgcc493c6">2.2.1. Caste Composition</a></li>
-<li><a href="#org2b4819a">2.2.2. Occupations</a></li>
-<li><a href="#org0dc45b2">2.2.3. Land relations</a></li>
-<li><a href="#org1e95112">2.2.4. Food security</a></li>
-<li><a href="#orgb247384">2.2.5. Cropping pattern, Production, Input use</a></li>
-<li><a href="#org4895058">2.2.6. Labour Deployment</a></li>
-<li><a href="#org750c016">2.2.7. Employment</a></li>
-<li><a href="#org0107781">2.2.8. Livestock</a></li>
-<li><a href="#org045cddd">2.2.9. Housing and Sanitation</a></li>
-<li><a href="#orgb571d00">2.2.10. Health and Education</a></li>
-<li><a href="#orgd820b0f">2.2.11. Assets and Indebtedness</a></li>
+<li><a href="#orgbfc1d40">2.2.1. Caste Composition</a></li>
+<li><a href="#org5f30b6f">2.2.2. Occupations</a></li>
+<li><a href="#org9ecfa44">2.2.3. Land relations</a></li>
+<li><a href="#org04539c7">2.2.4. Food security</a></li>
+<li><a href="#org2faff04">2.2.5. Cropping pattern, Production, Input use</a></li>
+<li><a href="#org7cec231">2.2.6. Labour Deployment</a></li>
+<li><a href="#orge592abe">2.2.7. Employment</a></li>
+<li><a href="#org84bd9dd">2.2.8. Livestock</a></li>
+<li><a href="#org25af51a">2.2.9. Housing and Sanitation</a></li>
+<li><a href="#orgc30a097">2.2.10. Health and Education</a></li>
+<li><a href="#org8b7518d">2.2.11. Assets and Indebtedness</a></li>
 </ul>
 </li>
 </ul>
@@ -286,13 +299,12 @@ for the JavaScript code in this tag.
 </div>
 
 
-
-<div id="outline-container-orge2ba8aa" class="outline-2">
-<h2 id="orge2ba8aa"><span class="section-number-2">1</span> Data Entry</h2>
+<div id="outline-container-orgd7a1c9b" class="outline-2">
+<h2 id="orgd7a1c9b"><span class="section-number-2">1</span> Data Entry</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org94a73cf" class="outline-3">
-<h3 id="org94a73cf"><span class="section-number-3">1.1</span> Overall Decisions Regarding Data Entry</h3>
+<div id="outline-container-org5f070fe" class="outline-3">
+<h3 id="org5f070fe"><span class="section-number-3">1.1</span> Overall Decisions Regarding Data Entry</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 This section records any overall decisions that are taken.
@@ -300,54 +312,54 @@ This section records any overall decisions that are taken.
 </div>
 
 <ol class="org-ol">
-<li><a id="org7de4767"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
-<li><a id="org62e9c68"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
+<li><a id="orgecccd4b"></a><span class="todo TODO">TODO</span> Decide on how to deal with ranges<br /></li>
+<li><a id="org33838a8"></a><span class="todo TODO">TODO</span> Fix social group for each caste<br />
 <div class="outline-text-6" id="text-1-1-0-0-2">
 <ul class="org-ul">
 <li>Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.</li>
 </ul>
 </div>
 </li>
-<li><a id="org68dfd21"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
+<li><a id="orga3e51d4"></a><span class="done DONE">DONE</span> Standard values of assets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span><br />
 <div class="outline-text-6" id="text-1-1-0-0-3">
 </div>
 <ol class="org-ol">
-<li><a id="orge8418e4"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
+<li><a id="org304f376"></a>Compute unit price from available data, and provide a table of summary statistics for each type of asset<br /></li>
 </ol>
 </li>
 </ol>
 </div>
 
-<div id="outline-container-orgc96573a" class="outline-3">
-<h3 id="orgc96573a"><span class="section-number-3">1.2</span> Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h3>
+<div id="outline-container-org1b93fec" class="outline-3">
+<h3 id="org1b93fec"><span class="section-number-3">1.2</span> Database Corrections&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Vikas">Vikas</span></span></h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
 <ol class="org-ol">
-<li><a id="orgcdce756"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
-<li><a id="org40fbf39"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
-<li><a id="orga32c2df"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
-<li><a id="org916e3d9"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
-<li><a id="org634c464"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
+<li><a id="org3f7b20a"></a><span class="todo TODO">TODO</span> FIES filter on names<br /></li>
+<li><a id="org1dab50c"></a><span class="todo TODO">TODO</span> Comments on FIES questions<br /></li>
+<li><a id="org12af436"></a><span class="todo TODO">TODO</span> Crops filter<br /></li>
+<li><a id="org3143fc8"></a><span class="done DONE">DONE</span> CodePlaces<br /></li>
+<li><a id="org13ba0b7"></a><span class="done DONE">DONE</span> Make a block/page-wise table of data operators<br />
 <div class="outline-text-7" id="text-1-2-0-0-0-5">
 </div>
 </li>
 
-<li><a id="org45a0b11"></a>Type of contract in labouring out should be foreign key<br /></li>
+<li><a id="org1d9ccd1"></a>Type of contract in labouring out should be foreign key<br /></li>
 
-<li><a id="org12a495f"></a>Labour and Input Use<br /></li>
+<li><a id="org6146724"></a>Labour and Input Use<br /></li>
 </ol>
 </div>
 
-<div id="outline-container-org871b3c6" class="outline-3">
-<h3 id="org871b3c6"><span class="section-number-3">1.3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h3>
+<div id="outline-container-orgd01ef25" class="outline-3">
+<h3 id="orgd01ef25"><span class="section-number-3">1.3</span> Inconsistencies in Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Sonia">Sonia</span>&#xa0;<span class="Jesim">Jesim</span></span></h3>
 <div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-org34703b0" class="outline-4">
-<h4 id="org34703b0"><span class="section-number-4">1.3.1</span> Tests to be done</h4>
+<div id="outline-container-org46c7113" class="outline-4">
+<h4 id="org46c7113"><span class="section-number-4">1.3.1</span> Tests to be done</h4>
 <div class="outline-text-4" id="text-1-3-1">
 </div>
 <ol class="org-ol">
-<li><a id="orgbe29795"></a>Land, cropping pattern, production, input use<br />
+<li><a id="org25d2da8"></a>Land, cropping pattern, production, input use<br />
 <div class="outline-text-5" id="text-1-3-1-1">
 <p>
 <a href="labour-database.html">Prachi&rsquo;s Corrections for Input Use and Labour</a>
@@ -355,37 +367,37 @@ This section records any overall decisions that are taken.
 </div>
 
 <ol class="org-ol">
-<li><a id="org42ac32f"></a>Match operational holding<br /></li>
-<li><a id="org80455a3"></a>Boxplots of per acre yield for different crops<br /></li>
-<li><a id="org85a8453"></a>Boxplots of seed use, fertiliser use and total expense on PPC per acre for different crops<br /></li>
+<li><a id="orgbb289dd"></a>Match operational holding<br /></li>
+<li><a id="org372f92a"></a>Boxplots of per acre yield for different crops<br /></li>
+<li><a id="org9520313"></a>Boxplots of seed use, fertiliser use and total expense on PPC per acre for different crops<br /></li>
 </ol>
 </li>
 
-<li><a id="orge1769be"></a>Labour Deployment<br />
+<li><a id="org828c209"></a>Labour Deployment<br />
 <ol class="org-ol">
-<li><a id="org5512bf0"></a>Check total labour use by crops, and labour use at the primary level of disaggregation of crop operations.<br /></li>
+<li><a id="org1354c9a"></a>Check total labour use by crops, and labour use at the primary level of disaggregation of crop operations.<br /></li>
 </ol>
 </li>
-<li><a id="org139049e"></a>Animal resources<br /></li>
-<li><a id="org1556258"></a>Employment<br />
+<li><a id="org355a296"></a>Animal resources<br /></li>
+<li><a id="org189b72d"></a>Employment<br />
 <ol class="org-ol">
-<li><a id="org24bfc37"></a>For casual workers, look at the distribution of total days of employment<br /></li>
+<li><a id="orge93edea"></a>For casual workers, look at the distribution of total days of employment<br /></li>
 </ol>
 </li>
-<li><a id="org0397995"></a>Incomes<br /></li>
-<li><a id="orgeb55eb7"></a>Housing, sanitation, drinking water<br /></li>
-<li><a id="orgd621e1a"></a>Health<br /></li>
-<li><a id="orgbbac051"></a>Education<br /></li>
+<li><a id="org3b7d63b"></a>Incomes<br /></li>
+<li><a id="org1f3515b"></a>Housing, sanitation, drinking water<br /></li>
+<li><a id="orgfb03815"></a>Health<br /></li>
+<li><a id="orgf2c14d7"></a>Education<br /></li>
 </ol>
 </div>
-<div id="outline-container-orgdf2ece8" class="outline-4">
-<h4 id="orgdf2ece8"><span class="section-number-4">1.3.2</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h4>
+<div id="outline-container-org1f6dbcb" class="outline-4">
+<h4 id="org1f6dbcb"><span class="section-number-4">1.3.2</span> <span class="todo TODO">TODO</span> Households for which data are missing for critical variables</h4>
 <div class="outline-text-4" id="text-1-3-2">
 <p>
 This section lists data gaps that are critical. Sonia to attend to these, in consultation with Jesim, where required.
 </p>
 
-<table id="org01c6a5d" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgeecd945" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 1:</span> These persons have no information on occupations</caption>
 
 <colgroup>
@@ -459,7 +471,7 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </tbody>
 </table>
 
-<table id="orgfba7715" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgd818411" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 2:</span> Households with data missing for critical variables</caption>
 
 <colgroup>
@@ -623,21 +635,21 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-org156846e" class="outline-4">
-<h4 id="org156846e"><span class="section-number-4">1.3.3</span> Data categorisation issues</h4>
+<div id="outline-container-orgda624f9" class="outline-4">
+<h4 id="orgda624f9"><span class="section-number-4">1.3.3</span> Data categorisation issues</h4>
 <div class="outline-text-4" id="text-1-3-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgf675865"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
-<li><a id="orgd2c3575"></a><span class="done DONE">DONE</span> Jhimar and Dhinvar are same<br /></li>
-<li><a id="orgf9351e3"></a><span class="done DONE">DONE</span> Lohar categorised as both BC and SC<br /></li>
-<li><a id="org49c1e35"></a><span class="todo TODO">TODO</span> Change occupation category &ldquo;unemployed&rdquo; to &ldquo;Not engaged in any specified activity&rdquo;<br /></li>
+<li><a id="org0c4e1f1"></a><span class="todo TODO">TODO</span> Majhabi Sikh and Rai Sikh are perhaps same<br /></li>
+<li><a id="org5ff3de0"></a><span class="done DONE">DONE</span> Jhimar and Dhinvar are same<br /></li>
+<li><a id="org0ca805d"></a><span class="done DONE">DONE</span> Lohar categorised as both BC and SC<br /></li>
+<li><a id="org2a249dc"></a><span class="todo TODO">TODO</span> Change occupation category &ldquo;unemployed&rdquo; to &ldquo;Not engaged in any specified activity&rdquo;<br /></li>
 </ol>
 </div>
-<div id="outline-container-org77cd8da" class="outline-4">
-<h4 id="org77cd8da"><span class="section-number-4">1.3.4</span> Abnormal asset prices</h4>
+<div id="outline-container-org10ba0d1" class="outline-4">
+<h4 id="org10ba0d1"><span class="section-number-4">1.3.4</span> Abnormal asset prices</h4>
 <div class="outline-text-4" id="text-1-3-4">
-<table id="org0de551c" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org33877ca" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 3:</span> Abnormal values of asset prices</caption>
 
 <colgroup>
@@ -697,22 +709,22 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 
 <ol class="org-ol">
-<li><a id="org7b2541e"></a>Match homestead land with housing information. Check if value of house and land are recorded.<br /></li>
+<li><a id="orgfff4ac7"></a>Match homestead land with housing information. Check if value of house and land are recorded.<br /></li>
 </ol>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org990458b" class="outline-2">
-<h2 id="org990458b"><span class="section-number-2">2</span> Analysis of Data</h2>
+<div id="outline-container-orge37584d" class="outline-2">
+<h2 id="orge37584d"><span class="section-number-2">2</span> Analysis of Data</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org31a0b80" class="outline-3">
-<h3 id="org31a0b80"><span class="section-number-3">2.1</span> Information for Data Users</h3>
+<div id="outline-container-orgadbd142" class="outline-3">
+<h3 id="orgadbd142"><span class="section-number-3">2.1</span> Information for Data Users</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
-<div id="outline-container-orgc1ef3fa" class="outline-4">
-<h4 id="orgc1ef3fa"><span class="section-number-4">2.1.1</span> Using this repo</h4>
+<div id="outline-container-org3866094" class="outline-4">
+<h4 id="org3866094"><span class="section-number-4">2.1.1</span> Using this repo</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <ul class="org-ul">
 <li>Please make a git branch for your work, and push it upstream when you want something merged with the master branch.</li>
@@ -721,8 +733,8 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-orge23ebe9" class="outline-4">
-<h4 id="orge23ebe9"><span class="section-number-4">2.1.2</span> Sample design and multiplier</h4>
+<div id="outline-container-org8886fdd" class="outline-4">
+<h4 id="org8886fdd"><span class="section-number-4">2.1.2</span> Sample design and multiplier</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <ul class="org-ul">
 <li>Database Table &rsquo;ruralsurvey_sampledesign&rsquo; contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.</li>
@@ -730,8 +742,8 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-<div id="outline-container-org477a014" class="outline-4">
-<h4 id="org477a014"><span class="section-number-4">2.1.3</span> Birdhana dhanis</h4>
+<div id="outline-container-org97655cd" class="outline-4">
+<h4 id="org97655cd"><span class="section-number-4">2.1.3</span> Birdhana dhanis</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <ul class="org-ul">
 <li>For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for &ldquo;Birdhana&rdquo; and &ldquo;Birdhana dhanis&rdquo;.</li>
@@ -740,17 +752,16 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 </div>
 </div>
 
-
-<div id="outline-container-org02dd3c7" class="outline-3">
-<h3 id="org02dd3c7"><span class="section-number-3">2.2</span> Emerging patterns</h3>
+<div id="outline-container-org9b21b78" class="outline-3">
+<h3 id="org9b21b78"><span class="section-number-3">2.2</span> Emerging patterns</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 </p>
 </div>
 
-<div id="outline-container-orgcc493c6" class="outline-4">
-<h4 id="orgcc493c6"><span class="section-number-4">2.2.1</span> Caste Composition</h4>
+<div id="outline-container-orgbfc1d40" class="outline-4">
+<h4 id="orgbfc1d40"><span class="section-number-4">2.2.1</span> Caste Composition</h4>
 <div class="outline-text-4" id="text-2-2-1">
 <p>
 Dhanak and Chamar are the main dalit castes in Khandrai.
@@ -761,7 +772,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 </p>
 
 
-<table id="org6504c98" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org9d6c88a" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 4:</span> Proportion of households belonging to different social groups, by village (per cent)</caption>
 
 <colgroup>
@@ -817,7 +828,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 </tbody>
 </table>
 
-<table id="orgb04d9b7" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org73fa349" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 5:</span> Caste composition of households in the villages</caption>
 
 <colgroup>
@@ -1211,12 +1222,12 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 </div>
 
 <ol class="org-ol">
-<li><a id="orgd8e4fa0"></a><span class="todo TODO">TODO</span> Social group composition to be checked with the Census numbers<br /></li>
+<li><a id="org2701c4f"></a><span class="todo TODO">TODO</span> Social group composition to be checked with the Census numbers<br /></li>
 </ol>
 </div>
 
-<div id="outline-container-org2b4819a" class="outline-4">
-<h4 id="org2b4819a"><span class="section-number-4">2.2.2</span> Occupations</h4>
+<div id="outline-container-org5f30b6f" class="outline-4">
+<h4 id="org5f30b6f"><span class="section-number-4">2.2.2</span> Occupations</h4>
 <div class="outline-text-4" id="text-2-2-2">
 <ul class="org-ul">
 <li>More peasants identified among men than among women. Is it because women do not participate in farming operations? Tasks in which female labour was deployed have become mechanised/chemicalised? What are the main tasks in which women continue to work? Women routinely participate in guarding of fields and in delivering food for make workers on the farm. Delivering food on the farm is a major task that involves spending an hour or two every day. Is this accounted for anywhere? We perhaps need some case studies on this.</li>
@@ -1226,7 +1237,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 </ul>
 
 
-<table id="orge0cdadf" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb631090" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 6:</span> Proportion of population engaged in different occupations, persons aged 7 years and above, by sex and village (per cent)</caption>
 
 <colgroup>
@@ -1534,49 +1545,253 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 </div>
 
 <ol class="org-ol">
-<li><a id="org2ae82b6"></a><span class="todo TODO">TODO</span> Check if all women who participate in labour on household operational holding are indeed recorded as peasants.<br /></li>
+<li><a id="orga16465b"></a><span class="todo TODO">TODO</span> Check if all women who participate in labour on household operational holding are indeed recorded as peasants.<br /></li>
 </ol>
 </div>
 
-<div id="outline-container-org0dc45b2" class="outline-4">
-<h4 id="org0dc45b2"><span class="section-number-4">2.2.3</span> Land relations</h4>
+<div id="outline-container-org9ecfa44" class="outline-4">
+<h4 id="org9ecfa44"><span class="section-number-4">2.2.3</span> Land relations</h4>
 <div class="outline-text-4" id="text-2-2-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgeef1c87"></a><a href="land-contracts.html">Analysis of land contracts</a><br /></li>
+<li><a id="org0c71f4d"></a>भूमिहीनता और जमीन के वितरण में असमानता<br />
+<div class="outline-text-5" id="text-2-2-3-1">
+<ul class="org-ul">
+<li>57 प्रतिशत परिवारों के पास निजी खेती की जमीन नहीं है; NSS के आँकड़ों के हिसाब से यह सिर्फ़ 28 प्रतिशत है।</li>
+<li>सबसे बड़े 20 प्रतिशत किसानों के पास 78 प्रतिशत जमीन है; NSS के आँकड़ों के हिसाब से यह 70 प्रतिशत है।</li>
+<li>सबसे बड़े  20 प्रतिशत किसानों के पास जोत का 86 प्रतिशत है; NSS के आँकड़ों के हिसाब से यह 67 प्रतिशत है।</li>
+</ul>
+
+
+<table id="org82aecff" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 7:</span> जमीन के स्वामित्व और जोत का वितरण (प्रतिशत)</caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">वर्ग</th>
+<th scope="col" class="org-right">जमीन के स्वामित्व में हिस्सा</th>
+<th scope="col" class="org-right">कुल जोत में हिस्सा</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">सबसे कम जमीन वाले 20% परिवार</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">20&#x2013;40%</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">40&#x2013;60%</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">60&#x2013;80%</td>
+<td class="org-right">19</td>
+<td class="org-right">12</td>
+</tr>
+
+<tr>
+<td class="org-left">सबसे ज्यादा जमीन वाले 20% परिवार</td>
+<td class="org-right">78</td>
+<td class="org-right">86</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+
+
+<li><a id="org8c04c07"></a>जमीन और जाति का सम्बन्ध<br />
+<div class="outline-text-5" id="text-2-2-3-2">
+<ul class="org-ul">
+<li>दलित, मुस्लिम और पिछड़ी जातियों में भूमिहीनता उच्च जाति के परिवारों के मुकाबले बहुत ज्यादा है।</li>
+</ul>
+
+<table id="org5ba4bbd" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 8:</span> विभिन्न सामाजिक/जातिय समूहों में भूमिहीन परिवारों का अनुपात (प्रतिशत)</caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">जाति</th>
+<th scope="col" class="org-right">भूमिहीन परिवारों का अनुपात</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">दलित</td>
+<td class="org-right">82</td>
+</tr>
+
+<tr>
+<td class="org-left">मुस्लिम</td>
+<td class="org-right">71</td>
+</tr>
+
+<tr>
+<td class="org-left">पिछड़ी जातियाँ</td>
+<td class="org-right">50</td>
+</tr>
+
+<tr>
+<td class="org-left">अन्य</td>
+<td class="org-right">9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+
+<li><a id="org016571f"></a>सिंचाई<br />
+<div class="outline-text-5" id="text-2-2-3-3">
+<ul class="org-ul">
+<li>न केवल बड़े किसानों के पास ज्यादा जमीन है, उनके पास सबसे अच्छी जमीन है।</li>
+<li>उदाहरण के तौर पर, लगभग सभी गाँवों में, बड़े किसानों की जमीनों में ट्यूबवेल से सिंचित जमीन का अनुपात छोटे किसानों के मुकाबले ज्यादा है।</li>
+</ul>
+
+<table id="orgcb1f8f1" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 9:</span> ट्यूबवेल से सिंचित जमीन का कुल निजी जमीन में अनुपात (प्रतिशत)</caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">वर</th>
+<th scope="col" class="org-right">खंदरई</th>
+<th scope="col" class="org-right">चहर कलां</th>
+<th scope="col" class="org-right">भिरढाणा</th>
+<th scope="col" class="org-left">जमालपुर शेखां</th>
+<th scope="col" class="org-right">गिज्जी</th>
+<th scope="col" class="org-right">भादस</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">सबसे कम जमीन वाले 20% परिवार</td>
+<td class="org-right">---</td>
+<td class="org-right">0</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
+<td class="org-right">---</td>
+<td class="org-right">---</td>
+</tr>
+
+<tr>
+<td class="org-left">20&#x2013;40%</td>
+<td class="org-right">---</td>
+<td class="org-right">42</td>
+<td class="org-right">---</td>
+<td class="org-left">---</td>
+<td class="org-right">0</td>
+<td class="org-right">---</td>
+</tr>
+
+<tr>
+<td class="org-left">40&#x2013;60%</td>
+<td class="org-right">0</td>
+<td class="org-right">64</td>
+<td class="org-right">0</td>
+<td class="org-left">---</td>
+<td class="org-right">86</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">60&#x2013;80%</td>
+<td class="org-right">74</td>
+<td class="org-right">78</td>
+<td class="org-right">100</td>
+<td class="org-left">0</td>
+<td class="org-right">88</td>
+<td class="org-right">43</td>
+</tr>
+
+<tr>
+<td class="org-left">सबसे ज्यादा जमीन वाले 20% परिवार</td>
+<td class="org-right">96</td>
+<td class="org-right">85</td>
+<td class="org-right">83</td>
+<td class="org-left">97</td>
+<td class="org-right">100</td>
+<td class="org-right">48</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+
+
+<li><a id="orgda03a08"></a>बटाई और ठेके के प्रकार<br /></li>
+
+<li><a id="org027ba68"></a>Burden of rent<br /></li>
+
+
+<li><a id="org37b7792"></a><a href="land-contracts.html">Analysis of land contracts</a><br /></li>
 </ol>
 </div>
-<div id="outline-container-org1e95112" class="outline-4">
-<h4 id="org1e95112"><span class="section-number-4">2.2.4</span> Food security</h4>
+<div id="outline-container-org04539c7" class="outline-4">
+<h4 id="org04539c7"><span class="section-number-4">2.2.4</span> Food security</h4>
 </div>
-<div id="outline-container-orgb247384" class="outline-4">
-<h4 id="orgb247384"><span class="section-number-4">2.2.5</span> Cropping pattern, Production, Input use</h4>
+<div id="outline-container-org2faff04" class="outline-4">
+<h4 id="org2faff04"><span class="section-number-4">2.2.5</span> Cropping pattern, Production, Input use</h4>
 </div>
-<div id="outline-container-org4895058" class="outline-4">
-<h4 id="org4895058"><span class="section-number-4">2.2.6</span> Labour Deployment</h4>
+<div id="outline-container-org7cec231" class="outline-4">
+<h4 id="org7cec231"><span class="section-number-4">2.2.6</span> Labour Deployment</h4>
 </div>
-<div id="outline-container-org750c016" class="outline-4">
-<h4 id="org750c016"><span class="section-number-4">2.2.7</span> Employment</h4>
+<div id="outline-container-orge592abe" class="outline-4">
+<h4 id="orge592abe"><span class="section-number-4">2.2.7</span> Employment</h4>
 </div>
-<div id="outline-container-org0107781" class="outline-4">
-<h4 id="org0107781"><span class="section-number-4">2.2.8</span> Livestock</h4>
+<div id="outline-container-org84bd9dd" class="outline-4">
+<h4 id="org84bd9dd"><span class="section-number-4">2.2.8</span> Livestock</h4>
 </div>
-<div id="outline-container-org045cddd" class="outline-4">
-<h4 id="org045cddd"><span class="section-number-4">2.2.9</span> Housing and Sanitation</h4>
+<div id="outline-container-org25af51a" class="outline-4">
+<h4 id="org25af51a"><span class="section-number-4">2.2.9</span> Housing and Sanitation</h4>
 </div>
-<div id="outline-container-orgb571d00" class="outline-4">
-<h4 id="orgb571d00"><span class="section-number-4">2.2.10</span> Health and Education</h4>
+<div id="outline-container-orgc30a097" class="outline-4">
+<h4 id="orgc30a097"><span class="section-number-4">2.2.10</span> Health and Education</h4>
 </div>
-<div id="outline-container-orgd820b0f" class="outline-4">
-<h4 id="orgd820b0f"><span class="section-number-4">2.2.11</span> Assets and Indebtedness</h4>
+<div id="outline-container-org8b7518d" class="outline-4">
+<h4 id="org8b7518d"><span class="section-number-4">2.2.11</span> Assets and Indebtedness</h4>
 <div class="outline-text-4" id="text-2-2-11">
 <p>
 Get unit prices
 </p>
 
 
-<table id="orgd1d006a" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<caption class="t-above"><span class="table-number">Table 7:</span> Summary statistics for unit prices of assets</caption>
+<table id="org929a145" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 10:</span> Summary statistics for unit prices of assets</caption>
 
 <colgroup>
 <col  class="org-left" />
@@ -2195,7 +2410,7 @@ Get unit prices
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: SSER</p>
-<p class="date">Created: 2019-01-09 Wed 14:07</p>
+<p class="date">Created: 2019-02-26 Tue 05:39</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
