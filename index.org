@@ -48,8 +48,7 @@ source("~/vikascloud/surveymonitor/sserconnect.R")
 
 #+NAME: read-data-code
 #+BEGIN_SRC R :results silent :exports none
-  dbListTables(surveypg)->t
-
+  #dbListTables(surveypg)->t
   data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
   data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
   data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
@@ -71,6 +70,7 @@ source("~/vikascloud/surveymonitor/sserconnect.R")
   setkey(hhid,id)
   factor(hhid$village_name,levels=c("Khandrai","Cheher Kalan","Birdhana","Jamalpur Shekhan","Gijji","Bhadas"))->hhid$village_name
   levels(hhid$village_name)<-c("खंदरई","चहर कलां","भिरढाणा","जमालपुर शेखां","गिज्जी","भादस")
+  hhid[village_name=="भिरढाणा" & stratum_number==10,village_name:="भिरढाणा ढाणियाँ"]
   #dbDisconnect(surveypg)
 #+END_SRC
 
@@ -669,10 +669,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   ##household[,c(1,2,3,26,38)]->t1
   copy(hhid)->t1
   merge(member,t1,by.x="sno_id",by.y="id")->t1
-  ##merge(t1,villages,by.x="village_id",by.y="id")->t1
-  t1[village_name=="भिरढाणा" & stratum_number==10,village_name:="भिरढाणा ढाणियाँ"]
   t1[as.numeric(age)>=15,.(population=sum(multiplier)),keyby=.(village_name,sex)]->t1
-  occupations[village_name=="भिरढाणा" & stratum_number==10,village_name:="भिरढाणा ढाणियाँ"]
   occupations[as.numeric(age)>=15,.(numberofworkers=sum(multiplier)),keyby=.(village_name,sex,occupation_category)]->t
   merge(t,t1,by=c("village_name","sex")) ->t
   round(t$numberofworkers*100/t$population,1)->t$numberofworkers
