@@ -469,27 +469,27 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 
 ***** Match homestead land with housing information. Check if value of house and land are recorded.
 
-* Analysis of Data
-** Information for Data Users
+* Information for Data Users
 
-*** Using this repo
+** Using this repo
 
 + Please make a git branch for your work, and push it upstream when you want something merged with the master branch.
 + The master branch shows up on the surveymonitor website. Vikas merges the branches into master. If needed, notify him to do so.
 
-*** Sample design and multiplier
+** Sample design and multiplier
 
 + Database Table 'ruralsurvey_sampledesign' contains the multipliers. Merge household table with ruralsurvey_sampledesign using stratum_number field, and then merge it with any other database table to get the multipliers.
 
-*** Birdhana dhanis
+** Birdhana dhanis
 
 + For all analysis, Birdhana dhani sample (Village Birdhana, Stratum number 10) should be treated separately from Birdhana village. Since the two were sampled from different sample frames, with the total number of households in Dhanis not being known, we do not yet have a way of creating a population estimate. This needs to be discussed. For the moment, all estimates should be made separately for "Birdhana" and "Birdhana dhanis".
 
-** Emerging patterns
+*
+* Analysis of Data
 
 This section will provide a compilation of tables and graphs on different aspects of social and economic conditions in the village.
 
-*** Caste Composition
+** Caste Composition
 
 Dhanak and Chamar are the main dalit castes in Khandrai.
 
@@ -521,14 +521,14 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+RESULTS: social-group-composition-code
 | सामाजिक समुदाय | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ | गिज्जी | भादस | सभी गाँव | हरियाणा (Census, 2011) |
 |---------------+------+---------+---------+----------------+------------+-------+------+---------+------------------------|
-| दलित          |   49 |    11.5 |    60.6 |           64.6 |       53.9 |  40.5 | 13.1 |    47.9 | 22.5                   |
-| मुस्लिम         |    0 |       0 |     1.7 |              0 |          0 |     0 | 72.9 |     4.6 | 8.6                    |
-| पिछड़ी जातियाँ  |   10 |      12 |    24.3 |           10.8 |       34.9 |  26.1 | 13.9 |    23.6 | nil                    |
-| अन्य           | 41.1 |    76.4 |    13.4 |           24.6 |       11.1 |  33.4 |  0.1 |    23.9 | nil                    |
+| दलित          |   49 |    11.5 |    60.6 |           64.6 |       53.9 |  33.7 |  3.9 |    39.9 | 22.5                   |
+| मुस्लिम         |    0 |       0 |     1.7 |              0 |          0 |     0 | 89.5 |    17.1 | 8.6                    |
+| पिछड़ी जातियाँ  |   10 |      12 |    24.3 |           10.8 |       34.9 |  17.3 |  6.6 |    20.2 | nil                    |
+| अन्य           | 41.1 |    76.4 |    13.4 |           24.6 |       11.1 |  48.9 |    0 |    22.8 | nil                    |
 
-**** TODO Social group composition to be checked with the Census numbers
+*** TODO Social group composition to be checked with the Census numbers
 
-*** Detailed Caste Table                                         :noexport:
+** Detailed Caste Table                                           :noexport:
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -556,65 +556,65 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+RESULTS: caste-composition-code
 | सामाजिक समुदाय | जाति       | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ | गिज्जी | भादस |
 |---------------+------------+------+---------+---------+----------------+------------+-------+------|
-| दलित          | बैरागी      |    0 |       0 |       0 |              0 |          0 |     3 |    0 |
-| दलित          | बालमीक     |    4 |       0 |       0 |              0 |        131 |     9 |    8 |
+| दलित          | बैरागी      |    0 |       0 |       0 |              0 |          0 |     9 |    0 |
+| दलित          | बालमीक     |    4 |       0 |       0 |              0 |        131 |    27 |    9 |
 | दलित          | बावरिया    |    4 |       0 |       0 |              0 |          0 |     0 |    0 |
 | दलित          | बाज़ीगर     |    0 |       0 |      31 |              0 |        111 |     0 |    0 |
-| दलित          | चमार       |   70 |      44 |     119 |              5 |        174 |    22 |    0 |
-| दलित          | धानक       |  256 |      28 |     108 |              1 |          0 |    26 |    0 |
-| दलित          | जाट        |    0 |       0 |       0 |              0 |          0 |     1 |    0 |
-| दलित          | कोली       |    0 |       0 |       0 |              0 |          0 |     0 |   20 |
+| दलित          | चमार       |   70 |      44 |     119 |              5 |        174 |    66 |    0 |
+| दलित          | धानक       |  256 |      28 |     108 |              1 |          0 |   123 |    0 |
+| दलित          | जाट        |    0 |       0 |       0 |              0 |          0 |     7 |    0 |
+| दलित          | कोली       |    0 |       0 |       0 |              0 |          0 |     0 |   21 |
 | दलित          | मजहबी सिख  |    0 |       0 |       0 |              1 |          0 |     0 |    0 |
 | दलित          | मीना       |    0 |       0 |       0 |              1 |          0 |     0 |    0 |
 | दलित          | नायक       |    0 |       0 |      31 |              1 |          0 |     0 |    0 |
 | दलित          | ओड         |    0 |       0 |      31 |              2 |        509 |     0 |    0 |
 | दलित          | राय सिख    |    0 |       0 |     571 |              4 |          0 |     0 |    0 |
-| दलित          | सैनी        |    0 |       0 |       0 |              0 |          0 |     0 |    4 |
-| मुस्लिम         | फ़कीर       |    0 |       0 |       0 |              0 |          0 |     0 |    9 |
-| मुस्लिम         | जोगी       |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
-| मुस्लिम         | कुम्हार      |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
-| मुस्लिम         | लोहार      |    0 |       0 |      32 |              0 |          1 |     0 |    8 |
-| मुस्लिम         | मेओ         |    0 |       0 |       0 |              0 |          0 |     0 |   69 |
+| दलित          | सैनी        |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
+| मुस्लिम         | फ़कीर       |    0 |       0 |       0 |              0 |          0 |     0 |   10 |
+| मुस्लिम         | जोगी       |    0 |       0 |       0 |              0 |          0 |     0 |    9 |
+| मुस्लिम         | कुम्हार      |    0 |       0 |       0 |              0 |          0 |     0 |    5 |
+| मुस्लिम         | लोहार      |    0 |       0 |      32 |              0 |          1 |     0 |   30 |
+| मुस्लिम         | मेओ         |    0 |       0 |       0 |              0 |          0 |     0 |  696 |
 | मुस्लिम         | मिरासी     |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
-| मुस्लिम         | मियाँ       |    0 |       0 |       0 |              0 |          0 |     0 |   22 |
+| मुस्लिम         | मियाँ       |    0 |       0 |       0 |              0 |          0 |     0 |   43 |
 | मुस्लिम         | नाई        |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
 | मुस्लिम         | कुरेशी       |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
-| मुस्लिम         | सैनी        |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
-| मुस्लिम         | सक्का       |    0 |       0 |       0 |              0 |          0 |     0 |   15 |
-| मुस्लिम         | तेली        |    0 |       0 |       0 |              0 |          0 |     0 |   11 |
-| पिछड़ी जातियाँ  | बैरागी      |    0 |       0 |       0 |              0 |          0 |    18 |    0 |
+| मुस्लिम         | सैनी        |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
+| मुस्लिम         | सक्का       |    0 |       0 |       0 |              0 |          0 |     0 |   27 |
+| मुस्लिम         | तेली        |    0 |       0 |       0 |              0 |          0 |     0 |   22 |
+| पिछड़ी जातियाँ  | बैरागी      |    0 |       0 |       0 |              0 |          0 |    55 |    0 |
 | पिछड़ी जातियाँ  | बनिया      |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
-| पिछड़ी जातियाँ  | भड़भूजा      |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
+| पिछड़ी जातियाँ  | भड़भूजा      |    0 |       0 |       0 |              0 |          0 |     0 |    9 |
 | पिछड़ी जातियाँ  | बत्रा सिख   |    0 |       0 |       0 |              0 |          1 |     0 |    0 |
-| पिछड़ी जातियाँ  | छिप्पी      |    0 |       0 |       0 |              0 |          0 |     5 |    0 |
+| पिछड़ी जातियाँ  | छिप्पी      |    0 |       0 |       0 |              0 |          0 |    15 |    0 |
 | पिछड़ी जातियाँ  | धोबी       |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
-| पिछड़ी जातियाँ  | झीमर       |   47 |       0 |      31 |              0 |          0 |     1 |    0 |
+| पिछड़ी जातियाँ  | झीमर       |   47 |       0 |      31 |              0 |          0 |     3 |    0 |
 | पिछड़ी जातियाँ  | जोगी       |    4 |       0 |       0 |              0 |          0 |     0 |    1 |
 | पिछड़ी जातियाँ  | कम्बोज      |    0 |       0 |      68 |              0 |         37 |     0 |    0 |
 | पिछड़ी जातियाँ  | कम्बोज सिख  |    0 |       0 |       0 |              0 |         11 |     0 |    0 |
-| पिछड़ी जातियाँ  | खाती       |    9 |      30 |       0 |              0 |         18 |     8 |    0 |
-| पिछड़ी जातियाँ  | कुम्हार      |   14 |      10 |      31 |              0 |          0 |     6 |    9 |
+| पिछड़ी जातियाँ  | खाती       |    9 |      30 |       0 |              0 |         18 |    24 |    0 |
+| पिछड़ी जातियाँ  | कुम्हार      |   14 |      10 |      31 |              0 |          0 |    18 |   20 |
 | पिछड़ी जातियाँ  | लोधी       |    0 |       0 |       0 |              1 |          0 |     0 |    0 |
-| पिछड़ी जातियाँ  | लोहार      |    0 |       5 |       0 |              0 |          0 |     2 |    1 |
+| पिछड़ी जातियाँ  | लोहार      |    0 |       5 |       0 |              0 |          0 |     6 |    4 |
 | पिछड़ी जातियाँ  | माली       |    0 |       0 |      31 |              0 |          0 |     0 |    0 |
-| पिछड़ी जातियाँ  | मनिहार     |    0 |       0 |       0 |              0 |          0 |     1 |    0 |
-| पिछड़ी जातियाँ  | मेओ         |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
+| पिछड़ी जातियाँ  | मनिहार     |    0 |       0 |       0 |              0 |          0 |     3 |    0 |
+| पिछड़ी जातियाँ  | मेओ         |    0 |       0 |       0 |              0 |          0 |     0 |   10 |
 | पिछड़ी जातियाँ  | नाई        |    0 |      25 |      62 |              0 |         55 |     0 |    0 |
 | पिछड़ी जातियाँ  | रेबारी      |    0 |       0 |     253 |              1 |          0 |     0 |    0 |
-| पिछड़ी जातियाँ  | सैनी        |    0 |       0 |       0 |              0 |        377 |     0 |   12 |
-| पिछड़ी जातियाँ  | सक्का       |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
+| पिछड़ी जातियाँ  | सैनी        |    0 |       0 |       0 |              0 |        377 |     0 |   25 |
+| पिछड़ी जातियाँ  | सक्का       |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
 | पिछड़ी जातियाँ  | तेली        |    0 |       0 |       1 |              0 |          0 |     0 |    0 |
 | अन्य           | बनिया      |    0 |       9 |      31 |              0 |          0 |     0 |    1 |
 | अन्य           | बिशनोई     |    0 |       0 |      63 |              3 |          0 |     0 |    0 |
 | अन्य           | ब्राह्मण     |    4 |      14 |       0 |              0 |          0 |     0 |    0 |
 | अन्य           | गर्ग        |    0 |       0 |       0 |              0 |         11 |     0 |    0 |
-| अन्य           | जाट        |  322 |     423 |      56 |              4 |         22 |    52 |    0 |
+| अन्य           | जाट        |  322 |     423 |      56 |              4 |         22 |   346 |    0 |
 | अन्य           | जट सिख     |    0 |       0 |       0 |              0 |         76 |     0 |    0 |
 | अन्य           | खाती       |    0 |       0 |       0 |              0 |         29 |     0 |    0 |
-| अन्य           | मेहता/अरोड़ा |    0 |       0 |      37 |              0 |         24 |     0 |    0 |
+| अन्य           | मेहता/अरोड़ा |    0 |       0 |      36 |              0 |         24 |     0 |    0 |
 | अन्य           | सुनार       |    0 |       3 |       5 |              0 |          0 |     0 |    0 |
 
-*** Occupations
+** Occupations
 
 + More peasants identified among men than among women. Is it because women do not participate in farming operations? Tasks in which female labour was deployed have become mechanised/chemicalised? What are the main tasks in which women continue to work? Women routinely participate in guarding of fields and in delivering food for make workers on the farm. Delivering food on the farm is a major task that involves spending an hour or two every day. Is this accounted for anywhere? We perhaps need some case studies on this.
 + More women participating in maintenance of animal resources than participating in farm operations on household operational holdings. More women participate in maintenance of animal resources than men, though participation of men is far from being negligible.
@@ -720,31 +720,31 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+NAME: occupation
 #+CAPTION: Proportion of population engaged in different occupations, persons aged 15 years and above, by sex and village (per cent)
 #+RESULTS: occupation-table1-code
-| विभिन्न प्रकार का काम                 | <2colc>खंदरई |      | <2colc>चहर कलां |      | <2colc>भिरढाणा |      | <2colc>भिरढाणा ढाणियाँ |      | <2colc>जमालपुर शेखां |      | <2colc>गिज्जी |      | <2colc>भादस |      |
+| विभिन्न प्रकार का काम                 | <2colc>खंदरई |      | <2colc>चहड़ कलां |      | <2colc>भिरढाणा |      | <2colc>भिरढाणा ढाणियाँ |      | <2colc>जमालपुर शेखाँ |      | <2colc>गिज्जी |      | <2colc>भादस |      |
 | {{{hlmacro}}}                       |       महिला |  पुरुष |          महिला |  पुरुष |          महिला |  पुरुष |                 महिला |  पुरुष |             महिला |  पुरुष |        महिला |  पुरुष |       महिला |  पुरुष |
-| लैंडलॉर्ड                              |           0 |  0.1 |              0 |  3.7 |              0 |  0.4 |                     0 |  0.1 |                 0 |    0 |          0.2 |    0 |           0 |    0 |
-| किसान                               |        13.6 | 28.4 |           23.7 | 47.5 |           12.5 | 32.6 |                   8.9 | 16.2 |              18.6 | 26.4 |         30.7 | 34.8 |        33.3 | 59.6 |
-| पशुपालन                              |        35.8 | 26.8 |           50.3 | 33.3 |           48.1 | 22.7 |                  31.5 | 16.9 |              44.5 | 28.8 |         53.5 | 47.1 |          60 | 40.4 |
-| खेत मज़दूरी                            |        15.4 | 12.9 |             13 | 23.3 |           22.6 |   16 |                  25.8 | 18.2 |              12.8 |  7.8 |         25.4 | 12.6 |        13.3 |   17 |
-| गैर-खेती मज़दूरी                        |         6.2 | 27.3 |           11.5 |  7.4 |            9.6 | 23.2 |                    16 | 26.1 |               7.3 | 16.2 |          1.7 | 19.3 |         4.4 | 14.9 |
-| सरकारी नौकरी                        |         3.7 |  4.6 |            1.1 |  8.1 |            0.9 |  2.2 |                   1.3 |  1.8 |               1.5 |  7.2 |          2.4 |    2 |           0 |  2.1 |
-| प्राईवेट नौकरी                        |         0.3 |  8.7 |              0 |  2.9 |              1 |   13 |                     0 | 10.4 |               1.1 |   24 |          2.4 | 26.7 |           0 |  8.5 |
-| निजी व्यवसाय                         |         4.9 |   16 |            0.5 |  5.6 |            0.9 |   23 |                     6 | 21.7 |               1.5 | 11.7 |          0.5 | 14.6 |           0 |  2.1 |
-| जातिगत काम/शिल्प                     |         2.2 |  1.1 |              1 |  7.7 |            5.1 |  3.3 |                   4.3 |  7.5 |               1.1 |  3.6 |            0 |  3.4 |           0 |    0 |
-| पेंशन/छात्रवृति/प्रवासी आय पर निर्भर      |        15.5 | 11.4 |             19 | 28.7 |           16.6 |  8.6 |                  14.5 |  9.1 |              20.1 | 15.3 |          9.8 |  4.9 |         4.4 | 14.9 |
-| बेरोजगार                             |         1.4 |  0.6 |              0 |  8.2 |              0 |  0.1 |                     0 |  0.3 |               0.4 |  3.6 |          0.2 |  3.6 |           0 |    0 |
-| विद्यार्थी                            |        21.5 | 16.9 |           18.4 |    8 |           12.6 | 16.9 |                  12.7 | 17.8 |              14.6 | 18.3 |          7.4 | 15.5 |        15.6 | 21.3 |
-| घर का काम                           |        77.1 |  0.7 |           51.3 |  0.6 |           74.7 |  1.8 |                  54.4 |  1.2 |              87.6 |  2.7 |         90.4 |    2 |        77.8 |  2.1 |
-| बीमारी या उम्र के कारण काम नहीं कर सकते |         2.5 |  7.8 |            4.4 |  5.8 |            0.4 |    3 |                   1.6 |  3.3 |               0.4 |  5.1 |          0.7 |  2.9 |           0 |    0 |
-| अन्य                                 |           0 |    0 |              0 |    0 |              0 |    0 |                     0 |    0 |                 0 |    0 |            0 |    0 |           0 |    0 |
-| nil                                 |         1.5 |  3.4 |              4 |  1.1 |            0.5 |  1.8 |                   0.3 |  2.4 |               0.7 |  0.3 |            0 |  0.9 |           0 |    0 |
+| लैंडलॉर्ड                              |           0 |  0.1 |              0 |  3.7 |              0 |  0.4 |                     0 |    0 |                 0 |  0.1 |            0 |    0 |         0.6 |    0 |
+| किसान                               |        13.6 | 28.4 |           23.7 | 47.5 |           12.5 | 32.6 |                  32.6 | 60.4 |               8.9 | 16.2 |           23 | 34.2 |        57.1 | 57.2 |
+| पशुपालन                              |        35.8 | 26.8 |           50.3 | 33.3 |           48.1 | 22.7 |                  60.9 | 41.7 |              31.5 | 16.9 |         45.2 | 29.9 |        62.5 | 56.5 |
+| खेत मज़दूरी                            |        15.4 | 12.9 |             13 | 23.3 |           22.6 |   16 |                    13 | 16.7 |              25.8 | 18.2 |          9.9 |  6.2 |        19.4 |  9.1 |
+| गैर-खेती मज़दूरी                        |         6.2 | 27.3 |           11.5 |  7.4 |            9.6 | 23.3 |                   4.3 | 14.6 |                16 | 26.1 |          5.8 | 12.5 |         1.2 |  9.8 |
+| सरकारी नौकरी                        |         3.7 |  4.6 |            1.1 |  8.1 |            0.9 |  2.2 |                     0 |  2.1 |               1.3 |  1.8 |          1.4 |  8.4 |         1.4 |  1.6 |
+| प्राईवेट नौकरी                        |         0.3 |  8.7 |              0 |  2.9 |              1 | 13.1 |                     0 |  8.3 |                 0 | 10.4 |          0.8 | 22.5 |         1.4 | 30.5 |
+| निजी व्यवसाय                         |         4.9 |   16 |            0.5 |  5.6 |            0.9 | 21.9 |                     0 |  2.1 |                 6 | 21.7 |          0.9 | 10.7 |         0.2 | 15.7 |
+| जातिगत काम/शिल्प                     |         2.2 |  1.1 |              1 |  7.7 |            5.1 |  3.3 |                     0 |    0 |               4.3 |  7.5 |          0.7 |  2.8 |           0 |    3 |
+| पेंशन/छात्रवृति/प्रवासी आय पर निर्भर      |        15.5 | 11.4 |             19 | 28.7 |           16.6 |  8.6 |                   4.3 | 14.6 |              14.5 |  9.1 |         20.9 | 16.2 |        10.2 |  4.8 |
+| बेरोजगार                             |         1.4 |  0.6 |              0 |  8.2 |              0 |  0.1 |                     0 |    0 |                 0 |  0.3 |          0.2 |  3.6 |         0.1 |  2.1 |
+| विद्यार्थी                            |        21.5 | 16.9 |           18.4 |    8 |           12.6 | 16.9 |                  15.2 | 20.8 |              12.7 | 17.8 |         15.3 | 18.6 |         5.1 | 16.3 |
+| घर का काम                           |        77.1 |  0.7 |           51.3 |  0.6 |           74.6 |  1.8 |                  78.3 |  2.1 |              54.4 |  1.2 |         86.7 |  2.9 |        89.2 |  1.5 |
+| बीमारी या उम्र के कारण काम नहीं कर सकते |         2.5 |  7.8 |            4.4 |  5.8 |            0.4 |    3 |                     0 |    0 |               1.6 |  3.3 |          0.2 |  4.3 |         0.8 |    2 |
+| अन्य                                 |           0 |    0 |              0 |    0 |              0 |  0.4 |                     0 |    0 |                 0 |    0 |            0 |    0 |           0 |    0 |
+| nil                                 |         1.5 |  3.4 |              4 |  1.1 |            0.5 |  2.1 |                     0 |    0 |               0.3 |  2.4 |            1 |  0.3 |           0 |  0.8 |
 
-***** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
+**** TODO Check if all women who participate in labour on household operational holding are indeed recorded as peasants.
 
-*** Land relations
+** Land relations
 
 
-**** भूमिहीनता और जमीन के वितरण में असमानता
+*** भूमिहीनता और जमीन के वितरण में असमानता
 
 + 57 प्रतिशत परिवारों के पास निजी खेती की जमीन नहीं है; NSS के आँकड़ों के हिसाब से यह सिर्फ़ 28 प्रतिशत है।
 + सबसे बड़े 20 प्रतिशत किसानों के पास 78 प्रतिशत जमीन है; NSS के आँकड़ों के हिसाब से यह 70 प्रतिशत है।
@@ -790,12 +790,12 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 |-------------------------------+------------------------+----------------|
 |    सबसे कम जमीन वाले 20% परिवार |                      0 |              0 |
 |                       20--40% |                      0 |              0 |
-|                       40--60% |                      1 |              0 |
-|                       60--80% |                     19 |             12 |
+|                       40--60% |                      2 |              0 |
+|                       60--80% |                     19 |             13 |
 | सबसे ज्यादा जमीन वाले 20% परिवार |                     78 |             86 |
 
 
-**** जमीन और जाति का सम्बन्ध
+*** जमीन और जाति का सम्बन्ध
 
 + दलित, मुस्लिम और पिछड़ी जातियों में भूमिहीनता उच्च जाति के परिवारों के मुकाबले बहुत ज्यादा है।
 
@@ -823,12 +823,12 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+RESULTS: land-socialgrp-code
 | जाति         | भूमिहीन परिवारों का अनुपात |
 |--------------+-------------------------|
-| दलित         |                      82 |
-| मुस्लिम        |                      71 |
-| पिछड़ी जातियाँ |                      50 |
-| अन्य          |                       9 |
+| दलित         |                      83 |
+| मुस्लिम        |                      39 |
+| पिछड़ी जातियाँ |                      51 |
+| अन्य          |                       8 |
 
-**** सिंचाई
+*** सिंचाई
 + न केवल बड़े किसानों के पास ज्यादा जमीन है, उनके पास सबसे अच्छी जमीन है।
 + उदाहरण के तौर पर, लगभग सभी गाँवों में, बड़े किसानों की जमीनों में ट्यूबवेल से सिंचित जमीन का अनुपात छोटे किसानों के मुकाबले ज्यादा है।
 
@@ -840,21 +840,20 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   merge(ownland,ownirr,by=c("sno_id","parcel_number"),all.x=T)->t
   t[is.na(irrigation_src_type),irrigation_src_type:="Unirrigated"]
   unique(t[,c(1,2,6,15)])->t
-  dcast(t,sno_id+parcel_number~irrigation_src_type,sum,value.var="extent")->t
+  dcast.data.table(t,sno_id+parcel_number~irrigation_src_type,sum,value.var="extent")->t
   ownland[,c(10,12,4)]->t1
   merge(t,t1,by=c("sno_id","parcel_number"),all.y=T)->t2
   merge(t2,hhid,by.x="sno_id",by.y="id",all.y=T)->t2
   names(t2)[c(4,6)]<-c("pond","tubewell")
   t2[is.na(extent),extent:=0][is.na(extent),tubewell:=0]
-
-  t2->t1
+  copy(t2)->t1
   t1[order(extent),owncum:=cumsum(extent*multiplier)/sum(extent*multiplier),village_name]
   t1[order(owncum),hhrank:=cumsum(multiplier)/sum(multiplier),village_name]
   t1[hhrank<=0.2,ownq:=1][hhrank>0.2 & hhrank<=0.4,ownq:=2][hhrank>0.4 & hhrank<=0.6,ownq:=3][hhrank>0.6 & hhrank<=0.8,ownq:=4][hhrank>0.8,ownq:=5]
   t1[,.(tubewell=sum(tubewell),extent=sum(extent)),keyby=.(village_name,ownq)]->t1
   t1[is.na(tubewell),tubewell:=0][,tubewellpc:=round(tubewell*100/extent)]
 
-  dcast(t1,ownq~village_name,sum,value.var="tubewellpc")->t1
+  dcast.data.table(t1,ownq~village_name,sum,value.var="tubewellpc")->t1
 
   t1$ownq<-c("सबसे कम जमीन वाले 20% परिवार","20--40%","40--60%","60--80%","सबसे ज्यादा जमीन वाले 20% परिवार")
   names(t1)[1]<-"वर्ग"
@@ -864,35 +863,35 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+name: irrigation1
 #+CAPTION: ट्यूबवेल से सिंचित जमीन का कुल निजी जमीन में अनुपात (प्रतिशत)
 #+RESULTS: irrigation1-code
-|                           वर   | खंदरई | चहर कलां | भिरढाणा | जमालपुर शेखां | गिज्जी | भादस |
-|-------------------------------+------+---------+---------+------------+-------+------|
-|    सबसे कम जमीन वाले 20% परिवार |  nil |       0 |     nil | nil        |   nil |  nil |
-|                       20--40% |  nil |      42 |     nil | nil        |     0 |  nil |
-|                       40--60% |    0 |      64 |       0 | nil        |    86 |    0 |
-|                       60--80% |   74 |      78 |     100 | 0          |    88 |   43 |
-| सबसे ज्यादा जमीन वाले 20% परिवार |   96 |      85 |      83 | 97         |   100 |   48 |
+|                           वर्ग | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ | गिज्जी | भादस |
+|-------------------------------+------+---------+---------+----------------+------------+-------+------|
+|    सबसे कम जमीन वाले 20% परिवार |  nil |       0 |     nil |            nil | nil        |   nil |  nil |
+|                       20--40% |  nil |      42 |     nil |            nil | nil        |     0 |    0 |
+|                       40--60% |    0 |      64 |       0 |              0 | nil        |    84 |   41 |
+|                       60--80% |   82 |      78 |     100 |             72 | 0          |    93 |   61 |
+| सबसे ज्यादा जमीन वाले 20% परिवार |  100 |      85 |      79 |            100 | 97         |   100 |   45 |
 
 
-**** बटाई और ठेके के प्रकार
+*** बटाई और ठेके के प्रकार
 
-**** Burden of rent
-
-
-**** [[file:land-contracts.org][Analysis of land contracts]]
-*** Food security
-*** Cropping pattern, Production, Input use
-*** Labour Deployment
-*** Employment
-****  Casual agricultural labour
+*** Burden of rent
 
 
-**** Long-term agricultural labour
-**** Non-agricultural labour
+*** [[file:land-contracts.org][Analysis of land contracts]]
+** Food security
+** Cropping pattern, Production, Input use
+** Labour Deployment
+** Employment
+***  Casual agricultural labour
 
-*** Livestock
-*** Housing and Sanitation
-*** Health and Education
-*** Assets and Indebtedness
+
+*** Long-term agricultural labour
+*** Non-agricultural labour
+
+** Livestock
+** Housing and Sanitation
+** Health and Education
+** Assets and Indebtedness
 
 #+INCLUDE: assets.org
 
