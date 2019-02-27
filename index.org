@@ -70,7 +70,7 @@ source("~/vikascloud/surveymonitor/sserconnect.R")
   setkey(hhid,id)
   hhid[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
   factor(hhid$village_name,levels=c("Khandrai","Cheher Kalan","Birdhana","Birdhana Dhanis","Jamalpur Shekhan","Gijji","Bhadas"))->hhid$village_name
-  levels(hhid$village_name)<-c("खंदरई","चहर कलां","भिरढाणा","भिरढाणा ढाणियाँ","जमालपुर शेखां","गिज्जी","भादस")
+  levels(hhid$village_name)<-c("खंदरई","चहड़ कलां","भिरढाणा","भिरढाणा ढाणियाँ","जमालपुर शेखाँ","गिज्जी","भादस")
 
   #dbDisconnect(surveypg)
 #+END_SRC
@@ -224,7 +224,6 @@ source("~/vikascloud/surveymonitor/sserconnect.R")
 | ruralsurvey_land_mortgaged_in                                   |
 | ruralsurvey_sampledesign                                        |
 | ruralsurvey_work_done_by_household_members_under_nrega          |
-
 
 * Data Entry
 ** Overall Decisions Regarding Data Entry
@@ -500,84 +499,121 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+NAME: social-group-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-  merge(household,villages,by.x="village_id",by.y="id")->t
-  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
-  t[,.(Number=round(sum(multiplier))),keyby=.(village_name,if_sc_st)]->t1
-  ave(t1$Number,t1$village_name,FUN=sum)->t1$Total
+  copy(hhid)->t
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  copy(member)->t1
+  merge(t1,t,by.x="sno_id",by.y="id")->t
+  dcast(t,if_sc_st+village_name~"Number",sum,value.var="multiplier",margins="village_name")->t1
+  dcast(t,village_name~"Total",sum,value.var="multiplier",margins="village_name")->t2
+  names(t1)[3]<-"Number"
+  merge(t1,t2,by="village_name")->t1
   round(t1$Number*100/t1$Total,1)->t1$Number
-  t1[CJ(unique(village_name),unique(if_sc_st))][,as.list(Number),by=.(if_sc_st)]->t1
-  t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4)&is.na(V5))]->t1
-  names(t1)[c(2:ncol(t1))]<-sort(unique(t$village_name))
-  factor(t1$if_sc_st,levels=c("SC","BC","Other"))->t1$if_sc_st
-  levels(t1$if_sc_st)<-c("Scheduled Castes","Backward Classes","Other Castes")
-  t1[order(t1$if_sc_st)]->t1
-  names(t1)[1]<-c("Social group")
+  dcast(t1,if_sc_st~village_name,sum,value.var="Number")->t1
+  factor(t1$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t1$if_sc_st
+  levels(t1$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t1[order(t1$if_sc_st),]->t1
+  t1$हरियाणा<-c(22.5,8.6,NA,NA)
+  names(t1)[c(1,9,10)]<-c("सामाजिक समुदाय","सभी गाँव","हरियाणा (Census, 2011)")
   t1
 #+END_SRC
 
 #+NAME: social-group-composition
-#+CAPTION: Proportion of households belonging to different social groups, by village (per cent)
+#+CAPTION: गाँवों की जनसंख्या में विभिन्न समाजिक समुदायों का अनुपात (प्रतिशत)
 #+RESULTS: social-group-composition-code
-| Social group     | Birdhana | Cheher Kalan | Gijji | Jamalpur Shekhan | Khandrai |
-|------------------+----------+--------------+-------+------------------+----------|
-| Scheduled Castes |       56 |         12.3 |  48.3 |             57.8 |     45.6 |
-| Backward Classes |     31.5 |         11.8 |  29.2 |             32.4 |     10.1 |
-| Other Castes     |     12.5 |         75.8 |  22.5 |              9.8 |     44.4 |
+| सामाजिक समुदाय | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ | गिज्जी | भादस | सभी गाँव | हरियाणा (Census, 2011) |
+|---------------+------+---------+---------+----------------+------------+-------+------+---------+------------------------|
+| दलित          |   49 |    11.5 |    60.6 |           64.6 |       53.9 |  40.5 | 13.1 |    47.9 | 22.5                   |
+| मुस्लिम         |    0 |       0 |     1.7 |              0 |          0 |     0 | 72.9 |     4.6 | 8.6                    |
+| पिछड़ी जातियाँ  |   10 |      12 |    24.3 |           10.8 |       34.9 |  26.1 | 13.9 |    23.6 | nil                    |
+| अन्य           | 41.1 |    76.4 |    13.4 |           24.6 |       11.1 |  33.4 |  0.1 |    23.9 | nil                    |
+
+**** TODO Social group composition to be checked with the Census numbers
+
+*** Detailed Caste Table                                         :noexport:
 
 #+NAME: caste-composition-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-  merge(household,villages,by.x="village_id",by.y="id")->t
-  merge(t,castes,by.x="caste_tribe_id",by.y="id")->t
-  t[,.(Number=round(sum(multiplier))),keyby=.(village_name,if_sc_st,caste_tribe)][CJ(unique(village_name),unique(if_sc_st),unique(caste_tribe))][,as.list(Number),by=.(if_sc_st,caste_tribe)]->t1
-  t1[!(is.na(V1)&is.na(V3)&is.na(V3)&is.na(V4))]->t1
-  names(t1)[c(3:ncol(t1))]<-sort(unique(t$village_name))
-  names(t1)[c(1:2)]<-c("Social group","Caste")
-  t1
+  copy(hhid)->t
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  t[,.(Number=round(sum(multiplier))),keyby=.(village_name,if_sc_st,caste_tribe)]->t
+  dcast(t,if_sc_st+caste_tribe~village_name,sum,value.var="Number")->t
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  factor(t$caste_tribe)->t$caste_tribe
+  levels(t$caste_tribe)<-c("बैरागी","बालमीक","बनिया","बावरिया","बाज़ीगर","भड़भूजा",
+                           "बत्रा सिख","बिशनोई","ब्राह्मण","चमार","छिप्पी","धानक","धोबी",
+                           "फ़कीर","गर्ग","जाट","जट सिख","झीमर","जोगी","कम्बोज",
+                           "कम्बोज सिख","खाती","कोली","कुम्हार","लोधी","लोहार",
+                           "माली","मनिहार","मजहबी सिख","मीना","मेहता/अरोड़ा",
+                           "मेओ","मिरासी","मियाँ","नाई","नायक","ओड","कुरेशी",
+                           "राय सिख","रेबारी","सैनी","सक्का","सुनार","तेली")
+  t[order(t$if_sc_st,t$caste_tribe),]->t
+  names(t)[c(1:2)]<-c("सामाजिक समुदाय","जाति")
+  t
 #+END_SRC
 
 #+NAME: caste-composition-code
 #+CAPTION: Caste composition of households in the villages
 #+RESULTS: caste-composition-code
-| Social group | Caste              | Birdhana | Cheher Kalan | Gijji | Jamalpur Shekhan | Khandrai |
-|--------------+--------------------+----------+--------------+-------+------------------+----------|
-| BC           | Bairagi            |      nil | nil          | 17    | nil              | nil      |
-| BC           | Bhatra sikh        |      nil | nil          | nil   | 1                | nil      |
-| BC           | Chhipi             |      nil | nil          | 4     | nil              | nil      |
-| BC           | Jhimar/Dhinwar     |       31 | nil          | nil   | nil              | 47       |
-| BC           | Kamboj             |       68 | nil          | nil   | 37               | nil      |
-| BC           | Kamboj Sikh        |      nil | nil          | nil   | 11               | nil      |
-| BC           | Khati              |      nil | 30           | 8     | 18               | 9        |
-| BC           | Kumhar             |       31 | 10           | 4     | nil              | 14       |
-| BC           | Lodhi              |        1 | nil          | nil   | nil              | nil      |
-| BC           | Lohar              |       32 | 5            | 1     | 1                | nil      |
-| BC           | Mali               |       31 | nil          | nil   | nil              | nil      |
-| BC           | Manihar            |      nil | nil          | 1     | nil              | nil      |
-| BC           | Nai                |       62 | 25           | nil   | 55               | nil      |
-| BC           | Rebari             |      254 | nil          | nil   | nil              | nil      |
-| BC           | Saini              |      nil | nil          | nil   | 408              | nil      |
-| BC           | Teli               |        1 | nil          | nil   | nil              | nil      |
-| Other        | Baniya             |       31 | 9            | nil   | nil              | nil      |
-| Other        | Bishnoi            |       68 | nil          | nil   | nil              | nil      |
-| Other        | Garg               |      nil | nil          | nil   | 11               | nil      |
-| Other        | Jat                |       60 | 423          | 27    | 43               | 322      |
-| Other        | Jat sikh           |      nil | nil          | nil   | 54               | nil      |
-| Other        | Khati              |      nil | nil          | nil   | 18               | nil      |
-| Other        | Mehta/Arora/Khatri |       38 | nil          | nil   | 34               | nil      |
-| Other        | Sunar              |        5 | 3            | nil   | nil              | nil      |
-| SC           | Bairagi            |      nil | nil          | 3     | nil              | nil      |
-| SC           | Balmiki            |      nil | nil          | 8     | 153              | 4        |
-| SC           | Bawaria            |      nil | nil          | nil   | 0                | 4        |
-| SC           | Bazigar            |       32 | nil          | nil   | 111              | nil      |
-| SC           | Chamar             |      125 | 44           | 22    | 174              | 70       |
-| SC           | Dhanak             |      109 | 29           | 24    | nil              | 256      |
-| SC           | Jat                |      nil | nil          | 1     | nil              | nil      |
-| SC           | Mazhabi Sikh       |        1 | nil          | nil   | nil              | nil      |
-| SC           | Meena              |        1 | nil          | nil   | nil              | nil      |
-| SC           | Nayak              |       32 | nil          | nil   | nil              | nil      |
-| SC           | Od                 |       33 | nil          | nil   | 509              | nil      |
-| SC           | Rai Sikh           |      576 | nil          | nil   | nil              | nil      |
-
-**** TODO Social group composition to be checked with the Census numbers
+| सामाजिक समुदाय | जाति       | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ | गिज्जी | भादस |
+|---------------+------------+------+---------+---------+----------------+------------+-------+------|
+| दलित          | बैरागी      |    0 |       0 |       0 |              0 |          0 |     3 |    0 |
+| दलित          | बालमीक     |    4 |       0 |       0 |              0 |        131 |     9 |    8 |
+| दलित          | बावरिया    |    4 |       0 |       0 |              0 |          0 |     0 |    0 |
+| दलित          | बाज़ीगर     |    0 |       0 |      31 |              0 |        111 |     0 |    0 |
+| दलित          | चमार       |   70 |      44 |     119 |              5 |        174 |    22 |    0 |
+| दलित          | धानक       |  256 |      28 |     108 |              1 |          0 |    26 |    0 |
+| दलित          | जाट        |    0 |       0 |       0 |              0 |          0 |     1 |    0 |
+| दलित          | कोली       |    0 |       0 |       0 |              0 |          0 |     0 |   20 |
+| दलित          | मजहबी सिख  |    0 |       0 |       0 |              1 |          0 |     0 |    0 |
+| दलित          | मीना       |    0 |       0 |       0 |              1 |          0 |     0 |    0 |
+| दलित          | नायक       |    0 |       0 |      31 |              1 |          0 |     0 |    0 |
+| दलित          | ओड         |    0 |       0 |      31 |              2 |        509 |     0 |    0 |
+| दलित          | राय सिख    |    0 |       0 |     571 |              4 |          0 |     0 |    0 |
+| दलित          | सैनी        |    0 |       0 |       0 |              0 |          0 |     0 |    4 |
+| मुस्लिम         | फ़कीर       |    0 |       0 |       0 |              0 |          0 |     0 |    9 |
+| मुस्लिम         | जोगी       |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
+| मुस्लिम         | कुम्हार      |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
+| मुस्लिम         | लोहार      |    0 |       0 |      32 |              0 |          1 |     0 |    8 |
+| मुस्लिम         | मेओ         |    0 |       0 |       0 |              0 |          0 |     0 |   69 |
+| मुस्लिम         | मिरासी     |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
+| मुस्लिम         | मियाँ       |    0 |       0 |       0 |              0 |          0 |     0 |   22 |
+| मुस्लिम         | नाई        |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
+| मुस्लिम         | कुरेशी       |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
+| मुस्लिम         | सैनी        |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
+| मुस्लिम         | सक्का       |    0 |       0 |       0 |              0 |          0 |     0 |   15 |
+| मुस्लिम         | तेली        |    0 |       0 |       0 |              0 |          0 |     0 |   11 |
+| पिछड़ी जातियाँ  | बैरागी      |    0 |       0 |       0 |              0 |          0 |    18 |    0 |
+| पिछड़ी जातियाँ  | बनिया      |    0 |       0 |       0 |              0 |          0 |     0 |    2 |
+| पिछड़ी जातियाँ  | भड़भूजा      |    0 |       0 |       0 |              0 |          0 |     0 |    8 |
+| पिछड़ी जातियाँ  | बत्रा सिख   |    0 |       0 |       0 |              0 |          1 |     0 |    0 |
+| पिछड़ी जातियाँ  | छिप्पी      |    0 |       0 |       0 |              0 |          0 |     5 |    0 |
+| पिछड़ी जातियाँ  | धोबी       |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
+| पिछड़ी जातियाँ  | झीमर       |   47 |       0 |      31 |              0 |          0 |     1 |    0 |
+| पिछड़ी जातियाँ  | जोगी       |    4 |       0 |       0 |              0 |          0 |     0 |    1 |
+| पिछड़ी जातियाँ  | कम्बोज      |    0 |       0 |      68 |              0 |         37 |     0 |    0 |
+| पिछड़ी जातियाँ  | कम्बोज सिख  |    0 |       0 |       0 |              0 |         11 |     0 |    0 |
+| पिछड़ी जातियाँ  | खाती       |    9 |      30 |       0 |              0 |         18 |     8 |    0 |
+| पिछड़ी जातियाँ  | कुम्हार      |   14 |      10 |      31 |              0 |          0 |     6 |    9 |
+| पिछड़ी जातियाँ  | लोधी       |    0 |       0 |       0 |              1 |          0 |     0 |    0 |
+| पिछड़ी जातियाँ  | लोहार      |    0 |       5 |       0 |              0 |          0 |     2 |    1 |
+| पिछड़ी जातियाँ  | माली       |    0 |       0 |      31 |              0 |          0 |     0 |    0 |
+| पिछड़ी जातियाँ  | मनिहार     |    0 |       0 |       0 |              0 |          0 |     1 |    0 |
+| पिछड़ी जातियाँ  | मेओ         |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
+| पिछड़ी जातियाँ  | नाई        |    0 |      25 |      62 |              0 |         55 |     0 |    0 |
+| पिछड़ी जातियाँ  | रेबारी      |    0 |       0 |     253 |              1 |          0 |     0 |    0 |
+| पिछड़ी जातियाँ  | सैनी        |    0 |       0 |       0 |              0 |        377 |     0 |   12 |
+| पिछड़ी जातियाँ  | सक्का       |    0 |       0 |       0 |              0 |          0 |     0 |    1 |
+| पिछड़ी जातियाँ  | तेली        |    0 |       0 |       1 |              0 |          0 |     0 |    0 |
+| अन्य           | बनिया      |    0 |       9 |      31 |              0 |          0 |     0 |    1 |
+| अन्य           | बिशनोई     |    0 |       0 |      63 |              3 |          0 |     0 |    0 |
+| अन्य           | ब्राह्मण     |    4 |      14 |       0 |              0 |          0 |     0 |    0 |
+| अन्य           | गर्ग        |    0 |       0 |       0 |              0 |         11 |     0 |    0 |
+| अन्य           | जाट        |  322 |     423 |      56 |              4 |         22 |    52 |    0 |
+| अन्य           | जट सिख     |    0 |       0 |       0 |              0 |         76 |     0 |    0 |
+| अन्य           | खाती       |    0 |       0 |       0 |              0 |         29 |     0 |    0 |
+| अन्य           | मेहता/अरोड़ा |    0 |       0 |      37 |              0 |         24 |     0 |    0 |
+| अन्य           | सुनार       |    0 |       3 |       5 |              0 |          0 |     0 |    0 |
 
 *** Occupations
 
@@ -683,7 +719,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+END_SRC
 
 #+NAME: occupation
-#+CAPTION: Proportion of population engaged in different occupations, persons aged 7 years and above, by sex and village (per cent)
+#+CAPTION: Proportion of population engaged in different occupations, persons aged 15 years and above, by sex and village (per cent)
 #+RESULTS: occupation-table1-code
 | विभिन्न प्रकार का काम                 | <2colc>खंदरई |      | <2colc>चहर कलां |      | <2colc>भिरढाणा |      | <2colc>भिरढाणा ढाणियाँ |      | <2colc>जमालपुर शेखां |      | <2colc>गिज्जी |      | <2colc>भादस |      |
 | {{{hlmacro}}}                       |       महिला |  पुरुष |          महिला |  पुरुष |          महिला |  पुरुष |                 महिला |  पुरुष |             महिला |  पुरुष |        महिला |  पुरुष |       महिला |  पुरुष |
@@ -848,6 +884,12 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 *** Cropping pattern, Production, Input use
 *** Labour Deployment
 *** Employment
+****  Casual agricultural labour
+
+
+**** Long-term agricultural labour
+**** Non-agricultural labour
+
 *** Livestock
 *** Housing and Sanitation
 *** Health and Education
@@ -864,5 +906,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   Processes<-as.numeric(sub(" .*","",GrepResults)) 
   tools::pskill(Processes)
 #+END_SRC
+
 
 
