@@ -9,7 +9,6 @@
 #+HTML_HEAD: <style>#content{max-width:1200px;} </style>
 #+MACRO: hlmacro (eval (org-table-insert-hline))
 
-
 * Preliminaries                                                    :noexport:
 
 
