@@ -916,6 +916,35 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
+=======
+**** [[file:land-contracts.org][Analysis of land contracts]]
+*** Food security
+*** Cropping pattern, Production, Input use
+
+#+name: land-socialgrp-code
+#+begin_src R :results value :exports results :colnames yes :hlines yes
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_cropping_pattern_schedule_production_and_sales"))->crops
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->codecrop
+  merge(crops,codecrop,by.x="crop_id",by.y="id")->crops
+  as.integer(crops$crop_number)->crops$crop_number_1
+  round((crops$crop_number-crops$crop_number_1)*10)->crops$crop_number_2
+  crops[,.(sno_id,crop_number_1,crop_number_2,crop)]->t
+  dcast.data.table(t,sno_id+crop_number_1~crop_number_2,value.var="crop")->t
+
+  paste(t$'0',"+",t$'1',"+",t$'2',sep="")->t$crop
+  gsub("\\+NA","",t$crop)->t$crop
+  gsub("NA\\+","",t$crop)->t$crop
+  t[,.(sno_id,crop_number_1,crop)]->t
+#+end_src
+
+*** Labour Deployment
+*** Employment
+*** Livestock
+*** Housing and Sanitation
+*** Health and Education
+*** Assets and Indebtedness
+
 
 #+INCLUDE: assets.org
 
