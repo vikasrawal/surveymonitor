@@ -61,9 +61,9 @@ source("~/vikascloud/surveymonitor/sserconnect.R")
   merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum_number"),all.x=T)->household
   household[household_number<9990]->household
   household[is.na(multiplier),multiplier:=1]
-  merge(household,villages,by.x="village_id",by.y="id")->household
-  merge(household,castes,by.x="caste_tribe_id",by.y="id")->household
-  merge(household,religions,by.x="religion_id",by.y="id")->household
+  merge(household,villages,by.x="village_id",by.y="id",all.x=T)->household
+  merge(household,castes,by.x="caste_tribe_id",by.y="id",all.x=T)->household
+  merge(household,religions,by.x="religion_id",by.y="id",all.x=T)->household
 
   household[,c(39,5,6,4,16,38,41,42)]->hhid
   setkey(hhid,id)
@@ -756,7 +756,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   data.table(dbReadTable(surveypg,"ruralsurvey_current_ownership_holdings"))->ownland
   data.table(dbReadTable(surveypg,"ruralsurvey_land_tenancy_mortgage"))->leaseland
   ownland[,.(ownhold=sum(extent)),keyby="sno_id"]->ownland
-  hhid->t
+  copy(hhid)->t
   t[ownland, `:=`(ownhold=i.ownhold)]->t
   t[is.na(ownhold),ownhold:=0]
   leaseland[!is.na(transfer_in_out)][,.(tenmort=sum(extent)),keyby=.(sno_id,transfer_in_out)][CJ(unique(sno_id),unique(transfer_in_out))][,as.list(tenmort),by=.(sno_id)]->t1
@@ -850,7 +850,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t1[order(extent),owncum:=cumsum(extent*multiplier)/sum(extent*multiplier),village_name]
   t1[order(owncum),hhrank:=cumsum(multiplier)/sum(multiplier),village_name]
   t1[hhrank<=0.2,ownq:=1][hhrank>0.2 & hhrank<=0.4,ownq:=2][hhrank>0.4 & hhrank<=0.6,ownq:=3][hhrank>0.6 & hhrank<=0.8,ownq:=4][hhrank>0.8,ownq:=5]
-  t1[,.(tubewell=sum(tubewell),extent=sum(extent)),keyby=.(village_name,ownq)]->t1
+  t1[,.(tubewell=sum(tubewell*multiplier),extent=sum(extent*multiplier)),keyby=.(village_name,ownq)]->t1
   t1[is.na(tubewell),tubewell:=0][,tubewellpc:=round(tubewell*100/extent)]
 
   dcast.data.table(t1,ownq~village_name,sum,value.var="tubewellpc")->t1
@@ -866,10 +866,10 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 |                           वर्ग | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ | गिज्जी | भादस |
 |-------------------------------+------+---------+---------+----------------+------------+-------+------|
 |    सबसे कम जमीन वाले 20% परिवार |  nil |       0 |     nil |            nil | nil        |   nil |  nil |
-|                       20--40% |  nil |      42 |     nil |            nil | nil        |     0 |    0 |
-|                       40--60% |    0 |      64 |       0 |              0 | nil        |    84 |   41 |
-|                       60--80% |   82 |      78 |     100 |             72 | 0          |    93 |   61 |
-| सबसे ज्यादा जमीन वाले 20% परिवार |  100 |      85 |      79 |            100 | 97         |   100 |   45 |
+|                       20--40% |  nil |      51 |     nil |            nil | nil        |     0 |    0 |
+|                       40--60% |    0 |      52 |       0 |              0 | nil        |    82 |   55 |
+|                       60--80% |   90 |      74 |      99 |             72 | 0          |    94 |   67 |
+| सबसे ज्यादा जमीन वाले 20% परिवार |  100 |      75 |      91 |            100 | 92         |   100 |   48 |
 
 
 *** बटाई और ठेके के प्रकार
@@ -884,6 +884,30 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 ** Employment
 ***  Casual agricultural labour
 
+#+NAME: occupation-preliminary-code
+#+BEGIN_SRC R :results silent :exports none
+  data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
+  agrilabour[is.na(labour_days)|labour_days==999]->t
+  household[id %in% t$sno_id][,c(
+
+  household[id==28]
+
+  codeoccupation[order(id)]->codeoccupation
+  factor(codeoccupation$id)->codeoccupation$id2
+  levels(codeoccupation$id2)<-codeoccupation$occupation_category
+  codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
+    data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+    merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
+  ## household[,c(1,2,3,12,24,25,26,38)]->t
+  copy(hhid)->t
+  merge(occupations,t,by.x="sno_id",by.y="id")->occupations
+  ## merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
+  ## merge(occupations,villages,by.x="village_id",by.y="id")->occupations
+  member[,c(1,3,4,5,16)]->t
+
+  factor(occupations$occupation_category,levels=c("Landlord","Peasant","Tending animals","Agricultural labour","Non-agricultural manual labour","Salaried government employee","Salaried private employee","Self-employed, business owner","Caste occupations/artisans","Recipient of pension/remittance","Apprentice","Collection of CPRs","Unemployed","Student","Housework","Unable to work because of age or poor health","Other"))->occupations$occupation_category
+  levels(occupations$occupation_category)<-c("लैंडलॉर्ड","किसान","पशुपालन","खेत मज़दूरी","गैर-खेती मज़दूरी","सरकारी नौकरी","प्राईवेट नौकरी","निजी व्यवसाय","जातिगत काम/शिल्प","पेंशन/छात्रवृति/प्रवासी आय पर निर्भर","काम सीख रहे हैं","वन उत्पाद इकट्ठा करना","बेरोजगार","विद्यार्थी","घर का काम","बीमारी या उम्र के कारण काम नहीं कर सकते","अन्य") 
+#+END_SRC
 
 *** Long-term agricultural labour
 *** Non-agricultural labour
