@@ -202,61 +202,200 @@
 
 #+NAME: missing-data-code-5
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-  household[,.(village_name,household_number,id)]->t
+    household[,.(village_name,household_number,id)]->t
 
-  merge(crop,t,by.x="sno_id",by.y="id",all.y=TRUE)->t1
-  t1[!is.na(crop_number)]->t1
-  t1[village_name=="Jamalpur Shekhan"|village_name=="Khandrai",.(village_name,household_number,crop_id)]->a
+    merge(crop,t,by.x="sno_id",by.y="id",all.y=TRUE)->t1
+    t1[!is.na(crop_number)]->t1
+    t1[village_name=="Jamalpur Shekhan"|village_name=="Khandrai"|village_name=="Cheher Kalan"|village_name=="Birdhana",.(village_name,household_number,crop_id)]->a
 
-  merge(t,labouruse,by.x=c("id"),by.y=c("sno_id"))->p
-  p[village_name=="Jamalpur Shekhan"|village_name=="Khandrai",.(village_name,household_number,crop_id)]->a1
+    merge(t,labouruse,by.x=c("id"),by.y=c("sno_id"))->p
+    p[village_name=="Jamalpur Shekhan"|village_name=="Khandrai"|village_name=="Cheher Kalan"|village_name=="Birdhana",.(village_name,household_number,crop_id)]->a1
   
-  unique(a1)->a1
-  merge(a1,code_crop,by.x="crop_id",by.y="id")->k
-  merge(a,code_crop,by.x="crop_id",by.y="id")->k1
-  library(dplyr)
-  anti_join(k1,k)->l
-  data.table(l)->l
-  l[,.(crop),by=.(village_name,household_number)]->l
-  l
+    unique(a1)->a1
+    merge(a1,code_crop,by.x="crop_id",by.y="id")->k
+    merge(a,code_crop,by.x="crop_id",by.y="id")->k1
+  k1[crop!="Fallow"]->k1
+    library(dplyr)
+    anti_join(k1,k)->l
+    data.table(l)->l
+    l[,.(crop),by=.(village_name,household_number)]->l
+    l[order(village_name,household_number)]
 
-  #anti_join(k,k1)->l1 #check hhd 12 and 48 plus crops
+    #anti_join(k,k1)->l1 #check hhd 12 and 48 plus crops
 #+END_SRC
 
 #+CAPTION: Entry is missing in labour use column
 #+RESULTS: missing-data-code-5
-| village_name     | household_number | crop                     |
-|------------------+------------------+--------------------------|
-| Khandrai         |                6 | Wheat                    |
-| Khandrai         |                6 | Paddy                    |
-| Khandrai         |                6 | Jowar fodder             |
-| Khandrai         |                6 | Sugarcane (planted)      |
-| Khandrai         |                6 | Barseem                  |
-| Khandrai         |               21 | Wheat                    |
-| Khandrai         |               21 | Paddy                    |
-| Khandrai         |               21 | Sugarcane (planted)      |
-| Khandrai         |               21 | Vegetables               |
-| Khandrai         |               27 | Wheat                    |
-| Khandrai         |               47 | Jowar fodder             |
-| Khandrai         |               47 | Barseem                  |
-| Khandrai         |               24 | Vegetables               |
-| Khandrai         |               10 | Fallow                   |
-| Khandrai         |               10 | Fallow                   |
-| Khandrai         |               11 | Fallow                   |
-| Khandrai         |               25 | Fallow                   |
-| Khandrai         |               28 | Fallow                   |
-| Khandrai         |               28 | Fallow                   |
-| Khandrai         |               29 | Fallow                   |
-| Khandrai         |               32 | Fallow                   |
-| Khandrai         |               32 | Fallow                   |
-| Jamalpur Shekhan |               16 | Fallow                   |
-| Jamalpur Shekhan |               16 | Fallow                   |
-| Jamalpur Shekhan |               30 | Fallow                   |
-| Jamalpur Shekhan |               30 | Fallow                   |
-| Jamalpur Shekhan |               49 | Fallow                   |
-| Jamalpur Shekhan |               71 | Fallow                   |
-| Jamalpur Shekhan |               71 | Fallow                   |
-| Khandrai         |               44 | Sugarcane (first ratoon) |
+| village_name | household_number | crop                     |
+|--------------+------------------+--------------------------|
+| Birdhana     |                1 | Wheat                    |
+| Birdhana     |                1 | Paddy                    |
+| Birdhana     |                1 | Jowar fodder             |
+| Birdhana     |                1 | Barseem                  |
+| Birdhana     |                1 | Vegetables               |
+| Birdhana     |                3 | Paddy                    |
+| Birdhana     |               12 | Cotton - Badi/Kapas      |
+| Birdhana     |               13 | Cotton - Badi/Kapas      |
+| Birdhana     |               13 | Wheat                    |
+| Birdhana     |               13 | Paddy                    |
+| Birdhana     |               16 | Wheat                    |
+| Birdhana     |               16 | Jowar fodder             |
+| Birdhana     |               16 | Barseem                  |
+| Birdhana     |               17 | Paddy                    |
+| Birdhana     |               17 | Jowar fodder             |
+| Birdhana     |               17 | Barseem                  |
+| Birdhana     |               24 | Barseem                  |
+| Birdhana     |               24 | Moong                    |
+| Birdhana     |               24 | Dhaincha                 |
+| Birdhana     |               27 | Mustard                  |
+| Birdhana     |               27 | Paddy                    |
+| Birdhana     |               27 | Vegetables               |
+| Birdhana     |               27 | Vegetables               |
+| Birdhana     |               27 | Vegetables               |
+| Birdhana     |               30 | Wheat                    |
+| Birdhana     |               30 | Paddy                    |
+| Birdhana     |               30 | Paddy                    |
+| Birdhana     |               33 | Cotton - Badi/Kapas      |
+| Birdhana     |               33 | Wheat                    |
+| Birdhana     |               33 | Paddy                    |
+| Birdhana     |               33 | Paddy                    |
+| Birdhana     |               33 | Bajra                    |
+| Birdhana     |               35 | Wheat                    |
+| Birdhana     |               35 | Paddy                    |
+| Birdhana     |               35 | Jowar fodder             |
+| Birdhana     |               35 | Barseem                  |
+| Birdhana     |               36 | Jowar fodder             |
+| Birdhana     |               36 | Barseem                  |
+| Birdhana     |               55 | Wheat                    |
+| Birdhana     |               55 | Paddy                    |
+| Birdhana     |               55 | Jowar fodder             |
+| Birdhana     |               55 | Barseem                  |
+| Birdhana     |               56 | Wheat                    |
+| Birdhana     |               56 | Paddy                    |
+| Birdhana     |               56 | Jowar fodder             |
+| Birdhana     |               56 | Barseem                  |
+| Birdhana     |               57 | Wheat                    |
+| Birdhana     |               57 | Paddy                    |
+| Birdhana     |               57 | Paddy                    |
+| Birdhana     |               57 | Jowar fodder             |
+| Birdhana     |               57 | Barseem                  |
+| Birdhana     |               58 | Wheat                    |
+| Birdhana     |               58 | Paddy                    |
+| Birdhana     |               58 | Jowar fodder             |
+| Birdhana     |               58 | Barseem                  |
+| Birdhana     |               63 | Jowar fodder             |
+| Birdhana     |               63 | Barseem                  |
+| Birdhana     |               63 | Vegetables               |
+| Birdhana     |               67 | Wheat                    |
+| Birdhana     |               67 | Paddy                    |
+| Birdhana     |               67 | Eucalyptus               |
+| Birdhana     |               68 | Jowar fodder             |
+| Birdhana     |               68 | Barseem                  |
+| Birdhana     |               70 | Wheat                    |
+| Birdhana     |               70 | Paddy                    |
+| Birdhana     |               76 | Jowar fodder             |
+| Birdhana     |               76 | Barseem                  |
+| Birdhana     |               77 | Jowar fodder             |
+| Birdhana     |               77 | Barseem                  |
+| Birdhana     |               78 | Jowar fodder             |
+| Birdhana     |               78 | Barseem                  |
+| Birdhana     |               79 | Wheat                    |
+| Birdhana     |               79 | Paddy                    |
+| Birdhana     |               79 | Vegetables               |
+| Birdhana     |               79 | Vegetables               |
+| Birdhana     |               79 | Vegetables               |
+| Birdhana     |               80 | Wheat                    |
+| Birdhana     |               81 | Wheat                    |
+| Birdhana     |               81 | Paddy                    |
+| Birdhana     |               81 | Jowar fodder             |
+| Birdhana     |               81 | Barseem                  |
+| Birdhana     |               81 | Moong                    |
+| Birdhana     |               83 | Jowar fodder             |
+| Birdhana     |               83 | Barseem                  |
+| Birdhana     |               84 | Cotton - Badi/Kapas      |
+| Birdhana     |               84 | Wheat                    |
+| Birdhana     |               84 | Paddy                    |
+| Birdhana     |               84 | Jowar fodder             |
+| Birdhana     |               84 | Barseem                  |
+| Birdhana     |               85 | Wheat                    |
+| Birdhana     |               85 | Paddy                    |
+| Birdhana     |               85 | Jowar fodder             |
+| Birdhana     |               85 | Barseem                  |
+| Birdhana     |               87 | Mustard                  |
+| Birdhana     |               87 | Jowar fodder             |
+| Birdhana     |               87 | Barseem                  |
+| Birdhana     |               88 | Wheat                    |
+| Birdhana     |               88 | Jowar fodder             |
+| Birdhana     |               88 | Barseem                  |
+| Birdhana     |               89 | Wheat                    |
+| Birdhana     |               89 | Jowar fodder             |
+| Birdhana     |               89 | Barseem                  |
+| Birdhana     |               90 | Jowar fodder             |
+| Birdhana     |               90 | Barseem                  |
+| Birdhana     |               91 | Cotton - Badi/Kapas      |
+| Birdhana     |               91 | Cotton - Badi/Kapas      |
+| Birdhana     |               91 | Jowar fodder             |
+| Birdhana     |               91 | Bajra                    |
+| Birdhana     |               91 | Barseem                  |
+| Birdhana     |               92 | Wheat                    |
+| Birdhana     |               92 | Paddy                    |
+| Birdhana     |               93 | Wheat                    |
+| Birdhana     |               93 | Paddy                    |
+| Birdhana     |               95 | Wheat                    |
+| Birdhana     |               95 | Paddy                    |
+| Birdhana     |               95 | Jowar fodder             |
+| Birdhana     |               95 | Barseem                  |
+| Birdhana     |               96 | Wheat                    |
+| Birdhana     |               96 | Paddy                    |
+| Birdhana     |               96 | Jowar fodder             |
+| Birdhana     |               96 | Barseem                  |
+| Birdhana     |               97 | Wheat                    |
+| Birdhana     |               97 | Paddy                    |
+| Birdhana     |               97 | Jowar fodder             |
+| Birdhana     |               97 | Barseem                  |
+| Cheher Kalan |                8 | Mustard                  |
+| Cheher Kalan |                8 | Wheat                    |
+| Cheher Kalan |                8 | Bajra                    |
+| Cheher Kalan |                8 | Guar                     |
+| Cheher Kalan |               29 | Mustard                  |
+| Cheher Kalan |               29 | Wheat                    |
+| Cheher Kalan |               29 | Bajra                    |
+| Cheher Kalan |               29 | Guar                     |
+| Cheher Kalan |               31 | Mustard                  |
+| Cheher Kalan |               31 | Bajra                    |
+| Cheher Kalan |               32 | Cotton - Badi/Kapas      |
+| Cheher Kalan |               32 | Mustard                  |
+| Cheher Kalan |               32 | Wheat                    |
+| Cheher Kalan |               32 | Bajra                    |
+| Cheher Kalan |               32 | Guar                     |
+| Cheher Kalan |               34 | Cotton - Badi/Kapas      |
+| Cheher Kalan |               34 | Mustard                  |
+| Cheher Kalan |               34 | Wheat                    |
+| Cheher Kalan |               36 | Cotton - Badi/Kapas      |
+| Cheher Kalan |               36 | Wheat                    |
+| Cheher Kalan |               39 | Cotton - Badi/Kapas      |
+| Cheher Kalan |               39 | Bajra                    |
+| Cheher Kalan |               40 | Mustard                  |
+| Cheher Kalan |               40 | Wheat                    |
+| Cheher Kalan |               40 | Jowar fodder             |
+| Cheher Kalan |               43 | Jowar fodder             |
+| Cheher Kalan |               48 | Jowar fodder             |
+| Cheher Kalan |               50 | Bajra                    |
+| Cheher Kalan |               51 | Wheat                    |
+| Cheher Kalan |               51 | Bajra                    |
+| Khandrai     |                6 | Wheat                    |
+| Khandrai     |                6 | Paddy                    |
+| Khandrai     |                6 | Jowar fodder             |
+| Khandrai     |                6 | Sugarcane (planted)      |
+| Khandrai     |                6 | Barseem                  |
+| Khandrai     |               21 | Wheat                    |
+| Khandrai     |               21 | Paddy                    |
+| Khandrai     |               21 | Sugarcane (planted)      |
+| Khandrai     |               21 | Vegetables               |
+| Khandrai     |               27 | Wheat                    |
+| Khandrai     |               44 | Sugarcane (first ratoon) |
+| Khandrai     |               47 | Jowar fodder             |
+| Khandrai     |               47 | Barseem                  |
 
 #+NAME: missing-data-code-6
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
@@ -289,7 +428,6 @@
 | Khandrai     |               25 |           5 | months_of_sowing |
 | Khandrai     |               28 |           6 | months_of_sowing |
 | Khandrai     |               28 |           7 | months_of_sowing |
-| Khandrai     |               29 |           5 | months_of_sowing |
 | Khandrai     |               32 |           4 | months_of_sowing |
 | Khandrai     |               32 |           5 | months_of_sowing |
 | Khandrai     |               35 |           4 | months_of_sowing |
@@ -314,6 +452,7 @@
 | Birdhana     |               67 |           5 | months_of_sowing |
 | Birdhana     |               67 |           3 | months_of_sowing |
 | Birdhana     |               67 |           4 | months_of_sowing |
+| Birdhana     |               68 |           6 | months_of_sowing |
 | Birdhana     |               57 |           6 | months_of_sowing |
 | Birdhana     |               58 |           3 | months_of_sowing |
 | Birdhana     |               58 |           4 | months_of_sowing |
@@ -599,20 +738,17 @@
 |--------------+------------------+-------------|
 | Khandrai     |               34 |           3 |
 | Khandrai     |               34 |           6 |
-| Khandrai     |               36 |           7 |
 | Khandrai     |               33 |           3 |
 | Khandrai     |               33 |           5 |
-| Khandrai     |               35 |           4 |
 | Khandrai     |               27 |           4 |
 | Khandrai     |               27 |           7 |
-| Khandrai     |               35 |           2 |
 | Khandrai     |               37 |           2 |
-| Khandrai     |               29 |           4 |
-| Khandrai     |               29 |           2 |
 | Khandrai     |               37 |           3 |
 | Khandrai     |               35 |           5 |
+| Khandrai     |               29 |           2 |
+| Khandrai     |               29 |           4 |
+| Khandrai     |               35 |           4 |
 | Birdhana     |               76 |           1 |
-| Birdhana     |               86 |           6 |
 | Birdhana     |                4 |           2 |
 | Birdhana     |                4 |           4 |
 | Birdhana     |                1 |           4 |
@@ -661,8 +797,6 @@
 | Birdhana     |               16 |           4 |
 | Birdhana     |               35 |           2 |
 | Birdhana     |               35 |           4 |
-| Birdhana     |               68 |           4 |
-| Birdhana     |               68 |           6 |
 | Cheher Kalan |               50 |           1 |
 | Cheher Kalan |               45 |         2.2 |
 | Cheher Kalan |               40 |           2 |
@@ -678,18 +812,10 @@
 | Birdhana     |               63 |           5 |
 | Birdhana     |               96 |           7 |
 | Birdhana     |               95 |           4 |
-| Khandrai     |                8 |           2 |
-| Khandrai     |               30 |           2 |
 | Khandrai     |               24 |           6 |
-| Khandrai     |               25 |           3 |
-| Khandrai     |               25 |           4 |
 | Cheher Kalan |               39 |           4 |
 | Cheher Kalan |               32 |           4 |
 | Cheher Kalan |               48 |           5 |
-| Khandrai     |                6 |           4 |
-| Khandrai     |                6 |           5 |
-| Khandrai     |               10 |           3 |
-| Khandrai     |               10 |           5 |
 | Gijji        |               87 |           4 |
 | Khandrai     |               44 |           4 |
 | Khandrai     |               47 |           6 |
@@ -738,7 +864,6 @@
 | Jamalpur Shekhan |               51 |       4 |
 | Jamalpur Shekhan |               51 |       3 |
 | Khandrai         |               38 |       3 |
-| Birdhana         |               80 |       4 |
 | Khandrai         |               33 |       3 |
 | Khandrai         |               36 |       1 |
 | Khandrai         |               36 |       3 |
@@ -761,6 +886,9 @@
 | Birdhana         |               36 |       4 |
 | Cheher Kalan     |               49 |     nil |
 | Birdhana         |                1 |     nil |
+| Birdhana         |               80 |       4 |
+| Cheher Kalan     |               48 |     nil |
+| Birdhana         |               77 |       3 |
 
 
 #+NAME: na-crop-operation-stage
@@ -773,12 +901,12 @@
 #+RESULTS: na-crop-operation-stage
 | village_name | household_number | crop_id |
 |--------------+------------------+---------|
-| Birdhana     |               80 | 4       |
 | Birdhana     |               16 | 1       |
 | Birdhana     |               89 | nil     |
 | Birdhana     |               36 | 4       |
 | Cheher Kalan |               49 | nil     |
 | Birdhana     |                1 | nil     |
+| Birdhana     |               80 | 4       |
 
 
 #+NAME: na-crop-operation-code
@@ -793,7 +921,6 @@
 |------------------+------------------+---------|
 | Jamalpur Shekhan |               12 |      24 |
 | Jamalpur Shekhan |               12 |      24 |
-| Birdhana         |               80 |       4 |
 | Birdhana         |               16 |       1 |
 | Cheher Kalan     |               13 |       1 |
 | Cheher Kalan     |               44 |       1 |
@@ -806,6 +933,8 @@
 | Birdhana         |               36 |       4 |
 | Cheher Kalan     |               49 |     nil |
 | Birdhana         |                1 |     nil |
+| Birdhana         |               80 |       4 |
+| Cheher Kalan     |               48 |     nil |
 
 
 #+NAME: na-extent-in-acres
@@ -1089,7 +1218,7 @@
 * Basic Tables                                                     :noexport:
 #+NAME: number_of_households
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-  household[villages, .(Village=village_name,"Number of households"=length(household_number)),by=.EACHI,on=c(village_id="id")][,village_id :=NULL]
+  household[, .(Village=village_name,"Number of households"=length(household_number)),by=.EACHI]
 #+END_SRC
 
 #+NAME: number_of_households
@@ -1376,7 +1505,6 @@ p[order(village_name,household_number)]
 
 #+NAME: corrections-input-matrix
 #+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
-
   household[,.(village_name,household_number,id)]->t
   t$qid <- paste(substr(t$village_name,1,3),t$household_number,sep="-")
   t[crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][!is.na(i.id),crop_table_id:=i.id][,i.id:=NULL][!is.na(crop_number)]->t1
@@ -1386,8 +1514,17 @@ p[order(village_name,household_number)]
   l[,.(qid,village_name,household_number,crop_number,crop_id,crop,Extent.in.acres,input_number,input_category,input_type,source,quantity,quantity_unit_id,value,lessor_quantity,lessor_value)]->k
   k[is.na(value),value:=0]->k
   k[is.na(lessor_value),lessor_value:=0]->k
-  k[value!=999]->k1
-  k1[lessor_value!=999]->k1
+  k[is.na(quantity),value:=0]
+
+
+  #k[value!=999]->k1
+  #k1[lessor_value!=999]->k1
+
+
+
+
+
+
   dcast(k1,qid+village_name+household_number+crop+input_category+input_type+Extent.in.acres~.,sum,value.var=c("value","lessor_value") )->k
 
   k[!is.na(Extent.in.acres)]->k #fix these cases
@@ -1410,11 +1547,35 @@ p[order(village_name,household_number)]
 
 #+NAME: urea_boxplot
 #+BEGIN_SRC R :results output graphics :file urea-boxplot.png :width 1200 :height 800 
+  household[,.(village_name,household_number,id)]->t
+  t$qid <- paste(substr(t$village_name,1,3),t$household_number,sep="-")
+  t[crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][!is.na(i.id),crop_table_id:=i.id][,i.id:=NULL][!is.na(crop_number)]->t1
+  t1[input,on=c(crop_table_id="cropping_pattern_schedule_production_and_sales_id")][cropinput,on=c(input_use_for_crops_id="id")]->l
+  input_category[l,on=c(id="input_category_id")]->l
+  input_type[l,on=c(id="input_type_id")]->l
+  l[,.(qid,village_name,household_number,crop_number,crop_id,crop,Extent.in.acres,input_number,input_category,input_type,source,quantity,quantity_unit_id,value,lessor_quantity,lessor_value)]->k
+  k[input_type=="Urea"]->k
+  ifelse(k$quantity_unit_id==10,k$quantity*100,k$quantity)->
 
-input_matrix[crop=="Paddy"|crop=="Wheat"|crop=="Cotton - Badi/Kapas"|crop=="Sugarcane (planted)"|crop=="Sugarcane (first ratoon)"|crop=="Barseem"|crop=="Mustard"]->a1
-a1[input_type=="Urea"]->a2
-ggplot(a2,aes(x=crop,y=per_acre_input))->a3
-a3+geom_boxplot()+geom_text_repel(aes(label=label),hjust=-0.3)+scale_y_continuous(name="Per acre Urea value")
+  k[is.na(value),value:=0]->k
+  k[is.na(lessor_value),lessor_value:=0]->k
+
+  dcast(k1,qid+village_name+household_number+crop+input_category+input_type+Extent.in.acres~.,sum,value.var=c("value","lessor_value") )->k
+
+  k[!is.na(Extent.in.acres)]->k #fix these cases
+  k$value+k$lessor_value->k$total_value
+  k$total_value/k$Extent.in.acres->k$per_acre_input
+  is_outlier <- function(x) {
+      return(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x))
+  }
+  k[,outlier:=is_outlier(per_acre_input),by=,.(crop,input_type,input_category)]->k
+  k[,label:=ifelse(outlier,qid,"")]->k
+
+
+  input_matrix[crop=="Paddy"|crop=="Wheat"|crop=="Cotton - Badi/Kapas"|crop=="Sugarcane (planted)"|crop=="Sugarcane (first ratoon)"|crop=="Barseem"|crop=="Mustard"]->a1
+  a1[input_type=="Urea"]->a2
+  ggplot(a2,aes(x=crop,y=per_acre_input))->a3
+  a3+geom_boxplot()+geom_text_repel(aes(label=label),hjust=-0.3)+scale_y_continuous(name="Per acre Urea value")
 
 #+END_SRC
 
@@ -1489,4 +1650,72 @@ a3+geom_boxplot()+geom_text_repel(aes(label=label),hjust=-0.3)+scale_y_continuou
 
 #+RESULTS: water_boxplot
 [[file:water-boxplot.png]]
-* Yield correction
+
+
+* TODO Yield correction
+
+#+NAME: yield-corrections
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+                                          # Matrix
+  household[,.(village_name,household_number,id,multiplier)]->t
+  t$qid <- paste(substr(t$village_name,1,3),t$household_number,sep="-")            
+  t[crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,i.id:=NULL][!is.na(crop_number)][,.(area=Extent.in.acres,main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,qid,crop_number,crop,multiplier)]->p
+
+  p[crop=="Paddy"|crop=="Wheat"|crop=="Cotton - Badi/Kapas"|crop=="Mustard"]->p
+  p[main!=999&!is.na(main)&!is.na(area)&!is.na(unit_main)]->p
+  ifelse(p$unit_main==10,p$main*100,p$main)->p$main_kg
+  p[,.(Yield=main_kg/area),by=.(village_name,crop,household_number,qid)]->p
+  p[Yield!=0]->p
+  is_outlier <- function(x) {
+      return(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x))
+  }
+  p[,outlier:=is_outlier(Yield),by=,.(village_name,crop)]->k
+  k[,label:=ifelse(outlier,qid,"")]->k
+
+  ggplot(k,aes(x=crop,y=Yield))->a3
+  a3+geom_boxplot()+geom_text_repel(aes(label=label),hjust=-0.5)+scale_y_continuous(name="Kilograms per acre")
+
+
+#+END_SRC
+
+#+RESULTS: yield-corrections
+
+#+NAME: yield-number
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+                                          # Matrix
+  household[,.(village_name,household_number,id,multiplier)]->t
+  t$qid <- paste(substr(t$village_name,1,3),t$household_number,sep="-")            
+  t[crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,i.id:=NULL][!is.na(crop_number)][,.(area=Extent.in.acres,main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,qid,crop_number,crop,multiplier)]->p
+  p[crop=="Paddy"|crop=="Wheat"|crop=="Cotton"|crop=="Mustard"]->p
+  #p[main!=999&!is.na(main)&!is.na(area)&!is.na(unit_main)]->p
+  ifelse(p$unit_main==10,p$main*100,p$main)->p$main_kg
+  p$main_kg*p$multiplier->p$main_kg
+  p$area*p$multiplier->p$area
+  p[,.(Yield=sum(main_kg)/sum(area)),by=.(village_name,crop)]->p
+#+END_SRC
+
+* Labour days hired correction
+
+#+NAME: labour_matrix
+#+BEGIN_SRC R :results value :exports results :colnames yes :hline yes
+  household[,.(village_name,household_number,id)]->t
+  t$qid <- paste(substr(t$village_name,1,3),t$household_number,sep="-")
+  t[crop,on=c(id="sno_id")][code_crop,on=c(crop_id="id")][,i.id:=NULL][!is.na(crop_number)][,.(area=Extent.in.acres,main=Production_main_product,by=Production_by_product,unit_main=main_unit_id,unit_by=by_unit_id),by=.(village_name,household_number,qid,crop_number,crop)]->p
+
+  labouruse[is.na(total_payment_in_cash),total_payment_in_cash:=0]
+  labouruse[total_payment_in_cash!=999]->labouruse
+
+  labouruse[type_of_worker=="Piece-rated workers",.(total=sum(total_payment_in_cash),labour_cost_born_by),by=.(id,crop_id,crop_operation_stage,sno_id)]->h
+
+  merge(h,t,by.x="sno_id",by.y="id",all.x=TRUE)
+
+   merge(t,labouruse,by.x=c("sno_id","crop_id"),by.y=c("sno_id","crop_id"))->p
+   p[type_of_worker!="Machine labour" & type_of_worker!="Piece-rated workers"]->p1
+   p1[,.(sno_id,crop_id,Extent.in.acres,household_number,village_name,crop_operation_stage,crop_operation_code,type_of_worker,measurement_unit_id,work_units,daily_hours,total_payment_in_cash)]->p2
+   merge(p2,measurement_unit,by.x="measurement_unit_id",by.y="id")->p2
+   p2[labourunit!="Days",.(village_name,crop_id,crop_operation_code,type_of_worker,labourunit),by=household_number]
+
+#+END_SRC
+
+
+* Matrix
