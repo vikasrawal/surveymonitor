@@ -18,6 +18,7 @@
   options(width=170)
   require(RPostgreSQL)
   require(ggplot2)
+  require(ggrepel)
   require(data.table)
   addhead<-function(d1,v1,v2) {
     as.data.table(expand.grid(V2=levels(v2),V1=levels(v1))[,c(2,1)])->tabhead
@@ -42,36 +43,36 @@
 
 #+NAME: open-database-connection
 #+BEGIN_SRC R :results silent :exports none
-source("~/vikascloud/surveymonitor/sserconnect.R")
-#+END_SRC
+  source("~/vikascloud/surveymonitor/sserconnect.R")
+  3#+END_SRC
 
-#+NAME: read-data-code
-#+BEGIN_SRC R :results silent :exports none
-  #dbListTables(surveypg)->t
-  data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
-  data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
-  data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
-  data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
-  data.table(dbReadTable(surveypg,"ruralsurvey_codereligion"))->religions
-  data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
-  data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
-  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
-  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
-  sampledesign[,id:=NULL]
-  merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum_number"),all.x=T)->household
-  household[household_number<9990]->household
-  household[is.na(multiplier),multiplier:=1]
-  merge(household,villages,by.x="village_id",by.y="id",all.x=T)->household
-  merge(household,castes,by.x="caste_tribe_id",by.y="id",all.x=T)->household
-  merge(household,religions,by.x="religion_id",by.y="id",all.x=T)->household
+  ,#+NAME: read-data-code
+  ,#+BEGIN_SRC R :results silent :exports none
+    #dbListTables(surveypg)->t
+    data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
+    data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
+    data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
+    data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
+    data.table(dbReadTable(surveypg,"ruralsurvey_codereligion"))->religions
+    data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
+    data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
+    data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
+    data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+    sampledesign[,id:=NULL]
+    merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum_number"),all.x=T)->household
+    household[household_number<9990]->household
+    household[is.na(multiplier),multiplier:=1]
+    merge(household,villages,by.x="village_id",by.y="id",all.x=T)->household
+    merge(household,castes,by.x="caste_tribe_id",by.y="id",all.x=T)->household
+    merge(household,religions,by.x="religion_id",by.y="id",all.x=T)->household
 
-  household[,c(39,5,6,4,16,38,41,42)]->hhid
-  setkey(hhid,id)
-  hhid[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
-  factor(hhid$village_name,levels=c("Khandrai","Cheher Kalan","Birdhana","Birdhana Dhanis","Jamalpur Shekhan","Gijji","Bhadas"))->hhid$village_name
-  levels(hhid$village_name)<-c("खंदरई","चहड़ कलां","भिरढाणा","भिरढाणा ढाणियाँ","जमालपुर शेखाँ","गिज्जी","भादस")
+    household[,c(39,5,6,4,16,38,41,42)]->hhid
+    setkey(hhid,id)
+    hhid[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
+    factor(hhid$village_name,levels=c("Khandrai","Cheher Kalan","Birdhana","Birdhana Dhanis","Jamalpur Shekhan","Gijji","Bhadas"))->hhid$village
+    levels(hhid$village)<-c("खंदरई","चहड़ कलां","भिरढाणा","भिरढाणा ढाणियाँ","जमालपुर शेखाँ","गिज्जी","भादस")
 
-  #dbDisconnect(surveypg)
+    #dbDisconnect(surveypg)
 #+END_SRC
 
 #+NAME: list-tables-code
@@ -85,147 +86,147 @@ source("~/vikascloud/surveymonitor/sserconnect.R")
 | x                                                               |
 |-----------------------------------------------------------------|
 | auth_user                                                       |
+| ruralsurvey_access_to_food_in_school_or_anganwadi               |
+| ruralsurvey_access_to_education_questions                       |
+| django_content_type                                             |
 | django_migrations                                               |
 | django_session                                                  |
-| ruralsurvey_access_to_food_in_school_or_anganwadi               |
-| django_content_type                                             |
-| ruralsurvey_access_to_education_questions                       |
-| django_admin_log                                                |
-| auth_group                                                      |
-| auth_user_user_permissions                                      |
-| ruralsurvey_annual_consumption_of_major_items_of_food           |
-| ruralsurvey_asset_ownership_land_buildings                      |
+| ruralsurvey_animal_resources_milk                               |
+| ruralsurvey_animal_resources_feed                               |
+| ruralsurvey_animal_resources_sale_production                    |
+| ruralsurvey_code_cooking_energy_source                          |
+| ruralsurvey_code_bank_account_type                              |
 | ruralsurvey_code_commodity                                      |
-| ruralsurvey_child_help                                          |
-| ruralsurvey_code_informal_saving_institions                     |
-| ruralsurvey_codeinputcategory                                   |
-| ruralsurvey_expenditure_on_education                            |
+| ruralsurvey_code_card_type                                      |
+| ruralsurvey_code_credit_institutions                            |
+| ruralsurvey_codefeedtype                                        |
+| ruralsurvey_code_food                                           |
+| ruralsurvey_codemodeoftransport                                 |
+| ruralsurvey_current_ownership_holdings                          |
+| ruralsurvey_for_long_term_agricultural_workers                  |
 | ruralsurvey_irrigation_ownership_holdings                       |
+| ruralsurvey_land_tenancy_mortgage                               |
 | ruralsurvey_sampledesign                                        |
 | ruralsurvey_work_done_by_household_members_under_nrega          |
-| auth_group_permissions                                          |
-| auth_user_groups                                                |
 | auth_permission                                                 |
-| ruralsurvey_incidence_of_diseases_over_last_one_month_disea4551 |
-| ruralsurvey_codeeducationalinstitution                          |
-| ruralsurvey_code_reason_no_treatment                            |
-| ruralsurvey_codesampletype                                      |
-| ruralsurvey_coderentunit                                        |
-| ruralsurvey_crop_sales                                          |
-| ruralsurvey_purchases_from_the_public_distribution_system       |
-| ruralsurvey_code_quantity_unit                                  |
+| auth_group_permissions                                          |
+| django_admin_log                                                |
+| auth_user_user_permissions                                      |
+| auth_group                                                      |
+| auth_user_groups                                                |
+| ruralsurvey_codeoccupationcategory                              |
+| ruralsurvey_codecrop                                            |
 | ruralsurvey_access_to_education_children                        |
+| ruralsurvey_assets                                              |
 | ruralsurvey_acquisition_and_loss_of_major_assets                |
-| ruralsurvey_animal_resources_sale_production                    |
-| ruralsurvey_animal_resources_work_done_by_household_members     |
-| ruralsurvey_animal_resources_milk                               |
-| ruralsurvey_animal_resources_for_last_one_year_inventory        |
-| ruralsurvey_animal_resources_feed                               |
-| ruralsurvey_asset_ownership_furniture                           |
-| ruralsurvey_asset_ownership_electrical                          |
-| ruralsurvey_animal_resources_for_last_one_year_sale_disposal    |
-| ruralsurvey_animal_resources_other_costs                        |
-| ruralsurvey_asset_ownership_inventories                         |
-| ruralsurvey_code_asset_others                                   |
-| ruralsurvey_code_card_type                                      |
-| ruralsurvey_code_asset_transport                                |
-| ruralsurvey_code_asset                                          |
-| ruralsurvey_code_asset_inventories                              |
-| ruralsurvey_business_and_artisan_earnings_household_members     |
-| ruralsurvey_code_asset_furniture                                |
-| ruralsurvey_code_bank_account_type                              |
-| ruralsurvey_business_and_artisan_earnings                       |
+| ruralsurvey_codecaste                                           |
+| ruralsurvey_household                                           |
+| ruralsurvey_member                                              |
 | ruralsurvey_code_purpose_of_borrowing                           |
-| ruralsurvey_code_cooking_energy_source                          |
-| ruralsurvey_codeanimaltype                                      |
-| ruralsurvey_code_food                                           |
-| ruralsurvey_codecropcommodity                                   |
-| ruralsurvey_code_reasons_for_sale                               |
-| ruralsurvey_code_description_of_buyer_lessee                    |
-| ruralsurvey_code_credit_institutions                            |
-| ruralsurvey_code_others_irrigation_other_nature_ex              |
-| ruralsurvey_codebusinesscategory                                |
 | ruralsurvey_code_source_of_borrowing                            |
-| ruralsurvey_code_materials                                      |
-| ruralsurvey_code_source_of_lighting                             |
-| ruralsurvey_codecontractduration                                |
-| ruralsurvey_code_payer                                          |
-| ruralsurvey_codediseasecategory                                 |
-| ruralsurvey_code_kind_commodity                                 |
+| ruralsurvey_codeplaces                                          |
+| ruralsurvey_codelabourunit                                      |
+| ruralsurvey_agricultural_non_agricultura_labour_services        |
+| ruralsurvey_agricultural_loans_borrowed_last_year_and_repaid    |
+| ruralsurvey_code_asset_others                                   |
+| ruralsurvey_code_asset                                          |
+| ruralsurvey_annual_consumption_of_major_items_of_food           |
+| ruralsurvey_asset_ownership_land_buildings                      |
+| ruralsurvey_code_asset_inventories                              |
+| ruralsurvey_animal_resources_work_done_by_household_members     |
+| ruralsurvey_asset_ownership_inventories                         |
+| ruralsurvey_code_asset_transport                                |
+| ruralsurvey_asset_ownership_transport                           |
+| ruralsurvey_bank_post_office_accounts                           |
+| ruralsurvey_animal_resources_for_last_one_year_inventory        |
+| ruralsurvey_team_members                                        |
+| ruralsurvey_use_of_informal_institutions_for_savings            |
 | ruralsurvey_comments_and_investigators                          |
-| ruralsurvey_codeirrigationsource                                |
-| ruralsurvey_codefeedtype                                        |
+| ruralsurvey_expenditure_on_education                            |
+| ruralsurvey_incidence_of_diseases_over_last_one_month_disea4551 |
+| ruralsurvey_incidence_of_inpatient_treatment_disease_category   |
+| ruralsurvey_wells_ownership                                     |
+| ruralsurvey_cropping_pattern_schedule_production_and_sales      |
+| ruralsurvey_crop_sales                                          |
+| ruralsurvey_occupations_household_members                       |
+| ruralsurvey_land_leased_out_fixed_rent                          |
+| ruralsurvey_housing_materials                                   |
+| ruralsurvey_housing_q                                           |
+| ruralsurvey_code_materials                                      |
+| ruralsurvey_codeeducationalinstitution                          |
+| ruralsurvey_code_informal_saving_institions                     |
+| ruralsurvey_codebusinesscategory                                |
+| ruralsurvey_codecropcommodity                                   |
+| ruralsurvey_code_reason_no_treatment                            |
+| ruralsurvey_codeinputcategory                                   |
+| ruralsurvey_codecontractduration                                |
+| ruralsurvey_codediseasecategory                                 |
+| ruralsurvey_code_payer                                          |
+| ruralsurvey_code_source_of_lighting                             |
+| ruralsurvey_code_others_irrigation_other_nature_ex              |
+| ruralsurvey_code_reasons_for_sale                               |
 | ruralsurvey_codeseasons                                         |
 | ruralsurvey_coderelationship                                    |
-| ruralsurvey_codeinputtype                                       |
 | ruralsurvey_codetenurialstatus                                  |
 | ruralsurvey_codevariety                                         |
+| ruralsurvey_codesampletype                                      |
 | ruralsurvey_codereligion                                        |
 | ruralsurvey_codeplaceofbirth                                    |
-| ruralsurvey_codeownershiptype                                   |
-| ruralsurvey_codelabourunit                                      |
-| ruralsurvey_codevillage                                         |
-| ruralsurvey_codeitem                                            |
-| ruralsurvey_codepowersource                                     |
-| ruralsurvey_codemodeoftransport                                 |
-| ruralsurvey_housing                                             |
-| ruralsurvey_for_long_term_agricultural_workers                  |
+| ruralsurvey_codeinputtype                                       |
 | ruralsurvey_consumption_of_frequent_food_week                   |
+| ruralsurvey_coderentunit                                        |
+| ruralsurvey_codepowersource                                     |
+| ruralsurvey_codeirrigationsource                                |
+| ruralsurvey_codeitem                                            |
+| ruralsurvey_codeownershiptype                                   |
+| ruralsurvey_housing                                             |
 | ruralsurvey_freedom_of_employment                               |
-| ruralsurvey_cropping_pattern_schedule_production_and_sales      |
+| ruralsurvey_experience_of_food_insecurity                       |
 | ruralsurvey_costs                                               |
 | ruralsurvey_housing_assistance                                  |
-| ruralsurvey_experience_of_food_insecurity                       |
-| ruralsurvey_current_ownership_holdings                          |
+| ruralsurvey_impact_of_specified_events_on_access_to_livelihoods |
 | ruralsurvey_incidence_of_inpatient_treatment                    |
 | ruralsurvey_income_from_salaries                                |
-| ruralsurvey_housing_q                                           |
-| ruralsurvey_labour_days_employed_and_wage_rates_agri            |
+| ruralsurvey_land_leased_in_fixed_rent                           |
 | ruralsurvey_income_from_hiring_out_machinery                    |
 | ruralsurvey_incidence_of_diseases_over_last_one_month           |
+| ruralsurvey_labour_days_employed_and_wage_rates_agri            |
 | ruralsurvey_input_use_for_crops_crop_number                     |
 | ruralsurvey_input_use_for_crops                                 |
-| ruralsurvey_impact_of_specified_events_on_access_to_livelihoods |
-| ruralsurvey_land_tenancy_mortgage                               |
+| ruralsurvey_land_leased_out_share_rent                          |
 | ruralsurvey_medical_insurance                                   |
 | ruralsurvey_land_mortgaged_in                                   |
 | ruralsurvey_land_mortgaged_out                                  |
-| ruralsurvey_land_leased_in_fixed_rent                           |
 | ruralsurvey_means_of_prod                                       |
-| ruralsurvey_land_leased_out_fixed_rent                          |
 | ruralsurvey_membership_in_self_help_groups                      |
 | ruralsurvey_non_agricultural_manual_labouring_out               |
-| ruralsurvey_land_leased_out_share_rent                          |
+| ruralsurvey_nrega_job_cards                                     |
+| ruralsurvey_outstanding_loans                                   |
 | ruralsurvey_other_costs_incurred_last_year                      |
 | ruralsurvey_payments_made_to_managers_and_long_term_workers_gen |
-| ruralsurvey_source_of_water_for_domestic_use                    |
-| ruralsurvey_ration_question                                     |
-| ruralsurvey_occupations_household_members                       |
-| ruralsurvey_scholarships_pensions_rents_remittances             |
-| ruralsurvey_ration_cards                                        |
-| ruralsurvey_standardnorm                                        |
-| ruralsurvey_outstanding_loans                                   |
+| ruralsurvey_purchases_from_the_public_distribution_system       |
 | ruralsurvey_payments_made_to_managers_and_long_term_workers     |
-| ruralsurvey_codecaste                                           |
-| ruralsurvey_household                                           |
-| ruralsurvey_agricultural_non_agricultura_labour_services        |
-| ruralsurvey_assets                                              |
-| ruralsurvey_housing_materials                                   |
-| ruralsurvey_agricultural_loans_borrowed_last_year_and_repaid    |
-| ruralsurvey_member                                              |
-| ruralsurvey_incidence_of_inpatient_treatment_disease_category   |
-| ruralsurvey_bank_post_office_accounts                           |
+| ruralsurvey_ration_question                                     |
+| ruralsurvey_ration_cards                                        |
+| ruralsurvey_scholarships_pensions_rents_remittances             |
+| ruralsurvey_standardnorm                                        |
+| ruralsurvey_animal_resources_for_last_one_year_sale_disposal    |
+| ruralsurvey_animal_resources_other_costs                        |
+| ruralsurvey_code_asset_furniture                                |
+| ruralsurvey_business_and_artisan_earnings_household_members     |
+| ruralsurvey_code_kind_commodity                                 |
+| ruralsurvey_code_quantity_unit                                  |
+| ruralsurvey_business_and_artisan_earnings                       |
+| ruralsurvey_codeanimaltype                                      |
+| ruralsurvey_asset_ownership_electrical                          |
+| ruralsurvey_code_description_of_buyer_lessee                    |
+| ruralsurvey_codevillage                                         |
 | ruralsurvey_asset_ownership_other                               |
-| ruralsurvey_team_members                                        |
-| ruralsurvey_code_asset_electrical                               |
-| ruralsurvey_codecrop                                            |
-| ruralsurvey_codeoccupationcategory                              |
-| ruralsurvey_codeplaces                                          |
+| ruralsurvey_asset_ownership_furniture                           |
 | ruralsurvey_agricultural_labouring_out                          |
-| ruralsurvey_asset_ownership_transport                           |
-| ruralsurvey_nrega_job_cards                                     |
-| ruralsurvey_use_of_informal_institutions_for_savings            |
-| ruralsurvey_wells_ownership                                     |
+| ruralsurvey_child_help                                          |
+| ruralsurvey_code_asset_electrical                               |
+| ruralsurvey_source_of_water_for_domestic_use                    |
 
 * Data Entry
 ** Overall Decisions Regarding Data Entry
@@ -250,7 +251,6 @@ CLOSED: [2018-11-11 Sun 06:59]
 ****** Type of contract in labouring out should be foreign key
 
 ****** Labour and Input Use
-
 *** Corrections in design of land tables                         :noexport:
 
 #+NAME: separate-irrigation
@@ -332,7 +332,6 @@ CLOSED: [2018-11-11 Sun 06:59]
 #+END_SRC
 
 ** Inconsistencies in Data                                     :Sonia:Jesim:
-
 *** Tests to be done
 
 **** Land, cropping pattern, production, input use
@@ -474,6 +473,61 @@ This section lists data gaps that are critical. Sonia to attend to these, in con
 
 ***** Match homestead land with housing information. Check if value of house and land are recorded.
 
+*** Employment
+#+NAME: occupation-preliminary1-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
+  agrilabour[crop_id==4]->t
+  t[crop_operation_code==2320]->t
+  unique(hhid[id %in% t$sno_id,.(village_name,household_number)])
+#+END_SRC
+
+#+NAME: occupation-preliminary
+#+RESULTS: occupation-preliminary1-code
+| village_name   | household_number |
+|----------------+------------------|
+| खंदरई           |               47 |
+| खंदरई           |               57 |
+| खंदरई           |               59 |
+| खंदरई           |               61 |
+| खंदरई           |               64 |
+| खंदरई           |               66 |
+| खंदरई           |               68 |
+| भिरढाणा        |                8 |
+| जमालपुर शेखाँ     |                3 |
+| जमालपुर शेखाँ     |                4 |
+| जमालपुर शेखाँ     |                8 |
+| भिरढाणा        |               21 |
+| भिरढाणा        |               23 |
+| जमालपुर शेखाँ     |               11 |
+| जमालपुर शेखाँ     |               15 |
+| भिरढाणा        |               32 |
+| भिरढाणा        |               37 |
+| जमालपुर शेखाँ     |               23 |
+| जमालपुर शेखाँ     |               24 |
+| जमालपुर शेखाँ     |               26 |
+| जमालपुर शेखाँ     |               28 |
+| जमालपुर शेखाँ     |               35 |
+| जमालपुर शेखाँ     |               39 |
+| भिरढाणा        |               43 |
+| भिरढाणा        |               48 |
+| जमालपुर शेखाँ     |               40 |
+| जमालपुर शेखाँ     |               42 |
+| जमालपुर शेखाँ     |               43 |
+| भिरढाणा        |               64 |
+| जमालपुर शेखाँ     |               47 |
+| भिरढाणा ढाणियाँ |               76 |
+| जमालपुर शेखाँ     |               60 |
+| जमालपुर शेखाँ     |               61 |
+| जमालपुर शेखाँ     |               65 |
+| जमालपुर शेखाँ     |               67 |
+| जमालपुर शेखाँ     |               72 |
+| भिरढाणा ढाणियाँ |               93 |
+| जमालपुर शेखाँ     |               74 |
+| जमालपुर शेखाँ     |               75 |
+| जमालपुर शेखाँ     |               76 |
+| जमालपुर शेखाँ     |               77 |
+ 
 * Information for Data Users
 
 ** Using this repo
@@ -760,7 +814,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   data.table(dbReadTable(surveypg,"ruralsurvey_land_tenancy_mortgage"))->leaseland
   ownland[,.(ownhold=sum(extent)),keyby="sno_id"]->ownland
   copy(hhid)->t
-  t[ownland, `:=`(ownhold=i.ownhold)]->t
+  t[ownland,  `:=`(ownhold=i.ownhold)]->t
   t[is.na(ownhold),ownhold:=0]
   leaseland[!is.na(transfer_in_out)][,.(tenmort=sum(extent)),keyby=.(sno_id,transfer_in_out)][CJ(unique(sno_id),unique(transfer_in_out))][,as.list(tenmort),by=.(sno_id)]->t1
   #t1[is.na(V1),V1:=0][is.na(V2),V2:=0]
@@ -850,13 +904,13 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   names(t2)[c(4,6)]<-c("pond","tubewell")
   t2[is.na(extent),extent:=0][is.na(extent),tubewell:=0]
   copy(t2)->t1
-  t1[order(extent),owncum:=cumsum(extent*multiplier)/sum(extent*multiplier),village_name]
-  t1[order(owncum),hhrank:=cumsum(multiplier)/sum(multiplier),village_name]
+  t1[order(extent),owncum:=cumsum(extent*multiplier)/sum(extent*multiplier),village]
+  t1[order(owncum),hhrank:=cumsum(multiplier)/sum(multiplier),village]
   t1[hhrank<=0.2,ownq:=1][hhrank>0.2 & hhrank<=0.4,ownq:=2][hhrank>0.4 & hhrank<=0.6,ownq:=3][hhrank>0.6 & hhrank<=0.8,ownq:=4][hhrank>0.8,ownq:=5]
-  t1[,.(tubewell=sum(tubewell*multiplier),extent=sum(extent*multiplier)),keyby=.(village_name,ownq)]->t1
+  t1[,.(tubewell=sum(tubewell*multiplier),extent=sum(extent*multiplier)),keyby=.(village,ownq)]->t1
   t1[is.na(tubewell),tubewell:=0][,tubewellpc:=round(tubewell*100/extent)]
 
-  dcast.data.table(t1,ownq~village_name,sum,value.var="tubewellpc")->t1
+  dcast.data.table(t1,ownq~village,sum,value.var="tubewellpc")->t1
 
   t1$ownq<-c("सबसे कम जमीन वाले 20% परिवार","20--40%","40--60%","60--80%","सबसे ज्यादा जमीन वाले 20% परिवार")
   names(t1)[1]<-"वर्ग"
@@ -905,110 +959,92 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 ** Employment
 ***  Casual agricultural labour
 
-#+NAME: occupation-preliminary-code
+#+NAME: casual-labour0-code
 #+BEGIN_SRC R :results silent :exports none
   data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
   data.table(dbReadTable(surveypg,"ruralsurvey_code_kind_commodity"))->kindcomm
+  data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->kindunit
+  data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->standards
   member[,.(sno_id,id,person_number,age,sex,name)]->t
   merge(agrilabour,t,by.x=c("sno_id","name_of_worker_id"),by.y=c("sno_id","id"),all.x=T)->agrilabour
 
   merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
-  agrilabour[labour_days==999|is.na(labour_days)]->t
 
+  copy(agrilabour)->t
+  t[kindcomm,on=c(wages_kind_commodity1_id="id"),`:=`(kind_commodity1=i.kind_commodity,crop1_id=i.crop_id,mainby1=i.main_or_by)]
+  t[kindunit,on=c(wages_kind_commodity1_unit_id="id"),`:=`(kind_commodity1_unit=i.quantity_unit)]
+  t[kindcomm,on=c(wages_kind_commodity2_id="id"),`:=`(kind_commodity2=i.kind_commodity,crop2_id=i.crop_id,mainby2=i.main_or_by)]
+  t[kindunit,on=c(wages_kind_commodity2_unit_id="id"),`:=`(kind_commodity2_unit=i.quantity_unit)]
 
-  unique(hhid[id %in% t$sno_id])
+  standards[parameter_description=="Sale price",.(code_id,commodity,value,unit_denominator)]->prices
+  prices[unit_denominator==10,value:=value/100][,price:=value][,unit_denominator:=NULL][,value:=NULL]
 
-  library(ggplot2)
-  subset(agrilabour,village_name=="जमालपुर शेखाँ")->t
-  merge(agrilabour, by.x="wages_kind_commodity1_id",
-  subset(agrilabour,!is.na(wages_kind_commodity1_quantity))->t
-  subset(t,wages_total_earnings_cash!=999)->t
-  subset(t,labour_days!=999)->t
-  subset(t,!is.na(wages_total_earnings_cash))->t
-  subset(t,!is.na(labour_days))->t
-  subset(t,wage_category=="Daily labour")->t
+  ## Kind commodity1
+  t[!is.na(crop1_id),.(id,crop1_id,mainby1,wages_kind_commodity1_unit_id,wages_kind_commodity1_quantity)]->t1
+  merge(t1,prices,by.x=c("crop1_id","mainby1"),by.y=c("code_id","commodity"),all.x=T)->t1
+  t1[,.(kindvalue1=wages_kind_commodity1_quantity*price),id]->t1
 
-  t$wage<-t$wages_total_earnings_cash/t$labour_days
+  ## Kind commodity2
+  t[!is.na(crop2_id),.(id,crop2_id,mainby2,wages_kind_commodity2_unit_id,wages_kind_commodity2_quantity)]->t2
+  merge(t2,prices,by.x=c("crop2_id","mainby2"),by.y=c("code_id","commodity"),all.x=T)->t2
+  t2[,.(kindvalue2=wages_kind_commodity2_quantity*price),id]->t2
 
-  agrilabour[wages_total_earnings_cash
+  copy(t)->t3
+  t3[is.na(tea_cups_total),tea_cups_total:=0][is.na(meals_total),meals_total:=0][is.na(bidi_cigarette_total),bidi_cigarette_total:=0]
+  t3[,.(othervalue=tea_cups_total*5+meals_total*20+bidi_cigarette_total*2),id]->t3
 
+  ### To account for t$other_payments_total
+  t[,.(sno_id,name,age,sex,labour_days,hours=work_hours/labour_days,cash=wages_total_earnings_cash),id]->t0
 
+  merge(t0,t1,by="id",all.x=TRUE)->t0
+  merge(t0,t2,by="id",all.x=TRUE)->t0
+  merge(t0,t3,by="id",all.x=TRUE)->t0
+  t0[is.na(kindvalue1),kindvalue1:=0][is.na(kindvalue2),kindvalue2:=0][is.na(cash),cash:=0][,kindvalue:=kindvalue1+kindvalue2+othervalue]
+  t0[,kindvalue1:=NULL][,kindvalue2:=NULL][,othervalue:=NULL][,totalearning:=cash+kindvalue]
+  t0[,standarddays:=labour_days*hours/8][,daily:=totalearning/standarddays]
+  merge(t0,hhid,by.x="sno_id",by.y="id")->casual_labour_final
 
-  ggplot(t,aes(x=sex,y=wage))+geom_boxplot()
-  t[,.(count=length(labour_days)),wage_category]
-
-  subset(t,wage_category=="Piece-rated workers")
-
-  codeoccupation[order(id)]->codeoccupation
-  factor(codeoccupation$id)->codeoccupation$id2
-  levels(codeoccupation$id2)<-codeoccupation$occupation_category
-  codeoccupation[,.(id,occupation_category=id2)]->codeoccupation
-    data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
-    merge(occupations,codeoccupation,by.x="occupation_category_id",by.y="id")->occupations
-  ## household[,c(1,2,3,12,24,25,26,38)]->t
-  copy(hhid)->t
-  merge(occupations,t,by.x="sno_id",by.y="id")->occupations
-  ## merge(occupations,castes,by.x="caste_tribe_id",by.y="id")->occupations
-  ## merge(occupations,villages,by.x="village_id",by.y="id")->occupations
-  member[,c(1,3,4,5,16)]->t
-
-  factor(occupations$occupation_category,levels=c("Landlord","Peasant","Tending animals","Agricultural labour","Non-agricultural manual labour","Salaried government employee","Salaried private employee","Self-employed, business owner","Caste occupations/artisans","Recipient of pension/remittance","Apprentice","Collection of CPRs","Unemployed","Student","Housework","Unable to work because of age or poor health","Other"))->occupations$occupation_category
-  levels(occupations$occupation_category)<-c("लैंडलॉर्ड","किसान","पशुपालन","खेत मज़दूरी","गैर-खेती मज़दूरी","सरकारी नौकरी","प्राईवेट नौकरी","निजी व्यवसाय","जातिगत काम/शिल्प","पेंशन/छात्रवृति/प्रवासी आय पर निर्भर","काम सीख रहे हैं","वन उत्पाद इकट्ठा करना","बेरोजगार","विद्यार्थी","घर का काम","बीमारी या उम्र के कारण काम नहीं कर सकते","अन्य") 
 #+END_SRC
 
-#+NAME: occupation-preliminary1-code
+#+NAME: casualdays_code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
-  data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
-  agrilabour[crop_id==4]->t
-  t[crop_operation_code==2320]->t
-  unique(hhid[id %in% t$sno_id,.(village_name,household_number)])
+  library(spatstat)
+  copy(casual_labour_final)->t
+  t[,.(days=sum(standarddays)),keyby=.(village,household_number,sno_id,id,name,age,sex,multiplier)]->t
+  t[,.(mediandays=round(weighted.median(days,multiplier))),.(village,sex)]->t
+  dcast(t,village~sex)->t
+  names(t)<-c("गाँव","महिलायें","पुरुष")
+  t
 #+END_SRC
 
-#+NAME: occupation-preliminary
-#+RESULTS: occupation-preliminary1-code
-| village_name   | household_number |
-|----------------+------------------|
-| खंदरई           |               47 |
-| खंदरई           |               57 |
-| खंदरई           |               59 |
-| खंदरई           |               61 |
-| खंदरई           |               64 |
-| खंदरई           |               66 |
-| खंदरई           |               68 |
-| भिरढाणा        |                8 |
-| जमालपुर शेखाँ     |                3 |
-| जमालपुर शेखाँ     |                4 |
-| जमालपुर शेखाँ     |                8 |
-| भिरढाणा        |               21 |
-| भिरढाणा        |               23 |
-| जमालपुर शेखाँ     |               11 |
-| जमालपुर शेखाँ     |               15 |
-| भिरढाणा        |               32 |
-| भिरढाणा        |               37 |
-| जमालपुर शेखाँ     |               23 |
-| जमालपुर शेखाँ     |               24 |
-| जमालपुर शेखाँ     |               26 |
-| जमालपुर शेखाँ     |               28 |
-| जमालपुर शेखाँ     |               35 |
-| जमालपुर शेखाँ     |               39 |
-| भिरढाणा        |               43 |
-| भिरढाणा        |               48 |
-| जमालपुर शेखाँ     |               40 |
-| जमालपुर शेखाँ     |               42 |
-| जमालपुर शेखाँ     |               43 |
-| भिरढाणा        |               64 |
-| जमालपुर शेखाँ     |               47 |
-| भिरढाणा ढाणियाँ |               76 |
-| जमालपुर शेखाँ     |               60 |
-| जमालपुर शेखाँ     |               61 |
-| जमालपुर शेखाँ     |               65 |
-| जमालपुर शेखाँ     |               67 |
-| जमालपुर शेखाँ     |               72 |
-| भिरढाणा ढाणियाँ |               93 |
-| जमालपुर शेखाँ     |               74 |
-| जमालपुर शेखाँ     |               75 |
-| जमालपुर शेखाँ     |               76 |
-| जमालपुर शेखाँ     |               77 |
+#+NAME: casualdays
+#+CAPTION: महिला और पुरुष खेत मजदूरों को मिले काम के औसत (median) दिन
+#+RESULTS: casualdays_code
+| गाँव            | महिलायें | पुरुष |
+|----------------+--------+-----|
+| खंदरई           |     15 |  13 |
+| चहड़ कलां        |     13 |   1 |
+| भिरढाणा        |     20 |  14 |
+| भिरढाणा ढाणियाँ |     25 |  22 |
+| जमालपुर शेखाँ     |     26 |  15 |
+| गिज्जी          |     11 |  10 |
+| भादस           |     15 |  19 |
+
+
+#+NAME: casualwage_code
+#+BEGIN_SRC R :results output graphics :file casualwage-boxplot.png :width 1200 :height 800 
+  copy(casual_labour_final)->t
+  paste(t$village,"(",t$household_number,")",sep="")->t$labels
+  ggplot(t,aes(x=sex,y=daily,weight=multiplier))->p
+  p+geom_boxplot()->p
+  p+geom_text_repel(data = subset(t, daily > 500),aes(label=labels),hjust=-0.3)->p
+  p
+#+END_SRC
+
+#+RESULTS: casualwage_code
+[[file:casualwage-boxplot.png]]
+
+
 
 *** Long-term agricultural labour
 *** Non-agricultural labour
@@ -1017,35 +1053,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
-
-**** [[file:land-contracts.org][Analysis of land contracts]]
-*** Food security
-*** Cropping pattern, Production, Input use
-
-#+name: land-socialgrp-code
-#+begin_src R :results value :exports results :colnames yes :hlines yes
-
-  data.table(dbReadTable(surveypg,"ruralsurvey_cropping_pattern_schedule_production_and_sales"))->crops
-  data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->codecrop
-  merge(crops,codecrop,by.x="crop_id",by.y="id")->crops
-  as.integer(crops$crop_number)->crops$crop_number_1
-  round((crops$crop_number-crops$crop_number_1)*10)->crops$crop_number_2
-  crops[,.(sno_id,crop_number_1,crop_number_2,crop)]->t
-  dcast.data.table(t,sno_id+crop_number_1~crop_number_2,value.var="crop")->t
-
-  paste(t$'0',"+",t$'1',"+",t$'2',sep="")->t$crop
-  gsub("\\+NA","",t$crop)->t$crop
-  gsub("NA\\+","",t$crop)->t$crop
-  t[,.(sno_id,crop_number_1,crop)]->t
-#+end_src
-
-*** Labour Deployment
-*** Employment
-*** Livestock
-*** Housing and Sanitation
-*** Health and Education
-*** Assets and Indebtedness
-
 
 #+INCLUDE: assets.org
 
