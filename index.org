@@ -964,6 +964,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   unique(hhid[id %in% t$sno_id,.(village_name,household_number)])
 #+END_SRC
 
+#+NAME: occupation-preliminary
 #+RESULTS: occupation-preliminary-code
 | village_name   | household_number |
 |----------------+------------------|
