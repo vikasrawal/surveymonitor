@@ -956,7 +956,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   levels(occupations$occupation_category)<-c("लैंडलॉर्ड","किसान","पशुपालन","खेत मज़दूरी","गैर-खेती मज़दूरी","सरकारी नौकरी","प्राईवेट नौकरी","निजी व्यवसाय","जातिगत काम/शिल्प","पेंशन/छात्रवृति/प्रवासी आय पर निर्भर","काम सीख रहे हैं","वन उत्पाद इकट्ठा करना","बेरोजगार","विद्यार्थी","घर का काम","बीमारी या उम्र के कारण काम नहीं कर सकते","अन्य") 
 #+END_SRC
 
-#+NAME: occupation-preliminary-code
+#+NAME: occupation-preliminary1-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
   data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
   agrilabour[crop_id==4]->t
@@ -965,7 +965,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+END_SRC
 
 #+NAME: occupation-preliminary
-#+RESULTS: occupation-preliminary-code
+#+RESULTS: occupation-preliminary1-code
 | village_name   | household_number |
 |----------------+------------------|
 | खंदरई           |               47 |
@@ -1017,7 +1017,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
-=======
+
 **** [[file:land-contracts.org][Analysis of land contracts]]
 *** Food security
 *** Cropping pattern, Production, Input use
