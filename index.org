@@ -1043,7 +1043,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t[sex=="F",sex:="महिलायें"][sex=="M",sex:="पुरुष"]
 
   t[,outlier:=is_outlier(daily,multiplier),by=,.(sex)]->t
-  t[,labels:=ifelse(outlier,paste(t$village,"(",t$household_number,")",sep=""),"")]
+  t[,labels:=ifelse(outlier,paste(t$village,"(",t$household_number,",", t$crop_operation_code,")",sep=""),"")]
   ggplot(t,aes(x=sex,y=daily,weight=multiplier))->p
   p+geom_boxplot()->p
   p+geom_text_repel(data = subset(t, daily > 500),aes(label=labels),hjust=-0.3)->p
