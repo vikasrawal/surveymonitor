@@ -1032,7 +1032,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 
 #+NAME: casualwage_code
-#+BEGIN_SRC R :results output graphics :file casualwage-boxplot.png :width 1200 :height 800 
+#+BEGIN_SRC R :results output graphics :exports results :file casualwage-boxplot.png :width 1200 :height 800 
   copy(casual_labour_final)->t
   paste(t$village,"(",t$household_number,")",sep="")->t$labels
   ggplot(t,aes(x=sex,y=daily,weight=multiplier))->p
@@ -1043,8 +1043,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+RESULTS: casualwage_code
 [[file:casualwage-boxplot.png]]
-
-
 
 *** Long-term agricultural labour
 *** Non-agricultural labour
