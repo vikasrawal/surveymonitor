@@ -15,29 +15,37 @@
 
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
-  options(width=170)
-  require(RPostgreSQL)
-  require(ggplot2)
-  require(ggrepel)
-  require(data.table)
-  addhead<-function(d1,v1,v2) {
-    as.data.table(expand.grid(V2=levels(v2),V1=levels(v1))[,c(2,1)])->tabhead
-    as.character(tabhead$V1)->tabhead$V1
-    c(1:nrow(tabhead))->tabhead$rank
-    ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
-    ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
-    tabhead$V1[tabhead$rank!=1]<-""
-    ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
-    transpose(tabhead[,c(1:2)])->tabhead
-    names(tabhead)->names(d1)[c((ncol(d1)-ncol(tabhead)+1):ncol(d1))]
-    as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
-    levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
-    names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
-    "{{{hlmacro}}}"->tabhead2[2,ncol(tabhead2)]
-     tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
-    ## tabhead2[2,1]<-""
-    tabhead2
+    options(width=170)
+    require(RPostgreSQL)
+    require(ggplot2)
+    require(ggrepel)
+    require(data.table)
+    addhead<-function(d1,v1,v2) {
+      as.data.table(expand.grid(V2=levels(v2),V1=levels(v1))[,c(2,1)])->tabhead
+      as.character(tabhead$V1)->tabhead$V1
+      c(1:nrow(tabhead))->tabhead$rank
+      ave(tabhead$rank,tabhead$V1,FUN=rank)->tabhead$rank
+      ave(tabhead$rank,tabhead$V1,FUN=length)->tabhead$len
+      tabhead$V1[tabhead$rank!=1]<-""
+      ifelse(tabhead$V1=="","",paste("<",tabhead$len,"colc>",tabhead$V1,sep=""))->tabhead$V1
+      transpose(tabhead[,c(1:2)])->tabhead
+      names(tabhead)->names(d1)[c((ncol(d1)-ncol(tabhead)+1):ncol(d1))]
+      as.data.frame(rbind(tabhead,d1,fill=TRUE))->tabhead2
+      levels(tabhead2[,ncol(tabhead2)])<-c(levels(tabhead2[,ncol(tabhead2)]),names(tabhead2)[length(names(tabhead2))],"{{{hlmacro}}}")
+      names(tabhead2)[length(names(tabhead2))] ->tabhead2[1,ncol(tabhead2)]
+      "{{{hlmacro}}}"->tabhead2[2,ncol(tabhead2)]
+       tabhead2[,c(ncol(tabhead2),1:ncol(tabhead2)-1)]->tabhead2
+      ## tabhead2[2,1]<-""
+      tabhead2
+    }
+
+  is_outlier <- function(x,w) {
+    return(x < weighted.quantile(x,w, 0.25) -
+           1.5 * (weighted.quantile(x,w, 0.75)-weighted.quantile(x,w, 0.25)) |
+           x > weighted.quantile(x,w, 0.75) +
+           1.5 * (weighted.quantile(x,w, 0.75)-weighted.quantile(x,w, 0.25)) )
   }
+
 
 #+END_SRC
 
@@ -1032,12 +1040,15 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+NAME: casualwage_code
 #+BEGIN_SRC R :results output graphics :exports results :file casualwage-boxplot.png :width 1200 :height 800 
   copy(casual_labour_final)->t
-  paste(t$village,"(",t$household_number,")",sep="")->t$labels
   t[sex=="F",sex:="महिलायें"][sex=="M",sex:="पुरुष"]
+
+  t[,outlier:=is_outlier(daily,multiplier),by=,.(sex)]->t
+  t[,labels:=ifelse(outlier,paste(t$village,"(",t$household_number,")",sep=""),"")]
   ggplot(t,aes(x=sex,y=daily,weight=multiplier))->p
   p+geom_boxplot()->p
   p+geom_text_repel(data = subset(t, daily > 500),aes(label=labels),hjust=-0.3)->p
   p+scale_x_discrete("")+scale_y_continuous("प्रति दिन आय(₹)")
+
 #+END_SRC
 
 #+NAME: casualwage
