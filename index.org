@@ -1029,7 +1029,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 | गिज्जी          |     26 |  20 |
 | भादस           |     15 |  19 |
 
-
 #+NAME: casualwage_code
 #+BEGIN_SRC R :results output graphics :exports results :file casualwage-boxplot.png :width 1200 :height 800 
   copy(casual_labour_final)->t
@@ -1041,9 +1040,10 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   p+scale_x_discrete("")+scale_y_continuous("प्रति दिन आय(₹)")
 #+END_SRC
 
+#+NAME: casualwage
+#+CAPTION: खेती के काम में मजदूरी
 #+RESULTS: casualwage_code
 [[file:casualwage-boxplot.png]]
-
 
 #+NAME: hh-earning-casuallabour_code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
@@ -1083,7 +1083,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   dcast(t1,village~crop_operation_code+sex,sum,value.var="medianearning")->t
   t
 #+END_SRC
-
 
 *** Long-term agricultural labour
 *** Non-agricultural labour
