@@ -44,10 +44,10 @@
 #+NAME: open-database-connection
 #+BEGIN_SRC R :results silent :exports none
   source("~/vikascloud/surveymonitor/sserconnect.R")
-  3#+END_SRC
+#+END_SRC
 
-  ,#+NAME: read-data-code
-  ,#+BEGIN_SRC R :results silent :exports none
+#+NAME: read-data-code
+#+BEGIN_SRC R :results silent :exports none
     #dbListTables(surveypg)->t
     data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
     data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
@@ -968,7 +968,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   member[,.(sno_id,id,person_number,age,sex,name)]->t
   merge(agrilabour,t,by.x=c("sno_id","name_of_worker_id"),by.y=c("sno_id","id"),all.x=T)->agrilabour
 
-  merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
+  #merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
 
   copy(agrilabour)->t
   t[kindcomm,on=c(wages_kind_commodity1_id="id"),`:=`(kind_commodity1=i.kind_commodity,crop1_id=i.crop_id,mainby1=i.main_or_by)]
@@ -994,7 +994,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t3[,.(othervalue=tea_cups_total*5+meals_total*20+bidi_cigarette_total*2),id]->t3
 
   ### To account for t$other_payments_total
-  t[,.(sno_id,name,age,sex,labour_days,hours=work_hours/labour_days,cash=wages_total_earnings_cash),id]->t0
+  t[,.(sno_id,name,age,sex,crop_id,crop_operation_code,crop_operation_code2,crop_operation_code3,crop_operation_code4,labour_days,hours=work_hours/labour_days,cash=wages_total_earnings_cash),id]->t0
 
   merge(t0,t1,by="id",all.x=TRUE)->t0
   merge(t0,t2,by="id",all.x=TRUE)->t0
@@ -1003,7 +1003,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t0[,kindvalue1:=NULL][,kindvalue2:=NULL][,othervalue:=NULL][,totalearning:=cash+kindvalue]
   t0[,standarddays:=labour_days*hours/8][,daily:=totalearning/standarddays]
   merge(t0,hhid,by.x="sno_id",by.y="id")->casual_labour_final
-
 #+END_SRC
 
 #+NAME: casualdays_code
@@ -1045,14 +1044,43 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+RESULTS: casualwage_code
 [[file:casualwage-boxplot.png]]
 
+
+#+NAME: hh-earning-casuallabour_code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  copy(casual_labour_final)->t
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t[,.(casualearning=sum(daily*standarddays)),keyby=.(village,household_number,sno_id,multiplier,if_sc_st)]->t
+  t[,.(medianearning=round(weighted.median(casualearning,multiplier))),keyby=.(village,if_sc_st)]->t
+  dcast(t,village~if_sc_st,mean,value.var="medianearning")->t
+  t[is.na(t)]<-NA
+  names(t)[1]<-c("गाँव")
+  t
+#+END_SRC
+
+#+NAME: hh-earning-casuallabour
+#+CAPTION: खेत मजदूरी (casual) से औसत (median) आय (₹)
+#+RESULTS: hh-earning-casuallabour_code
+| गाँव            |  दलित | मुस्लिम | पिछड़ी जातियाँ | अन्य   |
+|----------------+-------+-------+--------------+-------|
+| खंदरई           | 18687 | nil   |        12196 | nil   |
+| चहड़ कलां        | 16836 | nil   |        12896 | 203   |
+| भिरढाणा        | 14945 | 4000  |        15810 | 10750 |
+| भिरढाणा ढाणियाँ | 22500 | nil   |          nil | 2790  |
+| जमालपुर शेखाँ     | 13553 | 6109  |         6208 | nil   |
+| गिज्जी          | 14734 | nil   |         3836 | nil   |
+| भादस           |  6800 | 4320  |         2376 | nil   |
+
 #+NAME: casualdays2_code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
   library(spatstat)
   copy(casual_labour_final)->t
-  t[,.(days=sum(standarddays)),keyby=.(village,household_number,sno_id,id,name,age,sex,multiplier)]->t
-  t[,.(mediandays=round(weighted.median(days,multiplier))),.(village,sex)]->t
-  dcast(t,village~sex)->t
-  names(t)<-c("गाँव","महिलायें","पुरुष")
+  t[(crop_operation_code==2200&crop_id==4)|(crop_operation_code==6110&crop_id==1)]->t1
+  t1[is.na(crop_operation_code2)]->t1
+  #t[,.(days=sum(standarddays),daily=mea),keyby=.(village,household_number,sno_id,id,name,age,sex,multiplier)]->t
+  t1[,.(medianearning=round(weighted.median(daily,multiplier))),.(village,sex,crop_id,crop_operation_code)]->t1
+  dcast(t1,village~crop_operation_code+sex,sum,value.var="medianearning")->t
   t
 #+END_SRC
 
