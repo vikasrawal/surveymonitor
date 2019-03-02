@@ -1010,7 +1010,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
   library(spatstat)
   copy(casual_labour_final)->t
-  t[,.(days=sum(standarddays)),keyby=.(village,household_number,sno_id,id,name,age,sex,multiplier)]->t
+  t[,.(days=sum(standarddays)),keyby=.(village,household_number,sno_id,name,age,sex,multiplier)]->t
   t[,.(mediandays=round(weighted.median(days,multiplier))),.(village,sex)]->t
   dcast(t,village~sex)->t
   names(t)<-c("गाँव","महिलायें","पुरुष")
@@ -1022,12 +1022,12 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+RESULTS: casualdays_code
 | गाँव            | महिलायें | पुरुष |
 |----------------+--------+-----|
-| खंदरई           |     15 |  13 |
-| चहड़ कलां        |     13 |   1 |
-| भिरढाणा        |     20 |  14 |
-| भिरढाणा ढाणियाँ |     25 |  22 |
-| जमालपुर शेखाँ     |     26 |  15 |
-| गिज्जी          |     11 |  10 |
+| खंदरई           |     20 |  20 |
+| चहड़ कलां        |     32 |   4 |
+| भिरढाणा        |     46 |  18 |
+| भिरढाणा ढाणियाँ |     25 |  32 |
+| जमालपुर शेखाँ     |     76 |  46 |
+| गिज्जी          |     26 |  20 |
 | भादस           |     15 |  19 |
 
 
@@ -1044,6 +1044,18 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+RESULTS: casualwage_code
 [[file:casualwage-boxplot.png]]
+
+#+NAME: casualdays2_code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  library(spatstat)
+  copy(casual_labour_final)->t
+  t[,.(days=sum(standarddays)),keyby=.(village,household_number,sno_id,id,name,age,sex,multiplier)]->t
+  t[,.(mediandays=round(weighted.median(days,multiplier))),.(village,sex)]->t
+  dcast(t,village~sex)->t
+  names(t)<-c("गाँव","महिलायें","पुरुष")
+  t
+#+END_SRC
+
 
 *** Long-term agricultural labour
 *** Non-agricultural labour
