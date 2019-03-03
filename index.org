@@ -45,42 +45,41 @@
            x > weighted.quantile(x,w, 0.75) +
            1.5 * (weighted.quantile(x,w, 0.75)-weighted.quantile(x,w, 0.25)) )
   }
-
-
 #+END_SRC
 
 #+NAME: open-database-connection
 #+BEGIN_SRC R :results silent :exports none
   source("~/vikascloud/surveymonitor/sserconnect.R")
+
 #+END_SRC
 
 #+NAME: read-data-code
 #+BEGIN_SRC R :results silent :exports none
-    #dbListTables(surveypg)->t
-    data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
-    data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
-    data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
-    data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
-    data.table(dbReadTable(surveypg,"ruralsurvey_codereligion"))->religions
-    data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
-    data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
-    data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
-    data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
-    sampledesign[,id:=NULL]
-    merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum_number"),all.x=T)->household
-    household[household_number<9990]->household
-    household[is.na(multiplier),multiplier:=1]
-    merge(household,villages,by.x="village_id",by.y="id",all.x=T)->household
-    merge(household,castes,by.x="caste_tribe_id",by.y="id",all.x=T)->household
-    merge(household,religions,by.x="religion_id",by.y="id",all.x=T)->household
+  #dbListTables(surveypg)->t
+  data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
+  data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
+  data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
+  data.table(dbReadTable(surveypg,"ruralsurvey_codereligion"))->religions
+  data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
+  data.table(dbReadTable(surveypg,"ruralsurvey_coderelationship"))->relationship
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeoccupationcategory"))->occupationcode
+  data.table(dbReadTable(surveypg,"ruralsurvey_occupations_household_members"))->occupations
+  sampledesign[,id:=NULL]
+  merge(household,sampledesign,by.x=c("village_id","stratum_number"),by.y=c("village_id","stratum_number"),all.x=T)->household
+  household[household_number<9990]->household
+  household[is.na(multiplier),multiplier:=1]
+  merge(household,villages,by.x="village_id",by.y="id",all.x=T)->household
+  merge(household,castes,by.x="caste_tribe_id",by.y="id",all.x=T)->household
+  merge(household,religions,by.x="religion_id",by.y="id",all.x=T)->household
 
-    household[,c(39,5,6,4,16,38,41,42)]->hhid
-    setkey(hhid,id)
-    hhid[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
-    factor(hhid$village_name,levels=c("Khandrai","Cheher Kalan","Birdhana","Birdhana Dhanis","Jamalpur Shekhan","Gijji","Bhadas"))->hhid$village
-    levels(hhid$village)<-c("खंदरई","चहड़ कलां","भिरढाणा","भिरढाणा ढाणियाँ","जमालपुर शेखाँ","गिज्जी","भादस")
+  household[,c(39,5,6,4,16,38,41,42)]->hhid
+  setkey(hhid,id)
+  hhid[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
+  factor(hhid$village_name,levels=c("Khandrai","Cheher Kalan","Birdhana","Birdhana Dhanis","Jamalpur Shekhan","Gijji","Bhadas"))->hhid$village
+  levels(hhid$village)<-c("खंदरई","चहड़ कलां","भिरढाणा","भिरढाणा ढाणियाँ","जमालपुर शेखाँ","गिज्जी","भादस")
 
-    #dbDisconnect(surveypg)
+  #dbDisconnect(surveypg)
 #+END_SRC
 
 #+NAME: list-tables-code
@@ -235,6 +234,8 @@
 | ruralsurvey_child_help                                          |
 | ruralsurvey_code_asset_electrical                               |
 | ruralsurvey_source_of_water_for_domestic_use                    |
+
+* 
 
 * Data Entry
 ** Overall Decisions Regarding Data Entry
@@ -1098,6 +1099,72 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 *** Long-term agricultural labour
 
 *** Non-agricultural labour
+#+NAME: non-labour0-code
+#+BEGIN_SRC R :results silent :exports none
+  # Non-agri manual labour
+  data.table(dbReadTable(surveypg,"ruralsurvey_non_agricultural_manual_labouring_out"))->nonagri
+
+  # Businesses
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_business_and_artisan_earnings"))->businesses
+  data.table(dbReadTable(surveypg,"ruralsurvey_business_and_artisan_earnings_household_members"))->businessworkers
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_codebusinesscategory"))->businesscategory
+
+  businesscategory[id %in% c(2,3,4,9,14,11,16),type:="Business with non-manual work"][is.na(type),type:="Self-employment involving manual labour"]
+
+
+  merge(businesses,businesscategory,by.x="business_category_id",by.y="id",all.x=T)->businesses
+
+
+  businesses[,.(
+
+  ## NREGA
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_work_done_by_household_members_under_nrega"))->nrega
+
+
+  ## Salaried employment
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_income_from_salaries"))->salaries
+  salaries[is.na(annual_earning)]->t
+  merge(t,hhid,by.x="sno_id",by.y="id")->t
+  #hhid[id %in% t$sno_id]
+  member[,c(1,2,3,4,5)]->t1
+  merge(t,t1,by.x="name_of_worker_id",by.y="id")->t
+  t[,c(29,30,32,38,39,40,6,4,5,8,28,27)]->t
+  write.table(t,file="~/temp/missingsalaries.csv",sep="|",row.names=FALSE)
+
+  ## Rents, pensions
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_scholarships_pensions_rents_remittances"))->remittances
+
+  remittances[is.na(annual_earnings)]->t
+  hhid[id %in% t$sno_id]
+
+  ## Hiring machinery
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_income_from_hiring_out_machinery"))->machinehire
+
+  machinehire[is.na(gross_payment_received)]->t
+  hhid[id %in% t$sno_id]
+#+END_SRC
+
+*** Businesses, Salaries and Remittances
+
++ Bhadas 21: Furniture shop
++ Birdhana 11: DJ business
++ JS 8: Look at Mukesh's non-ag and business work
++ Gijji 86: What kind of pension does Jaypal get? Army? He is only 50 year old.
++ Gijji 88: What kind of pension does Ranveer get? Army? He is only 50 year old.
++ Birdhana 5: See household schedule. Case of upward mobility of a siri household?
++ Khandrai 62: Is Joginder a private salaried person? Temporary? But gets all the benefits?
++ Jamalpur 76: Salary is 2500 or 25000? Enter annual earnings.
++ Jamalpur 77: Non-agri manual..add Pardeep's days and salary
++ 10:Phollidevi/Shubhan Deen: Salary? What is the work? If salesman, shift to non-ag
++ 26:Geeta Devi/Sandeep: Shift to non-ag labour as "Shop assistant"
++ 181:Sarifuddin/158:Japhar/140:Sahid/105:Rafeek/44:Savitri : There is a bike repairing entry in salaries. Change to non-ag manual
++ 68:Babulal Shift carpenter to Non-ag manual "Artisan/Traditional caste..."
 
 ** Livestock
 ** Housing and Sanitation
@@ -1115,6 +1182,10 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   Processes<-as.numeric(sub(" .*","",GrepResults)) 
   tools::pskill(Processes)
 #+END_SRC
+
+
+
+* To check
 
 
 
