@@ -1644,7 +1644,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 | मुर्गियाँ    |  2.3 |     7 |            0 |    0 |
 | ऊँट        |  0.1 |     0 |          0.3 |    0 |
 
-#+NAME: animal-inventory-table0-code
+#+NAME: animal-inventory-table1-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
   copy(animalinventory)->t
   t[animal_type=="Chicken"|animal_type=="Duck"|animal_type=="Pigeon",animal_type:="Poultry"]
@@ -1652,11 +1652,11 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t[animal_type=="Cow/bullock"|animal_type=="Buffalo",animal_type:="Bovines"]
   t[animal_type!="Horse"]->t
   t[,.(number=sum(number)),.(sno_id,animal_type)]->t
-  t[,number:=1]
+  #t[,number:=1]
   factor(t$animal_type,levels=c("Bovines","Goats_Sheep","Pig","Poultry","Camel"))->t$animal_type
   levels(t$animal_type)<-c("गाय/भैंसें","बकरियाँ/भेड़ें","सूअर","मुर्गियाँ","ऊँट")
   dcast.data.table(t,sno_id~animal_type,sum,value.var="number")->t
-  merge(hhid,t,by.y="sno_id",by.x="id",all.x=T)->t
+  merge(hhid,t,by.y="sno_id",by.x="id")->t
   t[is.na(t)]<-0
   t[religion=="Muslim",if_sc_st:="Muslim"]
   factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
@@ -1664,7 +1664,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t[,c(1,2,5,6,9:14)]->t
   melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
   t[,.(hh_animal=sum(value*multiplier),hhall=sum(multiplier)),.(if_sc_st,variable)]->t
-  t[,hh_animal_prop:=round(hh_animal*100/hhall,1)]
+  t[,hh_animal_prop:=round(hh_animal/hhall,1)]
   dcast(t,variable~if_sc_st,sum,value.var="hh_animal_prop")->t
   names(t)[1]<-c("पशु")
   t
