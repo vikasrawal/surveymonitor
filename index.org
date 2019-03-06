@@ -9,9 +9,8 @@
 #+HTML_HEAD: <style>#content{max-width:1200px;} </style>
 #+MACRO: hlmacro (eval (org-table-insert-hline))
 
+
 * Preliminaries                                                    :noexport:
-
-
 
 #+NAME: load-libraries
 #+BEGIN_SRC R :results silent :exports none
@@ -50,7 +49,6 @@
 #+NAME: open-database-connection
 #+BEGIN_SRC R :results silent :exports none
   source("~/vikascloud/surveymonitor/sserconnect.R")
-
 #+END_SRC
 
 #+NAME: read-data-code
@@ -59,6 +57,7 @@
   data.table(dbReadTable(surveypg,"ruralsurvey_household"))->household
   data.table(dbReadTable(surveypg,"ruralsurvey_sampledesign"))->sampledesign
   data.table(dbReadTable(surveypg,"ruralsurvey_member"))->member
+  member[person_number<90]->member
   data.table(dbReadTable(surveypg,"ruralsurvey_codecaste"))->castes
   data.table(dbReadTable(surveypg,"ruralsurvey_codereligion"))->religions
   data.table(dbReadTable(surveypg,"ruralsurvey_codevillage"))->villages
@@ -72,7 +71,7 @@
   merge(household,villages,by.x="village_id",by.y="id",all.x=T)->household
   merge(household,castes,by.x="caste_tribe_id",by.y="id",all.x=T)->household
   merge(household,religions,by.x="religion_id",by.y="id",all.x=T)->household
-
+  household[household_number<9000]->household
   household[,c(39,5,6,4,16,38,41,42)]->hhid
   setkey(hhid,id)
   hhid[village_name=="Birdhana" & stratum_number==10,village_name:="Birdhana Dhanis"]
@@ -235,31 +234,16 @@
 | ruralsurvey_code_asset_electrical                               |
 | ruralsurvey_source_of_water_for_domestic_use                    |
 
-* 
-
 * Data Entry
 ** Overall Decisions Regarding Data Entry
 
 This section records any overall decisions that are taken.
 
-***** TODO Decide on how to deal with ranges
-***** TODO Fix social group for each caste
-+ Each caste belongs to a unique social group. This needs to be correctly identified and informed to all data operators.
 ***** DONE Standard values of assets                              :Vikas:
 CLOSED: [2018-11-11 Sun 05:56]
 ****** Compute unit price from available data, and provide a table of summary statistics for each type of asset
 
 ** Database Corrections                                              :Vikas:
-****** TODO FIES filter on names
-****** TODO Comments on FIES questions
-****** TODO Crops filter
-****** DONE CodePlaces
-****** DONE Make a block/page-wise table of data operators
-CLOSED: [2018-11-11 Sun 06:59]
-
-****** Type of contract in labouring out should be foreign key
-
-****** Labour and Input Use
 *** Corrections in design of land tables                         :noexport:
 
 #+NAME: separate-irrigation
@@ -831,6 +815,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   merge(t,t1,by.x="id",by.y="sno_id",all.x=T)->t
   t[is.na(leased_in),leased_in:=0][is.na(leased_out),leased_out:=0]
   t[,ophold:=ownhold+leased_in-leased_out]
+  t[,.(id,ownhold,ophold)]->landholdings
 
   t->t1
   t1[order(ownhold),owncum:=cumsum(ownhold*multiplier)/sum(ownhold*multiplier)][order(ophold),opcum:=cumsum(ophold*multiplier)/sum(ophold*multiplier)]
@@ -944,6 +929,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 
 *** [[file:land-contracts.org][Analysis of land contracts]]
+
 ** Food security
 ** Cropping pattern, Production, Input use
 
@@ -966,52 +952,63 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 ** Labour Deployment
 ** Employment
-***  Casual agricultural labour
+*** Casual agricultural labour
+
++ The level of employment in agriculture has fallen further since 2003 survey.
+  + Lower employment in weeding, harvesting and threshing.
+  + Vast increase in use of combine harvesters
++ Men have lower days of employment than women in most of the villages
++ Wages have increased significantly since the 2003 surveys. But this may be associated with a change in techniques of work. More importantly, this may be related to increase in non-agricultural employment.
+  + How were wage increases negotiated?
 
 #+NAME: casual-labour0-code
 #+BEGIN_SRC R :results silent :exports none
-  data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
-  data.table(dbReadTable(surveypg,"ruralsurvey_code_kind_commodity"))->kindcomm
-  data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->kindunit
-  data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->standards
-  member[,.(sno_id,id,person_number,age,sex,name)]->t
+   data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
+   data.table(dbReadTable(surveypg,"ruralsurvey_code_kind_commodity"))->kindcomm
+   data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->kindunit
+   data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->standards
+
+  member[person_number<90,.(sno_id,id,person_number,name,age,sex)]->t
+
   merge(agrilabour,t,by.x=c("sno_id","name_of_worker_id"),by.y=c("sno_id","id"),all.x=T)->agrilabour
 
-  #merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
+                                           #merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
 
-  copy(agrilabour)->t
-  t[kindcomm,on=c(wages_kind_commodity1_id="id"),`:=`(kind_commodity1=i.kind_commodity,crop1_id=i.crop_id,mainby1=i.main_or_by)]
-  t[kindunit,on=c(wages_kind_commodity1_unit_id="id"),`:=`(kind_commodity1_unit=i.quantity_unit)]
-  t[kindcomm,on=c(wages_kind_commodity2_id="id"),`:=`(kind_commodity2=i.kind_commodity,crop2_id=i.crop_id,mainby2=i.main_or_by)]
-  t[kindunit,on=c(wages_kind_commodity2_unit_id="id"),`:=`(kind_commodity2_unit=i.quantity_unit)]
+   copy(agrilabour)->t
+     t[kindcomm,on=c(wages_kind_commodity1_id="id"),`:=`(kind_commodity1=i.kind_commodity,crop1_id=i.crop_id,mainby1=i.main_or_by)]
+     t[kindunit,on=c(wages_kind_commodity1_unit_id="id"),`:=`(kind_commodity1_unit=i.quantity_unit)]
+     t[kindcomm,on=c(wages_kind_commodity2_id="id"),`:=`(kind_commodity2=i.kind_commodity,crop2_id=i.crop_id,mainby2=i.main_or_by)]
+     t[kindunit,on=c(wages_kind_commodity2_unit_id="id"),`:=`(kind_commodity2_unit=i.quantity_unit)]
 
-  standards[parameter_description=="Sale price",.(code_id,commodity,value,unit_denominator)]->prices
-  prices[unit_denominator==10,value:=value/100][,price:=value][,unit_denominator:=NULL][,value:=NULL]
+   standards[parameter_description=="Sale price",.(code_id,commodity,value,unit_denominator)]->prices
+     prices[unit_denominator==10,value:=value/100][,price:=value][,unit_denominator:=NULL][,value:=NULL]
 
-  ## Kind commodity1
-  t[!is.na(crop1_id),.(id,crop1_id,mainby1,wages_kind_commodity1_unit_id,wages_kind_commodity1_quantity)]->t1
-  merge(t1,prices,by.x=c("crop1_id","mainby1"),by.y=c("code_id","commodity"),all.x=T)->t1
-  t1[,.(kindvalue1=wages_kind_commodity1_quantity*price),id]->t1
+   ## Kind commodity1
+     t[!is.na(crop1_id),.(id,crop1_id,mainby1,wages_kind_commodity1_unit_id,wages_kind_commodity1_quantity)]->t1
+     merge(t1,prices,by.x=c("crop1_id","mainby1"),by.y=c("code_id","commodity"),all.x=T)->t1
+   t1[,.(kindvalue1=wages_kind_commodity1_quantity*price),id]->t1
 
-  ## Kind commodity2
-  t[!is.na(crop2_id),.(id,crop2_id,mainby2,wages_kind_commodity2_unit_id,wages_kind_commodity2_quantity)]->t2
-  merge(t2,prices,by.x=c("crop2_id","mainby2"),by.y=c("code_id","commodity"),all.x=T)->t2
-  t2[,.(kindvalue2=wages_kind_commodity2_quantity*price),id]->t2
+   ## Kind commodity2
+     t[!is.na(crop2_id),.(id,crop2_id,mainby2,wages_kind_commodity2_unit_id,wages_kind_commodity2_quantity)]->t2
+     merge(t2,prices,by.x=c("crop2_id","mainby2"),by.y=c("code_id","commodity"),all.x=T)->t2
+   t2[,.(kindvalue2=wages_kind_commodity2_quantity*price),id]->t2
 
-  copy(t)->t3
-  t3[is.na(tea_cups_total),tea_cups_total:=0][is.na(meals_total),meals_total:=0][is.na(bidi_cigarette_total),bidi_cigarette_total:=0]
-  t3[,.(othervalue=tea_cups_total*5+meals_total*20+bidi_cigarette_total*2),id]->t3
+   copy(t)->t3
+     t3[is.na(tea_cups_total),tea_cups_total:=0][is.na(meals_total),meals_total:=0][is.na(bidi_cigarette_total),bidi_cigarette_total:=0]
+   t3[,.(othervalue=tea_cups_total*5+meals_total*20+bidi_cigarette_total*2),id]->t3
 
-  ### To account for t$other_payments_total
-  t[,.(sno_id,name,age,sex,crop_id,crop_operation_code,crop_operation_code2,crop_operation_code3,crop_operation_code4,labour_days,hours=work_hours/labour_days,cash=wages_total_earnings_cash),id]->t0
+   ### To account for t$other_payments_total
+     t[,.(sno_id,name_of_worker_id,name,age,sex,crop_id,crop_operation_code,crop_operation_code2,crop_operation_code3,crop_operation_code4,labour_days,hours=work_hours/labour_days,cash=wages_total_earnings_cash),id]->t0
 
-  merge(t0,t1,by="id",all.x=TRUE)->t0
-  merge(t0,t2,by="id",all.x=TRUE)->t0
-  merge(t0,t3,by="id",all.x=TRUE)->t0
-  t0[is.na(kindvalue1),kindvalue1:=0][is.na(kindvalue2),kindvalue2:=0][is.na(cash),cash:=0][,kindvalue:=kindvalue1+kindvalue2+othervalue]
-  t0[,kindvalue1:=NULL][,kindvalue2:=NULL][,othervalue:=NULL][,totalearning:=cash+kindvalue]
-  t0[,standarddays:=labour_days*hours/8][,daily:=totalearning/standarddays]
-  merge(t0,hhid,by.x="sno_id",by.y="id")->casual_labour_final
+   merge(t0,t1,by="id",all.x=TRUE)->t0
+   merge(t0,t2,by="id",all.x=TRUE)->t0
+   merge(t0,t3,by="id",all.x=TRUE)->t0
+
+   t0[is.na(kindvalue1),kindvalue1:=0][is.na(kindvalue2),kindvalue2:=0][is.na(cash),cash:=0][,kindvalue:=kindvalue1+kindvalue2+othervalue]
+     t0[,kindvalue1:=NULL][,kindvalue2:=NULL][,othervalue:=NULL][,totalearning:=cash+kindvalue]
+
+   t0[,standarddays:=labour_days*hours/8][,daily:=totalearning/standarddays]
+   merge(t0,hhid,by.x="sno_id",by.y="id")->casual_labour_final
 #+END_SRC
 
 #+NAME: casualdays_code
@@ -1097,57 +1094,278 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+END_SRC
 
 *** Long-term agricultural labour
-
 *** Non-agricultural labour
+
++ Construction workers
++ Loading/unloading work
+
 #+NAME: non-labour0-code
 #+BEGIN_SRC R :results silent :exports none
-  # Non-agri manual labour
-  data.table(dbReadTable(surveypg,"ruralsurvey_non_agricultural_manual_labouring_out"))->nonagri
+  member[person_number<90,.(id,person_number,name,age,sex)]->m1
 
-  # Businesses
-
-  data.table(dbReadTable(surveypg,"ruralsurvey_business_and_artisan_earnings"))->businesses
-  data.table(dbReadTable(surveypg,"ruralsurvey_business_and_artisan_earnings_household_members"))->businessworkers
-
-  data.table(dbReadTable(surveypg,"ruralsurvey_codebusinesscategory"))->businesscategory
-
-  businesscategory[id %in% c(2,3,4,9,14,11,16),type:="Business with non-manual work"][is.na(type),type:="Self-employment involving manual labour"]
+  ## Non-agri manual labour
+  data.table(dbReadTable(surveypg,"ruralsurvey_non_agricultural_manual_labouring_out"))->nonagrimanual
 
 
-  merge(businesses,businesscategory,by.x="business_category_id",by.y="id",all.x=T)->businesses
+  ## Salaried employment
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_income_from_salaries"))->nonmanual
+
+  nonmanual[is.na(number_of_months),number_of_months:=annual_earning/monthly_salary][is.na(number_of_months),number_of_months:=12]
+
+  nonmanual[description_of_work== "Driver/other transport-sector worker",
+            description_of_work:="Driver/other transport sector worker"]
+  nonmanual[description_of_work== "Driver/other transport-sector workers",
+            description_of_work:="Driver/other transport sector worker"]
+  nonmanual[description_of_work== "Armed Forces/Police Salary Job",
+            description_of_work:="Armed Forces/Police"]
+  nonmanual[description_of_work== "Police Home Guard",
+            description_of_work:="Armed Forces/Police"]
+  nonmanual[description_of_work== "Government salaried job",
+            description_of_work:="Government salaried employee"]
+  nonmanual[description_of_work== "Government salary Job",
+              description_of_work:="Government salaried employee"]
+  nonmanual[description_of_work== "Government Salary Job",
+            description_of_work:="Government salaried employee"]
+  nonmanual[description_of_work== "Gunman",
+            description_of_work:="Security guard"]
+  nonmanual[description_of_work== "Security Guard",
+            description_of_work:="Security guard"]
+  nonmanual[description_of_work== "Miscellaneous company employees",
+            description_of_work:="Miscellaneous workers in private companies"]
+  nonmanual[description_of_work== "Miscellaneous company worker",
+            description_of_work:="Miscellaneous workers in private companies"]
+  nonmanual[description_of_work== "Miscellaneous Company Worker",
+            description_of_work:="Miscellaneous workers in private companies"]
+  nonmanual[description_of_work== "Miscellaneous company employee",
+            description_of_work:="Miscellaneous workers in private companies"]
+  nonmanual[description_of_work== "Miscellaneous Company company employee",
+            description_of_work:="Miscellaneous workers in private companies"]
+  nonmanual[description_of_work== "Factory worker",
+            description_of_work:="Miscellaneous workers in private companies"]
+  nonmanual[description_of_work== "Other skill labours",
+            description_of_work:="Other skilled workers"]
+  nonmanual[description_of_work== "Cook",
+            description_of_work:="Other skilled workers"]
+  nonmanual[description_of_work== "Mid-day meal worker",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Scheme worker (Aganwadi)",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Scheme worker (Anganwadi)",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Scheme worker (Asha)",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Scheme worker (ASHA)",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Scheme worker (Mid-day meal)",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Scheme worker (mid-day-meal)",
+            description_of_work:="Scheme worker"]
+  nonmanual[description_of_work== "Molvi",
+            description_of_work:="Salaried private job (miscellaneous)"]
+  nonmanual[description_of_work== "Accountant",
+            description_of_work:="Salaried private job (miscellaneous)"]
+  nonmanual[description_of_work== "Private office worker",
+            description_of_work:="Salaried private job (miscellaneous)"]
+  nonmanual[description_of_work== "Private salaried employee (miscellaneous)",
+            description_of_work:="Salaried private job (miscellaneous)"]
+  nonmanual[description_of_work== "Salaried Private Job (Miscellaneous)",
+            description_of_work:="Salaried private job (miscellaneous)"]
+  nonmanual[description_of_work== "Salary job in Religious Institution",
+            description_of_work:="Salaried private job (miscellaneous)"]
+  nonmanual[description_of_work== "Government Contract worker",
+            description_of_work:="Government salaried employee"]
 
 
-  businesses[,.(
+  ## Processing non-agri manual labour
+  nonmanual[description_of_work=="Shop Assistant"|description_of_work=="Shop assistant",
+            .(id,description_of_work,number_of_labour_days=number_of_months*25,
+              type_of_wage_contract="monthly",description_of_work_detailed=name_of_the_employer_or_organisation,
+              cash=annual_earning,kind=NA,kind_unit_id=NA,name_of_the_worker_id=name_of_worker_id,
+              place_of_work_id,sno_id,person_number,detail=NA)]->t
+
+  rbind(nonagrimanual,t)->nonagrimanual
+
+  nonmanual[description_of_work=="Mechanic",
+            .(id,description_of_work,number_of_labour_days=number_of_months*25,
+              type_of_wage_contract="monthly",description_of_work_detailed=name_of_the_employer_or_organisation,
+              cash=annual_earning,kind=NA,kind_unit_id=NA,name_of_the_worker_id=name_of_worker_id,
+              place_of_work_id,sno_id,person_number,detail=NA)]->t
+
+  rbind(nonagrimanual,t)->nonagrimanual
+
+  nonmanual[description_of_work=="Domestic Worker",
+            .(id,description_of_work="Domestic worker",number_of_labour_days=number_of_months*25,
+              type_of_wage_contract="monthly",description_of_work_detailed=name_of_the_employer_or_organisation,
+              cash=annual_earning,kind=NA,kind_unit_id=NA,name_of_the_worker_id=name_of_worker_id,
+              place_of_work_id,sno_id,person_number,detail=NA)]->t
+
+  rbind(nonagrimanual,t)->nonagrimanual
+
+  nonmanual[description_of_work=="Brick Kiln worker",
+            .(id,description_of_work="Brick kiln worker",number_of_labour_days=number_of_months*25,
+              type_of_wage_contract="piece-rate",description_of_work_detailed=name_of_the_employer_or_organisation,
+              cash=annual_earning,kind=NA,kind_unit_id=NA,name_of_the_worker_id=name_of_worker_id,
+              place_of_work_id,sno_id,person_number,detail=NA)]->t
+
+  rbind(nonagrimanual,t)->nonagrimanual
+
+  nonmanual[description_of_work=="Driver/other transport sector worker",
+            .(id,description_of_work,number_of_labour_days=number_of_months*25,
+              type_of_wage_contract="monthly",description_of_work_detailed=name_of_the_employer_or_organisation,
+              cash=annual_earning,kind=NA,kind_unit_id=NA,name_of_the_worker_id=name_of_worker_id,
+              place_of_work_id,sno_id,person_number,detail=NA)]->t
+
+  rbind(nonagrimanual,t)->nonagrimanual
+
+  nonmanual[description_of_work=="Other skilled workers",
+            .(id,description_of_work,number_of_labour_days=number_of_months*25,
+              type_of_wage_contract="monthly",description_of_work_detailed=name_of_the_employer_or_organisation,
+              cash=annual_earning,kind=NA,kind_unit_id=NA,name_of_the_worker_id=name_of_worker_id,
+              place_of_work_id,sno_id,person_number,detail=NA)]->t
+
+  rbind(nonagrimanual,t)->nonagrimanual
+
+
+  nonagrimanual[,person_number:=NULL]
+  merge(nonagrimanual,m1,by.x="name_of_the_worker_id",by.y="id")->nonagrimanual
+
+  nonagrimanual[description_of_work=="Casual Labour",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Other manual employment",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Other manual worker",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Waterman at toll booth",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Waterman at toll booth",
+                description_of_work:="Wall Painter"]
+  nonagrimanual[description_of_work=="Wall painter",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Casual Labour",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Welding",
+                description_of_work:="Other skilled workers"]
+  nonagrimanual[description_of_work=="Artisan/Traditional caste occupation",
+                description_of_work:="Artisans/Traditional caste occupations"]
+  nonagrimanual[description_of_work=="Non-Nai Barber",
+                description_of_work:="Artisans/Traditional caste occupations"]
+  nonagrimanual[description_of_work== "Driver/other transport sector workers",
+                description_of_work:="Driver/other transport sector worker"]
+  nonagrimanual[description_of_work== "Driver/other transport-sector workers",
+                description_of_work:="Driver/other transport sector worker"]
+  nonagrimanual[description_of_work=="Shop Assistant",
+                description_of_work:="Shop assistant"]
+
+
+  ## Combining some groups
+  nonagrimanual[description_of_work=="Construction Labour",
+                description_of_work:="Casual labour"]
+  nonagrimanual[description_of_work=="Loading/Unloading",
+                description_of_work:="Casual labour"]
+
+  nonagrimanual[,.(days=sum(number_of_labour_days),earnings=sum(cash)),keyby=.(sno_id,member_id=name_of_the_worker_id,nonagritype=description_of_work)]->personnonagri
+  melt.data.table(personnonagri,id=c("sno_id","member_id","nonagritype"))->t
+  dcast.data.table(t,sno_id+member_id~variable+nonagritype,sum)->personnonagri
+
+  nonagrimanual[,.(earnings=sum(cash)),keyby=.(sno_id,nonagritype=type_of_wage_contract)]->hhnonagri
+  melt.data.table(hhnonagri,id=c("sno_id","nonagritype"))->t
+  dcast.data.table(t,sno_id~nonagritype,sum)->hhnonagri
+
+  nonagrimanual[,.(days=sum(number_of_labour_days),earnings=sum(cash)),
+                keyby=.(sno_id,nonagritype=description_of_work)]->hhnonagri_wide
+
+  melt.data.table(hhnonagri_wide,id=c("sno_id","nonagritype"))->t
+
+  dcast.data.table(t,sno_id~variable+nonagritype,sum)->hhnonagri_wide
+
+
+  ##Non-manual labour
+
+  nonmanual[!(description_of_work=="Shop Assistant"|description_of_work=="Shop assistant"|description_of_work=="Mechanic")]->nonmanual
+  nonmanual[!(description_of_work=="Brick Kiln worker"|description_of_work=="Domestic Worker")]->nonmanual
+  nonmanual[!(description_of_work=="Driver/other transport sector worker"|description_of_work=="Other skilled workers")]->nonmanual
+
+  nonmanual[,person_number:=NULL]
+
+  merge(nonmanual,m1,by.x="name_of_worker_id",by.y="id")->nonmanual
+
+
+  nonmanual[,.(salary_days_=sum(number_of_months*25),salary_earnings=sum(annual_earning)),keyby=.(sno_id,member_id=name_of_worker_id)]->personnonmanual
+
+  nonmanual[,.(salary_days_=sum(number_of_months*25),salary_earnings=sum(annual_earning)),keyby=.(sno_id,member_id=name_of_worker_id,description_of_work)]->personnonmanual_wide
+  melt(personnonmanual_wide,id=c("sno_id","member_id","description_of_work"))->t
+  dcast.data.table(t,sno_id+member_id~description_of_work+variable,sum)->personnonmanual_wide
+
+  nonmanual[,.(salaryearnings=sum(annual_earning)),keyby=.(sno_id)]->hhnonmanual
+
+  nonmanual[,.(salary_days_=sum(number_of_months*25),salary_earnings=sum(annual_earning)),keyby=.(sno_id,description_of_work)]->hhnonmanual_wide
+  melt(hhnonmanual_wide,id=c("sno_id","description_of_work"))->t
+  dcast.data.table(t,sno_id~description_of_work+variable,sum)->hhnonmanual_wide
 
   ## NREGA
 
   data.table(dbReadTable(surveypg,"ruralsurvey_work_done_by_household_members_under_nrega"))->nrega
 
+  nrega[,.(days_nrega=sum(number_of_labour_days),earnings_nrega=sum(cash),occupation="NREGA"),keyby=.(sno_id,member_id=name_of_the_worker_id)]->personnrega
 
-  ## Salaried employment
+  nrega[,.(earnings_nrega=sum(cash)),keyby=sno_id]->hhnrega
 
-  data.table(dbReadTable(surveypg,"ruralsurvey_income_from_salaries"))->salaries
-  salaries[is.na(annual_earning)]->t
-  merge(t,hhid,by.x="sno_id",by.y="id")->t
-  #hhid[id %in% t$sno_id]
-  member[,c(1,2,3,4,5)]->t1
-  merge(t,t1,by.x="name_of_worker_id",by.y="id")->t
-  t[,c(29,30,32,38,39,40,6,4,5,8,28,27)]->t
-  write.table(t,file="~/temp/missingsalaries.csv",sep="|",row.names=FALSE)
+  ## Businesses
 
-  ## Rents, pensions
+  data.table(dbReadTable(surveypg,"ruralsurvey_business_and_artisan_earnings"))->businesses
 
-  data.table(dbReadTable(surveypg,"ruralsurvey_scholarships_pensions_rents_remittances"))->remittances
+  data.table(dbReadTable(surveypg,"ruralsurvey_business_and_artisan_earnings_household_members"))->businessworkers
 
-  remittances[is.na(annual_earnings)]->t
-  hhid[id %in% t$sno_id]
+  ##merge(businessworkers,m1,by.x="member_id",by.y="id")->t
 
-  ## Hiring machinery
+  data.table(dbReadTable(surveypg,"ruralsurvey_codebusinesscategory"))->businesscategory
 
-  data.table(dbReadTable(surveypg,"ruralsurvey_income_from_hiring_out_machinery"))->machinehire
+    businesscategory[id %in% c(2,3,4,9,14,11,16),type:="Business with non-manual work"][is.na(type),type:="Self-employment involving manual labour"]
 
-  machinehire[is.na(gross_payment_received)]->t
-  hhid[id %in% t$sno_id]
+
+    merge(businesses,businesscategory,by.x="business_category_id",by.y="id",all.x=T)->businesses
+
+    businesses[code_business_category=="Seller of milk and other dairy products",
+               code_business_category:="Livestock and related trade"]
+
+    businesses[code_business_category=="Educational institution",
+               code_business_category:="Other businesses"]
+
+    businesses[code_business_category=="Commission Agent/Agricultural Trader",
+               code_business_category:="Other businesses"]
+
+    businesses[code_business_category=="Street vendor (others)",
+               code_business_category:="Street vendors and food sellers"]
+
+    businesses[code_business_category=="Food Shop/Seller",
+               code_business_category:="Street vendors and food sellers"]
+
+    businesses[code_business_category=="Artisan/Traditional Caste Business",
+               code_business_category:="Artisan/Traditional Caste Services"]
+
+    businesses[code_business_category=="Tailor",
+               code_business_category:="Petty Shopkeeper"]
+
+    businesses[,.(earnings=sum(net_income)),keyby=.(sno_id,type)]->t
+    dcast.data.table(t,sno_id~type,sum,value.var="earnings")->hhbusiness
+
+
+
+    ## Rents, pensions
+
+    data.table(dbReadTable(surveypg,"ruralsurvey_scholarships_pensions_rents_remittances"))->remittances
+
+    remittances[,.(earnings=sum(annual_earnings)),keyby=.(sno_id,type_of_remittance)]->t
+    dcast.data.table(t,sno_id~type_of_remittance,sum,value.var="earnings")->hhremittance
+    names(hhremittance)[2]<-"Remittances"
+
+    ## Hiring machinery
+
+    data.table(dbReadTable(surveypg,"ruralsurvey_income_from_hiring_out_machinery"))->machinehire
+    machinehire$gross_payment-machinehire$cost_total_paid_out->machinehire$netincome
+    machinehire[,.(machinerental=sum(netincome)),keyby=sno_id]->hhmachinehire
+
 #+END_SRC
 
 *** Businesses, Salaries and Remittances
@@ -1166,7 +1384,319 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 + 181:Sarifuddin/158:Japhar/140:Sahid/105:Rafeek/44:Savitri : There is a bike repairing entry in salaries. Change to non-ag manual
 + 68:Babulal Shift carpenter to Non-ag manual "Artisan/Traditional caste..."
 
+
+**** What are the different types of businesses?
+
++ Artisans/traditional caste services: Nai, Chhippi, Khati, Lohar
+
+  In Gijji, Dhanaks have entered into caste occupations of some of the other castes (Nai, Tailor, Mason, etc).
+
+  A pattern commonly seen in many parts of India is that some castes enter into allied work as the demand for traditional caste occupation declines. Potmaker into brick making. Lohars/Bairagi in Gijji have found employment as welders.
+
++ Drivers, mechanics
+
+  + People having their own automobiles, or having small repairing workshops.
+  + In addition, there are workers who drive rented cars, autorickshaws
+  + Finally, there are drivers who work on salaries
+  + Distinction between the three categories is not very strict.
+
++ Street vending, food stalls, eating shops
+
++ Service providers for marriages and other functions (cooks, catering, tent and decoration, photographer, sound)
+
++ Petty shopkeepers
+
++ Most remunerative businesses include educational institutions, arthis and agricultural traders, and small factories (brick kiln, rice mill).
+
+**** Salaried jobs
+
++ Government jobs (army, police, various government departments, teachers, scheme workers)
+
+  + Many persons belonging to /balmiki/ caste in Gijji are employed as sanitation workers in the village, in neighbouring towns and in Delhi.
+
++ Miscellaneous employees in private companies
+
+  + Most of these workers are engaged in manual labour. But some also employed in white-collar jobs.
+
++ Shop assistants, sales persons
+
++ Drivers, helpers
+
+** Combined Income and Employment Matrices
+
+#+NAME: hh-income-emp-matrix-code
+#+BEGIN_SRC R :results silent :exports none
+    copy(hhid)->householdincome
+    casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
+    merge(householdincome,t,by.x="id",by.y="sno_id",all.x=T)->householdincome
+    merge(householdincome,hhnonagri,by.x="id",by.y="sno_id",all.x=T)->householdincome
+    merge(householdincome,hhnonmanual,by.x="id",by.y="sno_id",all.x=T)->householdincome
+    merge(householdincome,hhnrega,by.x="id",by.y="sno_id",all.x=T)->householdincome
+    merge(householdincome,hhbusiness,by.x="id",by.y="sno_id",all.x=T)->householdincome
+    merge(householdincome,hhremittance,by.x="id",by.y="sno_id",all.x=T)->householdincome
+    merge(householdincome,hhmachinehire,by.x="id",by.y="sno_id",all.x=T)->householdincome
+
+    merge(householdincome,landholdings,by="id",all.x=T)->householdincome
+
+    write.table(householdincome,
+                file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_clean.csv",
+                sep="|",row.names=FALSE)
+    copy(hhid)->householdincome_wide
+    casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
+    merge(householdincome_wide,t,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+    merge(householdincome_wide,hhnonagri_wide,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+    merge(householdincome_wide,hhnonmanual_wide,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+    merge(householdincome_wide,hhnrega,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+    merge(householdincome_wide,hhbusiness,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+    merge(householdincome_wide,hhremittance,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+    merge(householdincome_wide,hhmachinehire,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+
+    merge(householdincome_wide,landholdings,by="id",all.x=T)->householdincome_wide
+
+    write.table(householdincome_wide,
+                file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_wide_clean.csv",
+                sep="|",row.names=FALSE)
+#+end_src
+
+#+NAME: person-income-emp-matrix-code
+#+BEGIN_SRC R :results silent :exports none
+  member[,c(16,1,2,3,4,5)][person_number<90]->personlabour
+  setkey(personlabour,id)
+  casual_labour_final[,
+                      .(casual_agri_days=sum(labour_days),
+                        casual_agri_standarddays=sum(standarddays),
+                        casual_agri_income=sum(totalearning)
+                        ),
+                      keyby=.(id=name_of_worker_id)]->t
+  merge(personlabour,t,by="id",all.x=T)->personlabour
+
+  copy(personnonagri)->t
+  t[,sno_id:=NULL]->t
+  merge(personlabour,t,by.x="id",by.y="member_id",all.x=T)->personlabour
+
+#+end_src
+
 ** Livestock
+
++ Balmik households are engaged in rearing pigs
+
+#+NAME: animal-inventory-cleaning-code
+#+BEGIN_SRC R :results silent :exports none
+  #dbListTables(surveypg)
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_for_last_one_year_inventory"))->animalinventory
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeanimaltype"))->animaltype
+
+  ## Animal Inventory
+
+  animalinventory[is.na(number),number:=1]
+  merge(animalinventory,animaltype,by.x="animal_type_id",by.y="id")->animalinventory
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*500]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*1000]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
+  animalinventory[!(animal_type=="Cow/bullock"|animal_type=="Buffalo"),sex:=NA]
+  animalinventory[!(animal_type=="Cow/bullock"|animal_type=="Buffalo"),adult_or_calf:=NA]
+  animalinventory[(animal_type=="Cow/bullock"|animal_type=="Buffalo")&is.na(sex),sex:="Female"]
+  animalinventory[(animal_type=="Cow/bullock"|animal_type=="Buffalo")&is.na(adult_or_calf),adult_or_calf:="Adult"]
+#+end_src
+
+#+NAME: animal-data-cleaning-code
+#+BEGIN_SRC R :results silent :exports none
+  dbListTables(surveypg)
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_for_last_one_year_inventory"))->animalinventory
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeanimaltype"))->animaltype
+  data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->qtyunit
+  data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->cropid
+
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_feed"))->animalfeed
+  data.table(dbReadTable(surveypg,"ruralsurvey_codefeedtype"))->animalfeedtype
+  animalfeed[,feed_type:=NULL]
+  merge(animalfeed,animalfeedtype,by.x="feed_id",by.y="id",all.x=T)->animalfeed
+  ##data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->norms
+  ##norms[parameter_description=="Quantity"]->qtyconversion
+
+  copy(animalfeed)->animalfeed0
+
+  ##Wheat straw
+  animalfeed0[feed_id==1&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Kg
+  animalfeed0[feed_id==1&quantity_unit_id==3,c("quantity","quantity_unit_id"):=list(quantity*20,10)] #Trolley
+
+  ##Paddy straw
+  animalfeed0[feed_id==2&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Kg
+  animalfeed0[feed_id==2&quantity_unit_id==3,c("quantity","quantity_unit_id"):=list(quantity*18,10)] #Trolley
+  animalfeed0[feed_id==2&quantity_unit_id==4,c("quantity","quantity_unit_id"):=list(quantity*7,10)] #Cart
+
+
+  ##Bajra straw
+  animalfeed0[feed_id==3&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Kg
+  animalfeed0[feed_id==3&quantity_unit_id==5,c("quantity","quantity_unit_id"):=list(quantity*5/100,10)] #Bundle
+  animalfeed0[feed_id==3&quantity_unit_id==4,c("quantity","quantity_unit_id"):=list(quantity*3,10)] #Cart
+
+
+  ##Green fodder
+  animalfeed0[(feed_id==12|feed_id==13)&quantity_unit_id==14,quantity_unit_id:=12] #Use right unit for Acre
+
+  ## Berseem
+  animalfeed0[feed_id==13&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Kg
+  animalfeed0[feed_id==13&quantity_unit_id==5,c("quantity","quantity_unit_id"):=list(quantity*40/100,10)] #Bundle
+  animalfeed0[feed_id==13&quantity_unit_id==3,c("quantity","quantity_unit_id"):=list(quantity*20,10)] #Trolley
+
+  ## Jowar
+  animalfeed0[feed_id==12&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Kg
+  animalfeed0[feed_id==12&quantity_unit_id==5,c("quantity","quantity_unit_id"):=list(quantity*20/100,10)] #Bundle
+  animalfeed0[feed_id==12&quantity_unit_id==6,c("quantity","quantity_unit_id"):=list(quantity*20/100,10)] #Basket
+  animalfeed0[feed_id==12&quantity_unit_id==4,c("quantity","quantity_unit_id"):=list(quantity*7,10)] #Cart
+  animalfeed0[feed_id==12&quantity_unit_id==3,c("quantity","quantity_unit_id"):=list(quantity*20,10)] #Trolley
+
+  ## Others
+  animalfeed0[feed_id==15&quantity_unit_id==1,quantity_unit_id:=2] #Mustard oil, litre to kg
+  animalfeed0[feed_id==16&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Trolley
+
+  animalfeed0[,price:=total_value/quantity]
+
+  animalfeed0[,.(medprice=median(price,na.rm=T),
+                 q1price=quantile(price,0.25,na.rm=T),
+                 q3price=quantile(price,0.75,na.rm=T),
+                 cvprice=(var(price,na.rm=TRUE)^0.5/mean(price,na.rm=TRUE)),
+                 number=length(price[!is.na(price)]),
+                 blanks=length(total_value[is.na(total_value)])),
+              .(feed_id,feed_type,quantity_unit_id)]->t
+  t[blanks!=0][!is.na(quantity_unit_id)]->t
+  merge(t,qtyunit,by.x="quantity_unit_id",by.y="id")->t
+  t[,maxprice:=q3price+1.5*(q3price-q1price)]
+  t[,.(quantity_unit_id,feed_id,medprice,maxprice)]->t
+  merge(animalfeed0,t,by=c("quantity_unit_id","feed_id"),all.x=T)->animalfeed0
+  animalfeed0[price>maxprice,total_value:=quantity*maxprice][is.na(total_value),total_value:=quantity*medprice]
+  animalfeed0[price>maxprice,price:=maxprice][is.na(total_value),price:=medprice]
+
+
+  ##animalfeed0[feed_id==1&quantity_unit_id==10]->t
+  ##ggplot(t,aes(x=feed_type,y=price))+geom_boxplot()+facet_wrap(~feed_type,scales="free_y")
+
+
+
+
+  ## Animal Inventory
+
+  animalinventory[is.na(number),number:=1]
+  merge(animalinventory,animaltype,by.x="animal_type_id",by.y="id")->animalinventory
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*500]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*1000]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
+
+  ,total_present_value:=number*10000
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Adult"&sex=="Female"&age<7]
+
+  animalinventory[is.na(total_present_value)]->t
+  [animal_type_id>2]
+  [,.(count=length(id)),.(animal_type,adult_or_calf,sex)]
+  animalinventory[,.(price=median(total_present_value/number,na.rm=TRUE),count=length(id)),animal_type_id]
+
+  ## [35] "ruralsurvey_animal_resources_sale_production"                   
+  ## [36] "ruralsurvey_animal_resources_work_done_by_household_members"    
+  ## [37] "ruralsurvey_animal_resources_milk"                              
+  ## [38] "ruralsurvey_animal_resources_for_last_one_year_inventory"       
+  ## [39] "ruralsurvey_animal_resources_feed"                              
+  ## [42] "ruralsurvey_animal_resources_for_last_one_year_sale_disposal"   
+  ## [43] "ruralsurvey_animal_resources_other_costs"                       
+#+end_src
+
+#+NAME: animal-inventory-table0-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  copy(animalinventory)->t
+  t[animal_type=="Chicken"|animal_type=="Duck"|animal_type=="Pigeon",animal_type:="Poultry"]
+  t[animal_type=="Sheep"|animal_type=="Goat",animal_type:="Goats_Sheep"]
+  t[animal_type=="Cow/bullock"|animal_type=="Buffalo",animal_type:="Bovines"]
+  t[animal_type!="Horse"]->t
+  t[,.(number=sum(number)),.(sno_id,animal_type)]->t
+  t[,number:=1]
+  factor(t$animal_type,levels=c("Bovines","Goats_Sheep","Pig","Poultry","Camel"))->t$animal_type
+  levels(t$animal_type)<-c("गाय/भैंसें","बकरियाँ/भेड़ें","सूअर","मुर्गियाँ","ऊँट")
+  dcast.data.table(t,sno_id~animal_type,sum,value.var="number")->t
+  merge(hhid,t,by.y="sno_id",by.x="id",all.x=T)->t
+  t[is.na(t)]<-0
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t[,c(1,2,5,6,9:14)]->t
+  melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
+  t[,.(hh_animal=sum(value*multiplier),hhall=sum(multiplier)),.(if_sc_st,variable)]->t
+  t[,hh_animal_prop:=round(hh_animal*100/hhall,1)]
+  dcast(t,variable~if_sc_st,sum,value.var="hh_animal_prop")->t
+  names(t)[1]<-c("पशु")
+  t
+#+end_src
+
+
+#+NAME: animal-inventory-table0
+#+CAPTION: विभिन्न समुदायों में पशुपालन करने वाले परिवारों का अनुपात (प्रतिशत)
+#+RESULTS: animal-inventory-table0-code
+| पशु        | दलित | मुस्लिम | पिछड़ी जातियाँ |  अन्य |
+|-----------+------+-------+--------------+------|
+| गाय/भैंसें    | 39.1 |    58 |         59.3 | 77.2 |
+| बकरियाँ/भेड़ें |  7.6 |  17.7 |          0.6 |  0.2 |
+| सूअर       |  0.4 |     0 |            0 |    0 |
+| मुर्गियाँ    |  2.3 |     7 |            0 |    0 |
+| ऊँट        |  0.1 |     0 |          0.3 |    0 |
+
+#+NAME: animal-inventory-table0-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  copy(animalinventory)->t
+  t[animal_type=="Chicken"|animal_type=="Duck"|animal_type=="Pigeon",animal_type:="Poultry"]
+  t[animal_type=="Sheep"|animal_type=="Goat",animal_type:="Goats_Sheep"]
+  t[animal_type=="Cow/bullock"|animal_type=="Buffalo",animal_type:="Bovines"]
+  t[animal_type!="Horse"]->t
+  t[,.(number=sum(number)),.(sno_id,animal_type)]->t
+  t[,number:=1]
+  factor(t$animal_type,levels=c("Bovines","Goats_Sheep","Pig","Poultry","Camel"))->t$animal_type
+  levels(t$animal_type)<-c("गाय/भैंसें","बकरियाँ/भेड़ें","सूअर","मुर्गियाँ","ऊँट")
+  dcast.data.table(t,sno_id~animal_type,sum,value.var="number")->t
+  merge(hhid,t,by.y="sno_id",by.x="id",all.x=T)->t
+  t[is.na(t)]<-0
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t[,c(1,2,5,6,9:14)]->t
+  melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
+  t[,.(hh_animal=sum(value*multiplier),hhall=sum(multiplier)),.(if_sc_st,variable)]->t
+  t[,hh_animal_prop:=round(hh_animal*100/hhall,1)]
+  dcast(t,variable~if_sc_st,sum,value.var="hh_animal_prop")->t
+  names(t)[1]<-c("पशु")
+  t
+#+end_src
+
+
+
+#+NAME: animal-inventory-table2-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  merge(animalinventory,hhid,by.x="sno_id",by.y="id",all=T)->t
+  t[animal_type=="Cow/bullock",animal_type:="गाय/बैल"][animal_type=="Buffalo",animal_type:="भैंस"]
+  t[adult_or_calf=="Adult",adult_or_calf:="वयस्क"][adult_or_calf=="Calf",adult_or_calf:="बच्चा"]
+  t[animal_type=="गाय/बैल"|animal_type=="भैंस"]->t
+  t[sex=="Male",sex:="नर"][sex=="Female",sex:="मादा"]
+  t[,.(number=sum(number*multiplier)),keyby=.(animal_type,sex,adult_or_calf)]->t
+  dcast(t,animal_type+adult_or_calf~sex,sum,value.var="number",margins="sex")->t
+  round(t[,c(3:5)]*100/t[,5])->t[,c(3:5)]
+  names(t)[c(1:2)]<-c("पशु","वयस्क/बच्चा")
+  t[,c(1:4)]
+#+end_src
+
+#+NAME: animal-inventory-table2
+#+CAPTION: पशुओं की कुल संख्या में नर और मादाओं का अनुपात (प्रतिशत)
+#+RESULTS: animal-inventory-table2-code
+| पशु     | वयस्क/बच्चा | नर | मादा |
+|--------+-----------+----+------|
+| गाय/बैल | बच्चा      | 21 |   79 |
+| गाय/बैल | वयस्क      | 13 |   87 |
+| भैंस     | बच्चा      | 26 |   74 |
+| भैंस     | वयस्क      |  3 |   97 |
+
+
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
