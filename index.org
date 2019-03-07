@@ -19,6 +19,7 @@
     require(ggplot2)
     require(ggrepel)
     require(data.table)
+    require(spatstat)
     addhead<-function(d1,v1,v2) {
       as.data.table(expand.grid(V2=levels(v2),V1=levels(v1))[,c(2,1)])->tabhead
       as.character(tabhead$V1)->tabhead$V1
@@ -963,29 +964,29 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+NAME: casual-labour0-code
 #+BEGIN_SRC R :results silent :exports none
-   data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
-   data.table(dbReadTable(surveypg,"ruralsurvey_code_kind_commodity"))->kindcomm
-   data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->kindunit
-   data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->standards
+  data.table(dbReadTable(surveypg,"ruralsurvey_agricultural_labouring_out"))->agrilabour
+  data.table(dbReadTable(surveypg,"ruralsurvey_code_kind_commodity"))->kindcomm
+  data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->kindunit
+  data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->standards
 
   member[person_number<90,.(sno_id,id,person_number,name,age,sex)]->t
 
   merge(agrilabour,t,by.x=c("sno_id","name_of_worker_id"),by.y=c("sno_id","id"),all.x=T)->agrilabour
 
-                                           #merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
+  ## merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
 
-   copy(agrilabour)->t
-     t[kindcomm,on=c(wages_kind_commodity1_id="id"),`:=`(kind_commodity1=i.kind_commodity,crop1_id=i.crop_id,mainby1=i.main_or_by)]
-     t[kindunit,on=c(wages_kind_commodity1_unit_id="id"),`:=`(kind_commodity1_unit=i.quantity_unit)]
-     t[kindcomm,on=c(wages_kind_commodity2_id="id"),`:=`(kind_commodity2=i.kind_commodity,crop2_id=i.crop_id,mainby2=i.main_or_by)]
-     t[kindunit,on=c(wages_kind_commodity2_unit_id="id"),`:=`(kind_commodity2_unit=i.quantity_unit)]
+  copy(agrilabour)->t
+  t[kindcomm,on=c(wages_kind_commodity1_id="id"),`:=`(kind_commodity1=i.kind_commodity,crop1_id=i.crop_id,mainby1=i.main_or_by)]
+  t[kindunit,on=c(wages_kind_commodity1_unit_id="id"),`:=`(kind_commodity1_unit=i.quantity_unit)]
+  t[kindcomm,on=c(wages_kind_commodity2_id="id"),`:=`(kind_commodity2=i.kind_commodity,crop2_id=i.crop_id,mainby2=i.main_or_by)]
+  t[kindunit,on=c(wages_kind_commodity2_unit_id="id"),`:=`(kind_commodity2_unit=i.quantity_unit)]
 
-   standards[parameter_description=="Sale price",.(code_id,commodity,value,unit_denominator)]->prices
-     prices[unit_denominator==10,value:=value/100][,price:=value][,unit_denominator:=NULL][,value:=NULL]
+  standards[parameter_description=="Sale price",.(code_id,commodity,value,unit_denominator)]->prices
+  prices[unit_denominator==10,value:=value/100][,price:=value][,unit_denominator:=NULL][,value:=NULL]
 
    ## Kind commodity1
-     t[!is.na(crop1_id),.(id,crop1_id,mainby1,wages_kind_commodity1_unit_id,wages_kind_commodity1_quantity)]->t1
-     merge(t1,prices,by.x=c("crop1_id","mainby1"),by.y=c("code_id","commodity"),all.x=T)->t1
+  t[!is.na(crop1_id),.(id,crop1_id,mainby1,wages_kind_commodity1_unit_id,wages_kind_commodity1_quantity)]->t1
+  merge(t1,prices,by.x=c("crop1_id","mainby1"),by.y=c("code_id","commodity"),all.x=T)->t1
    t1[,.(kindvalue1=wages_kind_commodity1_quantity*price),id]->t1
 
    ## Kind commodity2
@@ -1482,7 +1483,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+NAME: animal-inventory-cleaning-code
 #+BEGIN_SRC R :results silent :exports none
-  #dbListTables(surveypg)
+  ## dbListTables(surveypg)
   data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_for_last_one_year_inventory"))->animalinventory
   data.table(dbReadTable(surveypg,"ruralsurvey_codeanimaltype"))->animaltype
 
@@ -1490,28 +1491,208 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
   animalinventory[is.na(number),number:=1]
   merge(animalinventory,animaltype,by.x="animal_type_id",by.y="id")->animalinventory
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*500]
-  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
-  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*1000]
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
-  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
-  animalinventory[!(animal_type=="Cow/bullock"|animal_type=="Buffalo"),sex:=NA]
-  animalinventory[!(animal_type=="Cow/bullock"|animal_type=="Buffalo"),adult_or_calf:=NA]
-  animalinventory[(animal_type=="Cow/bullock"|animal_type=="Buffalo")&is.na(sex),sex:="Female"]
-  animalinventory[(animal_type=="Cow/bullock"|animal_type=="Buffalo")&is.na(adult_or_calf),adult_or_calf:="Adult"]
+
+  ## Buffalo
+  ## Female
+  ## Calf
+  ## Less than 1 year,Rs. 1500
+  ## 1: 3000
+  ## 1-2: 15000
+  ## Calf,3: 30000
+  ## Adult, 3: 40000
+  ## 4: 55000
+  ## 5-6: 80000
+  ## 7-8: 60000
+  ## >8: 40000
+
+  ## Male
+  ## Calf:
+  ##   <1: 500
+  ## 1: 2000
+  ## 1-2: 3000
+  ## 2-4: 5000
+  ## Adult: 7000
+
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age==1,total_present_value:=3000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age<=2,total_present_value:=15000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age<=3&adult_or_calf=="Calf",total_present_value:=30000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age<=3,total_present_value:=40000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age<=4,total_present_value:=55000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age<=6,total_present_value:=80000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age<=8,total_present_value:=60000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&age>8,total_present_value:=40000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&adult_or_calf=="Calf"&is.na(age),total_present_value:=1500*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Female"&adult_or_calf=="Adult",total_present_value:=50000*number]
+
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Male"&age==1,total_present_value:=2000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Male"&age<=2,total_present_value:=3000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Male"&age<=4,total_present_value:=5000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Male"&age>4,total_present_value:=7000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Male"&adult_or_calf=="Calf"&is.na(age),total_present_value:=500*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Buffalo"&sex=="Male"&adult_or_calf=="Adult",total_present_value:=5000*number]
+
+
+  ## Cow
+  ## FemaleCalf
+  ## 1: 1000
+  ## 2: 1500
+  ## 3: 3000
+  ## Adult cow
+  ## 3-5: 30000
+  ## 5-6: 40000
+  ## 6-8: 20000
+  ## >8: 5000
+
+  ## Bullock
+  ## <1:500
+  ## 1: 1000
+  ## Adult: 2000
+
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age==1,total_present_value:=1000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age<=2,total_present_value:=1500*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age<=3&adult_or_calf=="Calf",total_present_value:=3000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age<=5,total_present_value:=30000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age<=6,total_present_value:=40000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age<=8,total_present_value:=20000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&age>8,total_present_value:=5000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&adult_or_calf=="Calf"&is.na(age),total_present_value:=500*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Female"&adult_or_calf=="Adult",total_present_value:=20000*number]
+
+
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Male"&age<=3,total_present_value:=1000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Male"&age>3,total_present_value:=2000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Male"&adult_or_calf=="Calf"&is.na(age),total_present_value:=500*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock"&sex=="Male"&adult_or_calf=="Adult",total_present_value:=2000*number]
+
+  animalinventory[is.na(total_present_value)&animal_type=="Goat",total_present_value:=5000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Sheep",total_present_value:=2000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Pig",total_present_value:=5000*number]
+  animalinventory[is.na(total_present_value)&animal_type=="Pigeon",total_present_value:=0]
 #+end_src
 
-#+NAME: animal-data-cleaning-code
+#+NAME: animal-inventory-table0-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  copy(animalinventory)->t
+  t[animal_type=="Chicken"|animal_type=="Duck"|animal_type=="Pigeon",animal_type:="Poultry"]
+  t[animal_type=="Sheep"|animal_type=="Goat",animal_type:="Goats_Sheep"]
+  t[animal_type=="Cow/bullock"|animal_type=="Buffalo",animal_type:="Bovines"]
+  t[animal_type!="Horse"]->t
+  t[,.(number=sum(number)),.(sno_id,animal_type)]->t
+  t[,number:=1]
+  factor(t$animal_type,levels=c("Bovines","Goats_Sheep","Pig","Poultry","Camel"))->t$animal_type
+  levels(t$animal_type)<-c("गाय/भैंसें","बकरियाँ/भेड़ें","सूअर","मुर्गियाँ","ऊँट")
+  dcast.data.table(t,sno_id~animal_type,sum,value.var="number")->t
+  merge(hhid,t,by.y="sno_id",by.x="id",all.x=T)->t
+  t[is.na(t)]<-0
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t[,c(1,2,5,6,9:14)]->t
+  melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
+  t[,.(hh_animal=sum(value*multiplier),hhall=sum(multiplier)),.(if_sc_st,variable)]->t
+  t[,hh_animal_prop:=round(hh_animal*100/hhall,1)]
+  dcast(t,variable~if_sc_st,sum,value.var="hh_animal_prop")->t
+  names(t)[1]<-c("पशु")
+  t
+#+end_src
+
+
+#+NAME: animal-inventory-table0
+#+CAPTION: विभिन्न समुदायों में पशुपालन करने वाले परिवारों का अनुपात (प्रतिशत)
+#+RESULTS: animal-inventory-table0-code
+| पशु        | दलित | मुस्लिम | पिछड़ी जातियाँ |  अन्य |
+|-----------+------+-------+--------------+------|
+| गाय/भैंसें    | 39.1 |  57.7 |         59.3 | 77.2 |
+| बकरियाँ/भेड़ें |  7.6 |  17.7 |          0.6 |  0.2 |
+| सूअर       |  0.4 |     0 |            0 |    0 |
+| मुर्गियाँ    |  2.3 |     7 |            0 |    0 |
+| ऊँट        |  0.1 |     0 |          0.3 |    0 |
+
+#+NAME: animal-inventory-table1-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  copy(animalinventory)->t
+  #t[animal_type=="Cow/bullock"|animal_type=="Buffalo"]->t
+  ## t[is.na(total_present_value)&animal_type=="Buffalo"&age<=1,total_present_value:=3000*number]
+  ## t[is.na(total_present_value)&animal_type=="Buffalo"&age<=3,total_present_value:=15000*number]
+  ## t[is.na(total_present_value)&animal_type=="Buffalo"&age<=6,total_present_value:=35000*number]
+  ## t[is.na(total_present_value)&animal_type=="Buffalo"&age<=8,total_present_value:=25000*number]
+  ## t[is.na(total_present_value)&animal_type=="Buffalo"&age>8,total_present_value:=10000*number]
+  ## t[is.na(total_present_value)&animal_type=="Buffalo"&adult_or_calf=="Adult",total_present_value:=50000*number]
+  ## t[is.na(total_present_value)&animal_type=="Cow/bullock"&age<=1,total_present_value:=2000*number]
+  ## t[is.na(total_present_value)&animal_type=="Cow/bullock"&age<=3,total_present_value:=8000*number]
+  ## t[is.na(total_present_value)&animal_type=="Cow/bullock"&age<=6,total_present_value:=20000*number]
+  ## t[is.na(total_present_value)&animal_type=="Cow/bullock"&age<=8,total_present_value:=10000*number]
+  ## t[is.na(total_present_value)&animal_type=="Cow/bullock"&age>=8,total_present_value:=5000*number]
+  ## t[is.na(total_present_value)&animal_type=="Cow/bullock"&adult_or_calf=="Adult",total_present_value:=30000*number]
+  ## t[is.na(total_present_value)&animal_type=="Goat",total_present_value:=5000*number]
+  ## t[is.na(total_present_value)&animal_type=="Sheep",total_present_value:=2000*number]
+  ## t[is.na(total_present_value)&animal_type=="Pig",total_present_value:=5000*number]
+  ## t[is.na(total_present_value)&animal_type=="Pigeon",total_present_value:=0]
+
+  t[,.(number=sum(total_present_value)),.(sno_id)]->t
+  #t[,number:=1]
+  merge(hhid,t,by.y="sno_id",by.x="id")->t
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+
+  #melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
+  t[,.(hh_animal=sum(number*multiplier),hhall=sum(multiplier)),.(if_sc_st,village)]->t
+  t[,hh_animal_prop:=round(hh_animal/hhall)]
+  dcast(t,village~if_sc_st,sum,value.var="hh_animal_prop")->t
+  names(t)[1]<-c("गाँव")
+  t[t==0]<-NA
+  t
+#+end_src
+
+#+NAME: animal-inventory-table1
+#+CAPTION: विभिन्न गाँवों में पशुपालन करने वाले परिवारों के पास औसत गाय/भैसों की कीमत, समुदाय के अनुसार
+#+RESULTS: animal-inventory-table1-code
+| गाँव            |  दलित | मुस्लिम | पिछड़ी जातियाँ |    अन्य |
+|----------------+-------+-------+--------------+--------|
+| खंदरई           | 62457 | nil   |        39561 | 116303 |
+| चहड़ कलां        | 46292 | nil   |        68659 | 109219 |
+| भिरढाणा        | 98899 | 60500 |        60932 |  75453 |
+| भिरढाणा ढाणियाँ | 90714 | nil   |       152750 | 118500 |
+| जमालपुर शेखाँ     | 58406 | nil   |        68867 | 143608 |
+| गिज्जी          | 53275 | nil   |        89478 | 155412 |
+| भादस           | 79890 | 64973 |        62678 |    nil |
+
+#+NAME: animal-inventory-table2-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  merge(animalinventory,hhid,by.x="sno_id",by.y="id",all=T)->t
+  t[animal_type=="Cow/bullock",animal_type:="गाय/बैल"][animal_type=="Buffalo",animal_type:="भैंस"]
+  t[adult_or_calf=="Adult",adult_or_calf:="वयस्क"][adult_or_calf=="Calf",adult_or_calf:="बच्चा"]
+  t[animal_type=="गाय/बैल"|animal_type=="भैंस"]->t
+  t[sex=="Male",sex:="नर"][sex=="Female",sex:="मादा"]
+  t[is.na(sex),sex:="मादा"]
+  t[,.(number=sum(number*multiplier)),keyby=.(animal_type,sex,adult_or_calf)]->t
+  dcast(t,animal_type+adult_or_calf~sex,sum,value.var="number",margins="sex")->t
+  round(t[,c(3:ncol(t))]*100/t[,ncol(t)])->t[,c(3:ncol(t))]
+  names(t)[c(1:2)]<-c("पशु","वयस्क/बच्चा")
+  t[,c(1:4)]
+#+end_src
+
+#+NAME: animal-inventory-table2
+#+CAPTION: पशुओं की कुल संख्या में नर और मादाओं का अनुपात (प्रतिशत)
+#+RESULTS: animal-inventory-table2-code
+| पशु     | वयस्क/बच्चा | नर | मादा |
+|--------+-----------+----+------|
+| गाय/बैल | बच्चा      | 22 |   78 |
+| गाय/बैल | वयस्क      | 12 |   88 |
+| भैंस     | बच्चा      | 26 |   74 |
+| भैंस     | वयस्क      |  3 |   97 |
+
+#+NAME: animal-costs-cleaning-code
 #+BEGIN_SRC R :results silent :exports none
-  dbListTables(surveypg)
-  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_for_last_one_year_inventory"))->animalinventory
-  data.table(dbReadTable(surveypg,"ruralsurvey_codeanimaltype"))->animaltype
-  data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->qtyunit
-  data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->cropid
+  #dbListTables(surveypg)
+  #data.table(dbReadTable(surveypg,"ruralsurvey_codeanimaltype"))->animaltype
+  #data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->qtyunit
+  #data.table(dbReadTable(surveypg,"ruralsurvey_codecrop"))->cropid
 
   data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_feed"))->animalfeed
   data.table(dbReadTable(surveypg,"ruralsurvey_codefeedtype"))->animalfeedtype
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_other_costs"))->animalothercosts
   animalfeed[,feed_type:=NULL]
   merge(animalfeed,animalfeedtype,by.x="feed_id",by.y="id",all.x=T)->animalfeed
   ##data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->norms
@@ -1554,6 +1735,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   animalfeed0[feed_id==15&quantity_unit_id==1,quantity_unit_id:=2] #Mustard oil, litre to kg
   animalfeed0[feed_id==16&quantity_unit_id==1,c("quantity","quantity_unit_id"):=list(quantity/100,10)] #Trolley
 
+
   animalfeed0[,price:=total_value/quantity]
 
   animalfeed0[,.(medprice=median(price,na.rm=T),
@@ -1568,138 +1750,194 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t[,maxprice:=q3price+1.5*(q3price-q1price)]
   t[,.(quantity_unit_id,feed_id,medprice,maxprice)]->t
   merge(animalfeed0,t,by=c("quantity_unit_id","feed_id"),all.x=T)->animalfeed0
-  animalfeed0[price>maxprice,total_value:=quantity*maxprice][is.na(total_value),total_value:=quantity*medprice]
+  animalfeed0[is.na(total_value)& price>maxprice,total_value:=quantity*maxprice][is.na(total_value),total_value:=quantity*medprice]
+  animalfeed0[is.na(total_value)&feed_type=="Mustard straw",total_value:=quantity*3.75]
   animalfeed0[price>maxprice,price:=maxprice][is.na(total_value),price:=medprice]
 
 
-  ##animalfeed0[feed_id==1&quantity_unit_id==10]->t
-  ##ggplot(t,aes(x=feed_type,y=price))+geom_boxplot()+facet_wrap(~feed_type,scales="free_y")
-
-
-
-
-  ## Animal Inventory
-
-  animalinventory[is.na(number),number:=1]
-  merge(animalinventory,animaltype,by.x="animal_type_id",by.y="id")->animalinventory
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*500]
-  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Male",total_present_value:=number*500]
-  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Calf"&sex=="Female",total_present_value:=number*1000]
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
-  animalinventory[is.na(total_present_value)&animal_type=="Buffalo" & adult_or_calf=="Adult"&sex=="Male",total_present_value:=number*1000]
-
-  ,total_present_value:=number*10000
-  animalinventory[is.na(total_present_value)&animal_type=="Cow/bullock" & adult_or_calf=="Adult"&sex=="Female"&age<7]
-
-  animalinventory[is.na(total_present_value)]->t
-  [animal_type_id>2]
-  [,.(count=length(id)),.(animal_type,adult_or_calf,sex)]
-  animalinventory[,.(price=median(total_present_value/number,na.rm=TRUE),count=length(id)),animal_type_id]
-
-  ## [35] "ruralsurvey_animal_resources_sale_production"                   
-  ## [36] "ruralsurvey_animal_resources_work_done_by_household_members"    
-  ## [37] "ruralsurvey_animal_resources_milk"                              
-  ## [38] "ruralsurvey_animal_resources_for_last_one_year_inventory"       
-  ## [39] "ruralsurvey_animal_resources_feed"                              
-  ## [42] "ruralsurvey_animal_resources_for_last_one_year_sale_disposal"   
-  ## [43] "ruralsurvey_animal_resources_other_costs"                       
+  animalfeed0[,.(feedcost=sum(total_value,na.rm=T)),keyby=sno_id]->animalcosts
+  animalothercosts[,.(veterinary_expenses=sum(veterinary_expenses,na.rm=TRUE),
+                      hiredlabour=sum(expenses_on_hired_labour,na.rm=TRUE),
+                      animalshed=sum(maintenance_of_shed,na.rm=TRUE),
+                      any_other_expenses=sum(any_other_expenses,na.rm=TRUE)),
+                   keyby=sno_id]->t
+  merge(hhid,animalcosts,by.x="id",by.y="sno_id",all.x=TRUE)->animalcosts
+  merge(animalcosts,t,by.x="id",by.y="sno_id",all.x=TRUE)->animalcosts
+  animalcosts[,c(1,10:14)]->animalcosts
 #+end_src
 
-#+NAME: animal-inventory-table0-code
+#+NAME: animal-income-cleaning-code
+#+BEGIN_SRC R :results silent :exports none
+  #dbListTables(surveypg)
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_sale_production"))->animalout
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_milk"))->milkout
+  data.table(dbReadTable(surveypg,"ruralsurvey_codeanimaltype"))->animaltype
+  data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->norms
+
+  ##Milk
+
+  milkout[is.na(production),production:=0]
+  milkout[,.(production=sum(production*30),ct=length(id)),sno_id]->milkout
+  milkout[ct>12,production:=production*12/ct][,ct:=NULL][,milkvalue:=production*40]
+
+  ##Manure production
+
+  norms[parameter_description=="Manure yield"][,.(animal_type_id=code_id,adult_or_calf=commodity,manureyield=value)]->t
+  norms[parameter_description=="Purchase price"&code_key=="input_category"&code_id==1]$value->a
+  manuretrollytokg<-30
+  merge(animalinventory,t,by=c("animal_type_id","adult_or_calf"))->manure
+  manure[is.na(number),number:=1]
+  manure[,.(manure=sum(manureyield*number*a/manuretrollytokg,na.rm=TRUE)),sno_id]->manure
+
+  ## Ghee
+  animalout[product=="Ghee",.(gheeincome=sum(sale*(price-400),na.rm=TRUE)),sno_id]->gheeincome
+
+  ##Depreciation/Appreciation
+
+  copy(animalinventory)->appdep
+  appdep[(animal_type_id==1|animal_type_id==2|animal_type_id==5)&age<1,appdep:=total_present_value]
+  appdep[is.na(appdep)&(animal_type_id==1|animal_type_id==2|animal_type_id==5)&age<3,appdep:=total_present_value/age]
+  appdep[is.na(appdep)&(animal_type_id==1|animal_type_id==2|animal_type_id==5)&adult_or_calf=="Calf",appdep:=total_present_value]
+  appdep[is.na(appdep)&(animal_type_id==1|animal_type_id==2|animal_type_id==5)&age<6,appdep:=total_present_value/3]
+  appdep[is.na(appdep)&(animal_type_id==1|animal_type_id==2|animal_type_id==5)&age<8,appdep:=-total_present_value/4]
+  appdep[is.na(appdep)&(animal_type_id==1|animal_type_id==2|animal_type_id==5)&age>=8,appdep:=-total_present_value/3]
+  appdep[is.na(appdep)&(animal_type_id==1|animal_type_id==2|animal_type_id==5)&adult_or_calf=="Adult",appdep:=total_present_value/5]
+
+  appdep[is.na(appdep)&(animal_type_id==3|animal_type_id==8|animal_type_id==6),appdep:=total_present_value/2]
+  appdep[is.na(appdep)&(animal_type_id==4|animal_type_id==7),appdep:=total_present_value/2]
+
+  appdep[,.(appdep=sum(appdep,na.rm=TRUE)),sno_id]->appdep
+
+
+  merge(hhid,milkout,by.x="id",by.y="sno_id",all.x=T)->animalout
+  merge(animalout,manure,by.x="id",by.y="sno_id",all.x=T)->animalout
+  merge(animalout,gheeincome,by.x="id",by.y="sno_id",all.x=T)->animalout
+  merge(animalout,appdep,by.x="id",by.y="sno_id",all.x=T)->animalout
+  merge(animalout,animalcosts,by="id",all.x=T)->animalout
+  animalout[is.na(animalout)]<-0
+  animalout[,.(output=(milkvalue+manure+gheeincome),appdep,feedcost,othercosts=(veterinary_expenses+hiredlabour+animalshed+any_other_expenses)),keyby=.(id,village_name,household_number,if_sc_st,caste_tribe,religion,village,multiplier)]->animalout
+  animalout[,income1:=output-feedcost-othercosts][,income2:=income1+appdep]
+#+end_src
+
+#+NAME: animal-income-calculation
+#+CAPTION: पशुपालन में आय का हिसाब
+|----------------------------+-------------------------------|
+| उत्पादन                     | दूघ                            |
+|                            | गोबर                          |
+|                            | घी                            |
+|                            | पशुधन में वृद्धि                   |
+|----------------------------+-------------------------------|
+| लागत                       | चारा                          |
+|                            | दवा/ईलाज का खर्च               |
+|                            | बाहर की मजदूरी                 |
+|                            | पशुओं के रखरखाव पर अन्य खर्चे       |
+|----------------------------+-------------------------------|
+| जिन खर्चों का हिसाब नहीं लिया | परिवार की मजदूरी               |
+|                            | परिवार की अपनी जमीन का किराया |
+|                            | पशुपालन में लगी पूँजी का ब्याज      |
+|----------------------------+-------------------------------|
+
+
+#+NAME: animal-income-table1-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
-  copy(animalinventory)->t
-  t[animal_type=="Chicken"|animal_type=="Duck"|animal_type=="Pigeon",animal_type:="Poultry"]
-  t[animal_type=="Sheep"|animal_type=="Goat",animal_type:="Goats_Sheep"]
-  t[animal_type=="Cow/bullock"|animal_type=="Buffalo",animal_type:="Bovines"]
-  t[animal_type!="Horse"]->t
-  t[,.(number=sum(number)),.(sno_id,animal_type)]->t
-  t[,number:=1]
-  factor(t$animal_type,levels=c("Bovines","Goats_Sheep","Pig","Poultry","Camel"))->t$animal_type
-  levels(t$animal_type)<-c("गाय/भैंसें","बकरियाँ/भेड़ें","सूअर","मुर्गियाँ","ऊँट")
-  dcast.data.table(t,sno_id~animal_type,sum,value.var="number")->t
-  merge(hhid,t,by.y="sno_id",by.x="id",all.x=T)->t
-  t[is.na(t)]<-0
+  animalout[output!=0]->t
   t[religion=="Muslim",if_sc_st:="Muslim"]
   factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
   levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
-  t[,c(1,2,5,6,9:14)]->t
-  melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
-  t[,.(hh_animal=sum(value*multiplier),hhall=sum(multiplier)),.(if_sc_st,variable)]->t
-  t[,hh_animal_prop:=round(hh_animal*100/hhall,1)]
-  dcast(t,variable~if_sc_st,sum,value.var="hh_animal_prop")->t
-  names(t)[1]<-c("पशु")
-  t
+  t[,.(income1=round(weighted.median(income1,multiplier)),
+       income2=round(weighted.median(income2,multiplier))),
+    keyby=if_sc_st]->t1
+
+  t[,.(if_sc_st="सभी जातियाँ",
+       income1=round(weighted.median(income1,multiplier)),
+       income2=round(weighted.median(income2,multiplier))),]->t2
+
+  rbind(t1,t2)->t1
+  names(t1)<-c("सामाजिक समुदाय","आय (उत्पादन-खर्च)","आय (उत्पादन+पशुधन की बढोतरी-खर्च)")
+  t1
 #+end_src
 
+#+NAME: animal-income-table1
+#+CAPTION: पशुपालन में औसत (median) आय (₹)
+#+RESULTS: animal-income-table1-code
+| सामाजिक समुदाय | आय (उत्पादन-खर्च) | आय (उत्पादन+पशुधन की बढोतरी-खर्च) |
+|---------------+-----------------+--------------------------------|
+| दलित          |            7497 |                          10620 |
+| मुस्लिम         |            1811 |                          12564 |
+| पिछड़ी जातियाँ  |            9801 |                           8843 |
+| अन्य           |           16009 |                          50010 |
+| सभी जातियाँ    |           11243 |                          14301 |
 
-#+NAME: animal-inventory-table0
-#+CAPTION: विभिन्न समुदायों में पशुपालन करने वाले परिवारों का अनुपात (प्रतिशत)
-#+RESULTS: animal-inventory-table0-code
-| पशु        | दलित | मुस्लिम | पिछड़ी जातियाँ |  अन्य |
-|-----------+------+-------+--------------+------|
-| गाय/भैंसें    | 39.1 |    58 |         59.3 | 77.2 |
-| बकरियाँ/भेड़ें |  7.6 |  17.7 |          0.6 |  0.2 |
-| सूअर       |  0.4 |     0 |            0 |    0 |
-| मुर्गियाँ    |  2.3 |     7 |            0 |    0 |
-| ऊँट        |  0.1 |     0 |          0.3 |    0 |
-
-#+NAME: animal-inventory-table1-code
+#+NAME: animal-income-table2-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
-  copy(animalinventory)->t
-  t[animal_type=="Cow/bullock"|animal_type=="Buffalo",animal_type:="Bovines"]
-  t[animal_type=="Bovines"]->t
-  t[,.(number=sum(number)),.(sno_id)]->t
-  #t[,number:=1]
-  merge(hhid,t,by.y="sno_id",by.x="id")->t
+  animalout[output!=0]->t
   t[religion=="Muslim",if_sc_st:="Muslim"]
   factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
   levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t[,.(income1=round(weighted.median(income1,multiplier)),
+       income2=round(weighted.median(income2,multiplier))),
+    keyby=.(if_sc_st,village)]->t1
 
-  #melt.data.table(t,id=c("id","village_name","if_sc_st","multiplier","village"))->t
-  t[,.(hh_animal=sum(number*multiplier),hhall=sum(multiplier)),.(if_sc_st,village)]->t
-  t[,hh_animal_prop:=round(hh_animal/hhall,1)]
-  dcast(t,village~if_sc_st,sum,value.var="hh_animal_prop")->t
-  names(t)[1]<-c("गाँव")
-  t
+  t[,.(if_sc_st="सभी जातियाँ",
+       income1=round(weighted.median(income1,multiplier)),
+       income2=round(weighted.median(income2,multiplier))),keyby=village]->t2
+
+  rbind(t1,t2)->t1
+  dcast(t1,village~if_sc_st,sum,value.var="income2")->t1
+  t1[t1==0]<-NA
+  names(t1)[1]<-c("गाँव")
+  t1
 #+end_src
 
-#+NAME: animal-inventory-table1
-#+CAPTION: विभिन्न गाँवों में पशुपालन करने वाले परिवारों के पास औसत गाय/भैसों की संख्या, समुदाय के अनुसार
-#+RESULTS: animal-inventory-table1-code
-| गाँव            | दलित | मुस्लिम | पिछड़ी जातियाँ | अन्य |
-|----------------+------+-------+--------------+-----|
-| खंदरई           |  2.6 |     0 |          1.4 | 3.9 |
-| चहड़ कलां        |  2.3 |     0 |          2.1 | 4.7 |
-| भिरढाणा        |  3.4 |     3 |          2.6 | 3.4 |
-| भिरढाणा ढाणियाँ |  3.4 |     0 |            5 | 4.8 |
-| जमालपुर शेखाँ     |  2.5 |     0 |          2.5 | 5.8 |
-| गिज्जी          |  2.3 |     0 |          3.1 | 4.1 |
-| भादस           |  2.8 |   2.3 |          2.3 |   0 |
+#+NAME: animal-income-table2
+#+CAPTION: विभिन्न गाँवों में पशुपालन से आय (₹)
+#+RESULTS: animal-income-table2-code
+| गाँव            |  दलित | मुस्लिम | पिछड़ी जातियाँ |    अन्य | सभी जातियाँ |
+|----------------+-------+-------+--------------+--------+------------|
+| खंदरई           | 13201 | nil   |        -8153 |  51937 |      33208 |
+| चहड़ कलां        | 30519 | nil   |        71840 |  69302 |      73298 |
+| भिरढाणा        |  2666 | 11037 |         3237 | -17733 |       3045 |
+| भिरढाणा ढाणियाँ | 40240 | nil   |        32374 | -87402 |      32170 |
+| जमालपुर शेखाँ     | 14833 | nil   |         4967 | -72448 |      11488 |
+| गिज्जी          | 16894 | nil   |        41437 |  37172 |      36459 |
+| भादस           | 27834 | 15334 |        -4473 |    nil |      15944 |
 
-#+NAME: animal-inventory-table2-code
+#+NAME: animal-income-table3-code
 #+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
-  merge(animalinventory,hhid,by.x="sno_id",by.y="id",all=T)->t
-  t[animal_type=="Cow/bullock",animal_type:="गाय/बैल"][animal_type=="Buffalo",animal_type:="भैंस"]
-  t[adult_or_calf=="Adult",adult_or_calf:="वयस्क"][adult_or_calf=="Calf",adult_or_calf:="बच्चा"]
-  t[animal_type=="गाय/बैल"|animal_type=="भैंस"]->t
-  t[sex=="Male",sex:="नर"][sex=="Female",sex:="मादा"]
-  t[,.(number=sum(number*multiplier)),keyby=.(animal_type,sex,adult_or_calf)]->t
-  dcast(t,animal_type+adult_or_calf~sex,sum,value.var="number",margins="sex")->t
-  round(t[,c(3:5)]*100/t[,5])->t[,c(3:5)]
-  names(t)[c(1:2)]<-c("पशु","वयस्क/बच्चा")
-  t[,c(1:4)]
+  animalout[output!=0]->t
+  t[income1>=0,income1:=0][income2>=0,income2:=0]
+  t[income1<0,income1:=1][income2<0,income2:=1]
+  t[religion=="Muslim",if_sc_st:="Muslim"]
+  factor(t$if_sc_st,levels=c("SC","Muslim","BC","Other"))->t$if_sc_st
+  levels(t$if_sc_st)<-c("दलित","मुस्लिम","पिछड़ी जातियाँ","अन्य")
+  t[,.(income1=sum(income1*multiplier),
+       income2=sum(income2*multiplier),
+       allhh=sum(multiplier)
+       ),
+    keyby=if_sc_st]->t1
+
+  t[,.(if_sc_st="सभी जातियाँ",
+       income1=sum(income1*multiplier),
+       income2=sum(income2*multiplier),
+       allhh=sum(multiplier)
+       ),]->t2
+
+  rbind(t1,t2)->t1
+  t1[,income1:=round(income1*100/allhh)][,income2:=round(income2*100/allhh)][,allhh:=NULL]
+  names(t1)<-c("सामाजिक समुदाय","आय (उत्पादन-खर्च)","आय (उत्पादन+पशुधन की बढोतरी-खर्च)")
+  t1
 #+end_src
 
-#+NAME: animal-inventory-table2
-#+CAPTION: पशुओं की कुल संख्या में नर और मादाओं का अनुपात (प्रतिशत)
-#+RESULTS: animal-inventory-table2-code
-| पशु     | वयस्क/बच्चा | नर | मादा |
-|--------+-----------+----+------|
-| गाय/बैल | बच्चा      | 21 |   79 |
-| गाय/बैल | वयस्क      | 13 |   87 |
-| भैंस     | बच्चा      | 26 |   74 |
-| भैंस     | वयस्क      |  3 |   97 |
+#+NAME: animal-income-table3
+#+CAPTION: पशुपालन में नुकसान उठाने वाले परिवारों का अनुपात (प्रतिशत)
+#+RESULTS: animal-income-table3-code
+| सामाजिक समुदाय | आय (उत्पादन-खर्च) | आय (उत्पादन+पशुधन की बढोतरी-खर्च) |
+|---------------+-----------------+--------------------------------|
+| दलित          |              38 |                             31 |
+| मुस्लिम         |              48 |                             34 |
+| पिछड़ी जातियाँ  |              38 |                             37 |
+| अन्य           |              34 |                             29 |
+| सभी जातियाँ    |              38 |                             32 |
 
 
 ** Housing and Sanitation
@@ -1717,7 +1955,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   Processes<-as.numeric(sub(" .*","",GrepResults)) 
   tools::pskill(Processes)
 #+END_SRC
-
 
 
 * To check
