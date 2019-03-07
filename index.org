@@ -1821,7 +1821,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+NAME: animal-income-calculation
 #+CAPTION: पशुपालन में आय का हिसाब
-
 | उत्पादन/लागत                | घटक                           |
 |----------------------------+-------------------------------|
 | उत्पादन                     | दूघ                            |
