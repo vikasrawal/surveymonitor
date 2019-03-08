@@ -842,9 +842,9 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 |-------------------------------+------------------------+----------------|
 |    सबसे कम जमीन वाले 20% परिवार |                      0 |              0 |
 |                       20--40% |                      0 |              0 |
-|                       40--60% |                      2 |              0 |
-|                       60--80% |                     19 |             13 |
-| सबसे ज्यादा जमीन वाले 20% परिवार |                     78 |             86 |
+|                       40--60% |                      1 |              0 |
+|                       60--80% |                     15 |             14 |
+| सबसे ज्यादा जमीन वाले 20% परिवार |                     83 |             88 |
 
 
 *** जमीन और जाति का सम्बन्ध
@@ -969,9 +969,11 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   data.table(dbReadTable(surveypg,"ruralsurvey_code_quantity_unit"))->kindunit
   data.table(dbReadTable(surveypg,"ruralsurvey_standardnorm"))->standards
 
-  member[person_number<90,.(sno_id,id,person_number,name,age,sex)]->t
+  member[,.(sno_id,id,person_number,name,age,sex)]->t
 
   merge(agrilabour,t,by.x=c("sno_id","name_of_worker_id"),by.y=c("sno_id","id"),all.x=T)->agrilabour
+
+  agrilabour[person<90]->agrilabour
 
   ## merge(agrilabour,hhid,by.x="sno_id",by.y="id",all.x=T)->agrilabour
 
@@ -1010,6 +1012,9 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
    t0[,standarddays:=labour_days*hours/8][,daily:=totalearning/standarddays]
    merge(t0,hhid,by.x="sno_id",by.y="id")->casual_labour_final
+
+
+  write.table(casual_labour_final,file="~/Dropbox_gmail/Dropbox/sser_survey_data/casual_labour_final.csv",sep="|",row.names=FALSE)
 #+END_SRC
 
 #+NAME: casualdays_code
@@ -1026,15 +1031,15 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 #+NAME: casualdays
 #+CAPTION: महिला और पुरुष खेत मजदूरों को मिले काम के औसत (median) दिन
 #+RESULTS: casualdays_code
-| गाँव            | महिलायें | पुरुष |
-|----------------+--------+-----|
-| खंदरई           |     20 |  20 |
-| चहड़ कलां        |     32 |   4 |
-| भिरढाणा        |     46 |  18 |
-| भिरढाणा ढाणियाँ |     25 |  32 |
-| जमालपुर शेखाँ     |     76 |  46 |
-| गिज्जी          |     26 |  20 |
-| भादस           |     15 |  19 |
+| गाँव            | महिलायें | पुरुष | NA  |
+|----------------+--------+-----+-----|
+| खंदरई           |     20 |  20 | 250 |
+| चहड़ कलां        |     32 |   4 | nil |
+| भिरढाणा        |     46 |  18 | nil |
+| भिरढाणा ढाणियाँ |     25 |  32 | nil |
+| जमालपुर शेखाँ     |     76 |  46 | nil |
+| गिज्जी          |     26 |  20 | nil |
+| भादस           |     15 |  19 | 3   |
 
 #+NAME: casualwage_code
 #+BEGIN_SRC R :results output graphics :exports results :file casualwage-boxplot.png :width 1200 :height 800 
@@ -1442,6 +1447,7 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   write.table(householdincome,
               file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_clean.csv",
               sep="|",row.names=FALSE)
+
   copy(hhid)->householdincome_wide
   casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
   merge(householdincome_wide,t,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
@@ -1481,7 +1487,9 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 #+NAME: non-agri-table1-code
 #+begin_src R :results value :exports results :colnames yes :hlines yes
-
+  nonagrimanual[,c(1,3,4,5,7,11,15,16)]->t
+  t$category<-"Manual Non-agricultural Labour"
+  merge(t,hhid,by.x="sno_id",by.y="id")->t
 #+end_src
 
 ** Livestock
@@ -1967,12 +1975,124 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   t1
 #+end_src
 
-
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
 
 #+INCLUDE: assets.org
+
+** Household Incomes
+
+#+name: crop-income-data-code
+#+begin_src R :results silent :export none
+  readRDS("~/MEGAsync/haryana2018/prod_matrix_final.rds")->prod_matrix_final
+  merge(prod_matrix_final,hhid,by.x="sno_id",by.y="id")->prod_matrix_final
+  prod_matrix_final[!(village_name=="Gijji"|village_name=="Bhadas")]->crop_income_matrix
+  #names(prod_matrix_final)
+ crop_income_matrix[,costa2:=owner_fertiliser+owner_manure+owner_ppc+owner_seed+owner_water+owner_piece_rate_payment+owner_daily_rate_payment+owner_hired_machine+owner_diesel+annual_charges+depreciation+lt_worker_wage+rent_main_value+rent_by_value+wage_main_value+wage_by_value]
+  crop_income_matrix[,income_over_a2:=main_value+by_value-costa2]
+#+end_src
+
+#+name: crop-income-table0-code
+#+begin_src R :results value :export results :colnames yes :hlines yes
+  crop_income_matrix[,.(income=sum(income_over_a2)),keyby=.(sno_id,village,multiplier)]->t
+  t[income>=1000000,incomeclass:="₹ 1000000 से ज्यादा"]
+  t[income<1000000,incomeclass:="₹ 1000000 से कम"]
+  t[income<500000,incomeclass:="₹ 500000 से कम"]
+  t[income<200000,incomeclass:="₹ 200000 से कम"]
+  t[income<100000,incomeclass:="₹ 100000 से कम"]
+#  t[income<50000,incomeclass:="₹ 50000 से कम"]
+  t[income<0,incomeclass:="नुकसान"]
+  factor(t$incomeclass,levels=c("नुकसान",
+                                "₹ 100000 से कम","₹ 200000 से कम",
+                                "₹ 500000 से कम","₹ 1000000 से कम",
+                                "₹ 1000000 से ज्यादा"))->t$incomeclass
+  t[order(incomeclass),.(households=sum(multiplier)),keyby=.(incomeclass,village)]->t
+  ave(t$household,t$village,FUN=sum)->t$allhh
+  t[,households:=round(households*100/allhh)]
+  dcast(t,incomeclass~village,sum,value.var="households")->t
+  names(t)[1]<-"खेती में आय"
+  t
+#+end_src
+
+#+name: crop-income-table0
+#+CAPTION: खेती से आय की विभिन्न श्रेणियों में किसान परिवारों का अनुपात (प्रतिशत)
+#+RESULTS: crop-income-table0-code
+| खेती में आय          | खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ |
+|-------------------+------+---------+---------+----------------+------------|
+| नुकसान             |    5 |       0 |       0 |              0 |          0 |
+| ₹ 100000 से कम     |   22 |      43 |      18 |             19 |         48 |
+| ₹ 200000 से कम     |   35 |      42 |       9 |             24 |          5 |
+| ₹ 500000 से कम     |   21 |      15 |      44 |             29 |         23 |
+| ₹ 1000000 से कम    |   10 |       0 |      23 |             24 |         14 |
+| ₹ 1000000 से ज्यादा |    7 |       0 |       7 |              5 |          9 |
+
+#+name: crop-income-table1-code
+#+begin_src R :results value :export results :colnames yes :hlines yes
+  melt.data.table(crop_income_matrix,
+                  id=c("sno_id","crop_id","crop_number_1","crop",
+                       "village","village_name",
+                       "if_sc_st","caste_tribe",
+                       "stratum_number","household_number",
+                       "religion","multiplier"),
+                  m=c("main_value","by_value","costa2","income_over_a2","area"))->t
+  t$multiplier*t$value->t$value
+  t[crop_id %in% c(3,4,2,7,27,1)]->t
+  t[crop!="Wheat+Mustard"]->t
+  factor(t$crop)->t$crop
+  levels(t$crop)<-c("नरमा","सरसों","जीरी","ईख","ईख","गेहूँ")
+  dcast.data.table(t,crop~variable,sum)->t
+  t[,GVO:=round((main_value+by_value)/area)][,costa2:=round(costa2/area)][,income:=round(income_over_a2/area)]
+  t[order(crop),.(crop,GVO,costa2,income)]->t
+  names(t)<-c("फसल","उत्पादन","खर्च (A2)","आय")
+  t
+#+end_src
+
+#+name: crop-income-table1
+#+CAPTION: मुख्य फसलों से प्रति एकड़ औसत उत्पादन, खर्च (A2), आय (₹/एकड़)
+#+RESULTS: crop-income-table1-code
+| फसल  | उत्पादन | खर्च (A2) |    आय |
+|------+--------+----------+-------|
+| नरमा |  21405 |    16137 |  5268 |
+| सरसों |  23706 |     6476 | 17230 |
+| जीरी |  54659 |    25002 | 29657 |
+| ईख   |  93454 |    51560 | 41894 |
+| गेहूँ   |  42845 |    19785 | 23060 |
+
+#+name: crop-income-table2-code
+#+begin_src R :results value :export results :colnames yes :hlines yes
+  melt.data.table(crop_income_matrix,
+                  id=c("sno_id","crop_id","crop_number_1","crop",
+                       "village","village_name",
+                       "if_sc_st","caste_tribe",
+                       "stratum_number","household_number",
+                       "religion","multiplier"),
+                  m=c("income_over_a2","area"))->t
+  t$multiplier*t$value->t$value
+  t[crop_id %in% c(3,4,2,7,27,1)]->t
+  t[crop!="Wheat+Mustard"]->t
+  factor(t$crop)->t$crop
+  levels(t$crop)<-c("नरमा","सरसों","जीरी","ईख","ईख","गेहूँ")
+  dcast.data.table(t,village+crop~variable,c(sum,length))->t
+  t[value_length_area>5]->t
+  t[,income:=round(value_sum_income_over_a2/value_sum_area)]
+  dcast.data.table(t,crop~village,sum,value.var="income")->t
+  t[t==0]<-NA
+  names(t)[1]<-"फसल"
+  t
+#+end_src
+
+#+name: crop-income-table2
+#+CAPTION: विभिन्न गाँवों में फ़सलों से औसत आय (₹/एकड़)
+#+RESULTS: crop-income-table2-code
+| फसल  |  खंदरई | चहड़ कलां | भिरढाणा | भिरढाणा ढाणियाँ | जमालपुर शेखाँ |
+|------+-------+---------+---------+----------------+------------|
+| नरमा |  3858 |    4705 |    7875 |           9377 |         88 |
+| सरसों |   nil |   17534 |     nil |            nil |        nil |
+| जीरी | 21632 |     nil |   28624 |          11009 |      37930 |
+| ईख   | 41894 |     nil |     nil |            nil |        nil |
+| गेहूँ   | 21557 |   16314 |   22601 |          16682 |      27761 |
+
 
 
 * Kill Connections                                                 :noexport:
