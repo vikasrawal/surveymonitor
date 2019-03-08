@@ -1948,14 +1948,17 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 | सभी जातियाँ    |              38 |                             32 |
 
 #+NAME: livestock-labour-table1-code
-#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+#+BEGIN_SRC R :results silent :exports none :colnames yes :hlines yes
   data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_work_done_by_household_members"))->livestocklabour
   member[,c(1,4,5,16)]->m1
   merge(m1,hhid,by.x="sno_id",by.y="id")->m1
   as.numeric(m1$age)->m1$agen
   merge(livestocklabour,m1,by.x="name_of_worker_id",by.y="id")->livestocklabour
   #merge(livestocklabour,hhid,by.x="sno_id",by.y="id")->livestocklabour
+  animalinventory[,.(value=sum(total_present_value)),keyby=sno_id][value!=0]->animalhh
+  merge(livestocklabour,animalinventory,by.x="sno_id.x",by.y="sno_id")->livestocklabour
   livestocklabour[agen>=15,.(workers=sum(multiplier)),keyby=.(sex,village)]->t1
+
   m1[agen>=15,.(allpersons=sum(multiplier)),keyby=.(sex,village)]->t2
   merge(t1,t2)->t1
   t1[,workers:=round(workers*100/allpersons)]
@@ -1963,19 +1966,6 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   names(t1)<-c("गाँव","महिलायें","पुरुष")
   t1
 #+end_src
-
-#+NAME: livestock-labour-table1
-#+CAPTION: पशुपालन का काम करने वाले पुरुषों और महिलाओं का कुल जनसंख्या में अनुपात, 15 साल से बड़े पुरुष और महिलायें (प्रतिशत)
-#+RESULTS: livestock-labour-table1-code
-| गाँव            | महिलायें | पुरुष |
-|----------------+--------+-----|
-| खंदरई           |     35 |  25 |
-| चहड़ कलां        |     60 |  36 |
-| भिरढाणा        |     38 |  19 |
-| भिरढाणा ढाणियाँ |     62 |  46 |
-| जमालपुर शेखाँ     |     31 |  19 |
-| गिज्जी          |     42 |  26 |
-| भादस           |     57 |  57 |
 
 
 ** Housing and Sanitation
