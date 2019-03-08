@@ -1423,40 +1423,40 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 
 + Drivers, helpers
 
-** Combined Income and Employment Matrices
+*** Combined Income and Employment Matrices
 
-#+NAME: hh-income-emp-matrix-code
+#+NAME: hh-income-emp-matrix-code1
 #+BEGIN_SRC R :results silent :exports none
-    copy(hhid)->householdincome
-    casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
-    merge(householdincome,t,by.x="id",by.y="sno_id",all.x=T)->householdincome
-    merge(householdincome,hhnonagri,by.x="id",by.y="sno_id",all.x=T)->householdincome
-    merge(householdincome,hhnonmanual,by.x="id",by.y="sno_id",all.x=T)->householdincome
-    merge(householdincome,hhnrega,by.x="id",by.y="sno_id",all.x=T)->householdincome
-    merge(householdincome,hhbusiness,by.x="id",by.y="sno_id",all.x=T)->householdincome
-    merge(householdincome,hhremittance,by.x="id",by.y="sno_id",all.x=T)->householdincome
-    merge(householdincome,hhmachinehire,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  copy(hhid)->householdincome
+  casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
+  merge(householdincome,t,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  merge(householdincome,hhnonagri,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  merge(householdincome,hhnonmanual,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  merge(householdincome,hhnrega,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  merge(householdincome,hhbusiness,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  merge(householdincome,hhremittance,by.x="id",by.y="sno_id",all.x=T)->householdincome
+  merge(householdincome,hhmachinehire,by.x="id",by.y="sno_id",all.x=T)->householdincome
 
-    merge(householdincome,landholdings,by="id",all.x=T)->householdincome
+  merge(householdincome,landholdings,by="id",all.x=T)->householdincome
 
-    write.table(householdincome,
-                file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_clean.csv",
-                sep="|",row.names=FALSE)
-    copy(hhid)->householdincome_wide
-    casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
-    merge(householdincome_wide,t,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
-    merge(householdincome_wide,hhnonagri_wide,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
-    merge(householdincome_wide,hhnonmanual_wide,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
-    merge(householdincome_wide,hhnrega,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
-    merge(householdincome_wide,hhbusiness,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
-    merge(householdincome_wide,hhremittance,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
-    merge(householdincome_wide,hhmachinehire,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  write.table(householdincome,
+              file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_clean.csv",
+              sep="|",row.names=FALSE)
+  copy(hhid)->householdincome_wide
+  casual_labour_final[,.(casual_agri_labour=sum(totalearning)),keyby=sno_id]->t
+  merge(householdincome_wide,t,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,hhnonagri_wide,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,hhnonmanual_wide,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,hhnrega,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,hhbusiness,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,hhremittance,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,hhmachinehire,by.x="id",by.y="sno_id",all.x=T)->householdincome_wide
 
-    merge(householdincome_wide,landholdings,by="id",all.x=T)->householdincome_wide
+  merge(householdincome_wide,landholdings,by="id",all.x=T)->householdincome_wide
 
-    write.table(householdincome_wide,
-                file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_wide_clean.csv",
-                sep="|",row.names=FALSE)
+  write.table(householdincome_wide,
+              file="/home/vikas/Dropbox_gmail/Dropbox/sser_survey_data/household_income_wide_clean.csv",
+              sep="|",row.names=FALSE)
 #+end_src
 
 #+NAME: person-income-emp-matrix-code
@@ -1474,6 +1474,13 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
   copy(personnonagri)->t
   t[,sno_id:=NULL]->t
   merge(personlabour,t,by.x="id",by.y="member_id",all.x=T)->personlabour
+
+#+end_src
+
+*** Results on Employment
+
+#+NAME: non-agri-table1-code
+#+begin_src R :results value :exports results :colnames yes :hlines yes
 
 #+end_src
 
@@ -1940,12 +1947,43 @@ Cheher Kalan is a predominantly Jat village with very few households belonging t
 | अन्य           |              34 |                             29 |
 | सभी जातियाँ    |              38 |                             32 |
 
+#+NAME: livestock-labour-table1-code
+#+BEGIN_SRC R :results value :exports results :colnames yes :hlines yes
+  data.table(dbReadTable(surveypg,"ruralsurvey_animal_resources_work_done_by_household_members"))->livestocklabour
+  member[,c(1,4,5,16)]->m1
+  merge(m1,hhid,by.x="sno_id",by.y="id")->m1
+  as.numeric(m1$age)->m1$agen
+  merge(livestocklabour,m1,by.x="name_of_worker_id",by.y="id")->livestocklabour
+  #merge(livestocklabour,hhid,by.x="sno_id",by.y="id")->livestocklabour
+  livestocklabour[agen>=15,.(workers=sum(multiplier)),keyby=.(sex,village)]->t1
+  m1[agen>=15,.(allpersons=sum(multiplier)),keyby=.(sex,village)]->t2
+  merge(t1,t2)->t1
+  t1[,workers:=round(workers*100/allpersons)]
+  dcast(t1,village~sex,sum,value.var="workers")->t1
+  names(t1)<-c("गाँव","महिलायें","पुरुष")
+  t1
+#+end_src
+
+#+NAME: livestock-labour-table1
+#+CAPTION: पशुपालन का काम करने वाले पुरुषों और महिलाओं का कुल जनसंख्या में अनुपात, 15 साल से बड़े पुरुष और महिलायें (प्रतिशत)
+#+RESULTS: livestock-labour-table1-code
+| गाँव            | महिलायें | पुरुष |
+|----------------+--------+-----|
+| खंदरई           |     35 |  25 |
+| चहड़ कलां        |     60 |  36 |
+| भिरढाणा        |     38 |  19 |
+| भिरढाणा ढाणियाँ |     62 |  46 |
+| जमालपुर शेखाँ     |     31 |  19 |
+| गिज्जी          |     42 |  26 |
+| भादस           |     57 |  57 |
+
 
 ** Housing and Sanitation
 ** Health and Education
 ** Assets and Indebtedness
 
 #+INCLUDE: assets.org
+
 
 * Kill Connections                                                 :noexport:
 
